@@ -15,5 +15,5 @@ class AccountAdmin(admin.ModelAdmin):
     )
 
     list_filter = (
-        "season"
+        "season",
     )
