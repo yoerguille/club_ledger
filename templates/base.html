@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+        Club Ledger
+        {% endblock %}
+    </title>
+</head>
+<body>
+
+    <header>
+        <h1>Club Ledger</h1>
+
+        <nav>
+            <a href="/">Inicio</a>
+            <a href="/customers/">Clientes</a>
+        </nav>
+
+        <hr>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>
