@@ -26,3 +26,4 @@ class TransactionAdmin(admin.ModelAdmin):
     ordering = (
         "-date",
     )
+

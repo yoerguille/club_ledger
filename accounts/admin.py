@@ -7,6 +7,7 @@ class AccountAdmin(admin.ModelAdmin):
     list_display = (
         "customer",
         "season",
+        "get_balance",
         "created_at",
     )
 
@@ -17,3 +18,8 @@ class AccountAdmin(admin.ModelAdmin):
     list_filter = (
         "season",
     )
+
+    def get_balance(self, obj):
+        return f"{obj.balance} €"
+    
+    get_balance.short_description = "Saldo"
