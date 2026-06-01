@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+Clientes
+{% endblock %}
+
+{% block content %}
+
+<h2>{{ customer.name }}</h2>
+
+<p>
+    <strong>Email:</strong>
+    {{ customer.email|default:"-" }}
+</p>
+
+<p>
+    <strong>Teléfono:</strong>
+    {{ customer.phone|default:"-" }}
+</p>
+
+<p>
+    <strong>Contacto:</strong>
+    {{ customer.contact_person|default:"-" }}
+</p>
+
+<hr>
+
+<h3>Cuentas por temporada</h3>
+
+<ul>
+    {% for account in customer.accounts.all %}
+        <li>
+            {{ account.season.name }}
+            —
+            Saldo:
+            {{ account.balance }} €
+        </li>
+    {% empty %}
+        <li>No hay cuentas creadas</li>
+    {% endfor %}
+</ul>
+
+
+
+{% endblock %}

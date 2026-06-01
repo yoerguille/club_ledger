@@ -11,7 +11,7 @@ Clientes
 <ul>
     {% for customer in customers %}
         <li>
-            {{ customer.name }}
+            <a href="{% url 'customers:customer_detail' customer.pk %}">{{customer.name}}</a>
         </li>
     {% empty %}
         <li>No hay clientes</li>
