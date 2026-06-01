@@ -30,7 +30,7 @@ Clientes
 <ul>
     {% for account in customer.accounts.all %}
         <li>
-            {{ account.season.name }}
+            <a href="{% url 'accounts:accounts_detail' account.pk %}">{{account.season.name}}</a>
             —
             Saldo:
             {{ account.balance }} €
