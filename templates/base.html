@@ -1,30 +1,49 @@
+{% load static %}
+{% load tailwind_tags %}
+
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+    {% tailwind_css %}
     <meta charset="UTF-8">
+
     <title>
+
         {% block title %}
+
         Club Ledger
+
         {% endblock %}
+
     </title>
+
+   
 </head>
-<body>
 
-    <header>
-        <h1>Club Ledger</h1>
+<body class="bg-gray-100">
 
-        <nav>
-            <a href="/">Inicio</a>
-            <a href="{% url 'customers:customer_list' %}">Clientes</a>
-        </nav>
+    <div class="min-h-screen flex">
 
-        <hr>
-    </header>
+        {% include "components/sidebar.html" %}
 
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+        <div class="flex-1 flex flex-col">
+
+            {% include "components/navbar.html" %}
+
+            <main class="p-8">
+
+                {% block content %}
+                
+                {% endblock %}
+
+            </main>
+
+        </div>
+
+
+    </div>
+
 
 </body>
 </html>
