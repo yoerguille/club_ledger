@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.db import models
 
-from accounts.models import Account
+from apps.accounts.models import Account
 
 from django.core.exceptions import ValidationError
 # Create your models here.

@@ -1,6 +1,6 @@
 from django.db import models
-from customers.models import Customer
-from seasons.models import Season
+from apps.customers.models import Customer
+from apps.seasons.models import Season
 from decimal import Decimal
 
 # Create your models here.

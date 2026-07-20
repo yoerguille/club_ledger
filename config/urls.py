@@ -20,9 +20,9 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path("customers/", include("customers.urls", namespace='customers')),
-    path("accounts/", include("accounts.urls", namespace='accounts')),
-    path("", include("dashboard.urls", namespace='dashboard')),
+    path("customers/", include("apps.customers.urls", namespace='customers')),
+    path("accounts/", include("apps.accounts.urls", namespace='accounts')),
+    path("", include("apps.dashboard.urls", namespace='dashboard')),
 
     path("__reload__/", include("django_browser_reload.urls")),
 ]

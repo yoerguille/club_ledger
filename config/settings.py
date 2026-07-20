@@ -38,11 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'customers',
-    'accounts',
-    'transactions',
-    'seasons',
-    'dashboard',
+    'apps.customers',
+    'apps.accounts',
+    'apps.transactions',
+    'apps.seasons',
+    'apps.dashboard',
+    'apps.core',
 
     'tailwind',
     'theme',

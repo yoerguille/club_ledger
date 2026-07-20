@@ -1,10 +1,10 @@
 from django.db.models import Case, DecimalField, F, Sum, Value, When
 from django.db.models.functions import Coalesce
 
-from accounts.models import Account
-from customers.models import Customer
-from seasons.models import Season
-from transactions.models import Transaction
+from apps.accounts.models import Account
+from apps.customers.models import Customer
+from apps.seasons.models import Season
+from apps.transactions.models import Transaction
 
 
 def get_dashboard_stats():

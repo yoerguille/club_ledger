@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Nuevo cliente
+{% endblock %}
+
+{% block page_title %}
+    Nuevo cliente
+{% endblock %}
+
+{% block content %}
+
+<h2 class="text-2xl font-bold mb-6">
+    Nuevo cliente
+</h2>
+
+<form method="post" class="space-y-4">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button
+        type="submit"
+        class="bg-blue-600 text-white px-4 py-2 rounded"
+    >
+        Guardar cliente
+    </button>
+
+</form>
+
+{% endblock %}
