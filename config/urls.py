@@ -23,6 +23,7 @@ urlpatterns = [
     path("customers/", include("apps.customers.urls", namespace='customers')),
     path("accounts/", include("apps.accounts.urls", namespace='accounts')),
     path("", include("apps.dashboard.urls", namespace='dashboard')),
+    path("transactions/", include("apps.transactions.urls", namespace='transactions')),
 
     path("__reload__/", include("django_browser_reload.urls")),
 ]

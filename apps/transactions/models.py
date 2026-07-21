@@ -75,6 +75,19 @@ class Transaction(models.Model):
         verbose_name_plural = 'Movimientos'
         ordering = ["date", "id"]
 
+    @property
+    def is_charge(self):
+        return self.movement_type == self.MovementType.CHARGE
+    
+    @property
+    def is_payment(self):
+        return self.movement_type == self.MovementType.PAYMENT
+    
+    @property
+    def formatted_amount(self):
+        sign = '+' if self.is_charge else '-'
+        return f"{sign}{self.amount:.2f} €"
+
     def __str__(self):
         return (
             f"{self.account.customer.name} - "
