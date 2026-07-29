@@ -32,4 +32,16 @@ class PaymentForm(forms.ModelForm):
             "date": forms.DateInput(attrs={"type": "date"}),
         }
 
+    def clean_payment_method(self):
+
+        payment_method = self.cleaned_data.get("payment_method")
+
+        if not payment_method:
+            raise forms.ValidationError(
+                "Debes seleccionar un método de pago."
+            )
+            
+        return payment_method
+        
+
 

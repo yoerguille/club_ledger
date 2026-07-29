@@ -15,7 +15,19 @@
 
         <form method="post" class="space-y-4">
             {% csrf_token %}
-            {{ form.as_p }}
+
+            {% include "components/forms/field.html" with field=form.date %}
+
+            {% include "components/forms/field.html" with field=form.description %}
+
+            {% include "components/forms/field.html" with field=form.amount %}
+
+            {% if form.payment_method %}
+                {% include "components/forms/field.html" with field=form.payment_method %}
+            {% endif %}
+
+            {% include "components/forms/field.html" with field=form.notes %}
+
 
             <div class="flex gap-3 pt-4">
                 <button type="submit"
@@ -28,6 +40,7 @@
                     Cancelar
                 </a>
             </div>
+            
         </form>
 
     </div>
