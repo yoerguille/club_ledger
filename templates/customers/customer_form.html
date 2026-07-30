@@ -10,23 +10,44 @@
 
 {% block content %}
 
-<h2 class="text-2xl font-bold mb-6">
-    Nuevo cliente
-</h2>
+<div class="max-w-2xl">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
 
-<form method="post" class="space-y-4">
 
-    {% csrf_token %}
+        <h2 class="text-2xl font-bold mb-6">
+            Nuevo cliente
+        </h2>
 
-    {{ form.as_p }}
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
 
-    <button
-        type="submit"
-        class="bg-blue-600 text-white px-4 py-2 rounded"
-    >
-        Guardar cliente
-    </button>
+            {% include "components/forms/field.html" with field=form.name %}
 
-</form>
+            {% include "components/forms/field.html" with field=form.cif %}
+
+            {% include "components/forms/field.html" with field=form.email %}
+
+            {% include "components/forms/field.html" with field=form.phone %}
+
+            {% include "components/forms/field.html" with field=form.adress %}
+
+            {% include "components/forms/field.html" with field=form.contact_person %}
+
+
+            <div class="flex gap-3 pt-4">
+                <button type="submit"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    Guardar
+                </button>
+
+                <a href="{% url 'customers:customer_list' %}"
+                    class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50">
+                    Cancelar
+                </a>
+            </div>
+                    
+        </form>
+    </div>
+</div>
 
 {% endblock %}
