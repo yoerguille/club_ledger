@@ -23,7 +23,7 @@ class Account(models.Model):
     notes = models.TextField(
         blank=True,
         null=True,
-        verbose_name="Noats",
+        verbose_name="Notas",
     )
 
     created_at = models.DateTimeField(
@@ -31,7 +31,7 @@ class Account(models.Model):
     )
 
     updated_at = models.DateTimeField(
-        auto_now_add=True,
+        auto_now=True,
     )
 
     class Meta:

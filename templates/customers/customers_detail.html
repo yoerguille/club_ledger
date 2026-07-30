@@ -1,44 +1,97 @@
 {% extends "base.html" %}
 
 {% block title %}
-Clientes
+{{ customer.name }}
 {% endblock %}
 
 {% block content %}
 
-<h2>{{ customer.name }}</h2>
 
-<p>
-    <strong>Email:</strong>
-    {{ customer.email|default:"-" }}
-</p>
+    <div class="mb-6 flex justify-end">
 
-<p>
-    <strong>Teléfono:</strong>
-    {{ customer.phone|default:"-" }}
-</p>
+        <a
+            href="{% url 'customers:customer_update' customer.pk %}"
+            class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 transition"
+        >
+            Editar cliente
+        </a>
 
-<p>
-    <strong>Contacto:</strong>
-    {{ customer.contact_person|default:"-" }}
-</p>
+    </div>
 
-<hr>
 
-<h3>Cuentas por temporada</h3>
+    <h2 class="text-2xl font-bold">
 
-<ul>
-    {% for account in customer.accounts.all %}
-        <li>
-            <a href="{% url 'accounts:account_detail' account.pk %}">{{account.season.name}}</a>
-            —
-            Saldo:
-            {{ account.balance }} €
-        </li>
-    {% empty %}
-        <li>No hay cuentas creadas</li>
-    {% endfor %}
-</ul>
+        {{ customer.name }}
+
+    </h2>
+
+    <div class="mt-6 grid grid-cols-2 gap-6">
+
+        <div>
+
+            <p><strong>Persona de contacto:</strong></p>
+
+            <p>{{ customer.contact_person|default:"—" }}</p>
+
+        </div>
+
+        <div>
+
+            <p><strong>Email:</strong></p>
+
+            <p>{{ customer.email|default:"—" }}</p>
+
+        </div>
+
+        <div>
+
+            <p><strong>Teléfono:</strong></p>
+
+            <p>{{ customer.phone|default:"—" }}</p>
+
+        </div>
+
+    </div>
+
+    {% if customer.notes %}
+
+        <div class="mt-8">
+
+            <h3 class="font-semibold mb-2">
+
+                Notas
+
+            </h3>
+
+            <p>
+
+                {{ customer.notes }}
+
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+    <h3 class="mt-10 mb-4 text-xl font-semibold">
+    Cuentas
+    </h3>
+
+    <ul>
+        {% for account in customer.accounts.all %}
+            <li>
+                <a href="{% url 'accounts:account_detail' account.pk %}">{{account.season.name}}</a>
+                —
+                Saldo:
+                {{ account.balance }} €
+            </li>
+        {% empty %}
+            <p class="text-gray-500">
+                Este cliente todavía no tiene cuentas.
+            </p>
+        {% endfor %}
+    </ul>
 
 
 
