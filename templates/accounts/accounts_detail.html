@@ -6,77 +6,110 @@ Cuenta
 
 {% block content %}
 
-<h2>
-    {{ account.customer.name }}
-</h2>
+    <h2>
+        {{ account.customer.name }}
+    </h2>
 
-<p>
-    <strong>Temporada:</strong>
-    {{ account.season.name }}
-</p>
+<div class="grid gap-6 md:grid-cols-3">
 
-<hr>
+    {% include "components/cards/stat_card_money.html" with title="Saldo actual: " value=account.balance %}
 
-<h3>
-    Saldo actual:
-    {{ account.balance }} €
-</h3>
+    {% include "components/cards/stat_card_money.html" with title="Pedidos: " value=account.total_charges %}
 
-<div class="flex gap-3 mb-6">
+    {% include "components/cards/stat_card_money.html" with title="Pagos: " value=account.total_payments %}
+</div>
+
+<div class="mt-8 flex flex-wrap gap-3">
+
     <a href="{% url 'transactions:charge_create' account.id %}"
-       class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+       class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
         + Registrar pedido
     </a>
 
     <a href="{% url 'transactions:payment_create' account.id %}"
-       class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+       class="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700">
         + Registrar pago
     </a>
+
+    <button
+        disabled
+        class="rounded-lg bg-gray-300 px-4 py-2 text-gray-600 cursor-not-allowed">
+        Estado de cuenta (Próximamente)
+    </button>
+
 </div>
 
 <hr>
 
 <h3>Movimientos</h3>
 
-<table border="1" cellpadding="8">
-    <thead>
-        <tr>
-            <th>Fecha</th>
-            <th>Tipo</th>
-            <th>Descripción</th>
-            <th>Importe</th>
-        </tr>
-    </thead>
+<div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
 
-    <tbody>
-        {% for transaction in account.transactions.all %}
-        <tr>
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    Fecha
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    Concepto
+                </th>
+                <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    Tipo
+                </th>
+                <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    Método
+                </th>
+                <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    Importe
+                </th>
+            </tr>
+        </thead>
 
-            <td>
-                {{ transaction.date }}
-            </td>
+        <tbody class="divide-y divide-gray-100 bg-white">
+            {% for transaction in account.transactions.all %}
+            <tr class="hover:bg-gray-50 transition-colors">
 
-            <td>
-                {{ transaction.get_movement_type_display }}
-            </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {{ transaction.date|date:"d/m/Y" }}
+                </td>
 
-            <td>
-                {{ transaction.description }}
-            </td>
+                <td class="px-6 py-4">
+                    {{ transaction.description }}
+                </td>
 
-            <td>
-                {{transaction.signed_amount}}
-            </td>
+                <td class="px-6 py-4 text-center">
+                    {% include "components/badges/movement_badge.html" %}
+                </td>
 
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4">
-                No hay movimientos
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                <td class="px-6 py-4 text-center">
+                    {% if transaction.payment_method %}
+                        {{ transaction.get_payment_method_display }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+
+                <td class="px-6 py-4 text-right font-mono font-semibold">
+
+                    {{ transaction.formatted_amount }}
+
+                </td>
+
+            </tr>
+            {% empty %}
+            <tr>
+
+                <td colspan="5" class="px-6 py-10 text-center text-gray-500">
+
+                    No existen movimientos registrados.
+
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}

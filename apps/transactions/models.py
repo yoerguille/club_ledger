@@ -105,6 +105,18 @@ class Transaction(models.Model):
             return self.amount
         
         return -self.amount
+
+   
+    @property
+    def badge_classes(self):
+        if self.is_charge:
+            return "bg-blue-100 text-blue-700"
+
+        return "bg-green-100 text-green-700"
+
+    @property
+    def movement_label(self):
+        return self.get_movement_type_display()
     
     def clean(self):
         # => Si es un cargo no debe tener método de pago
