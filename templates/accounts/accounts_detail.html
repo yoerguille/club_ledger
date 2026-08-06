@@ -6,18 +6,35 @@ Cuenta
 
 {% block content %}
 
-    <h2>
-        {{ account.customer.name }}
-    </h2>
+<div class="mb-8 flex items-start justify-between">
+
+    <div>
+
+        <h1 class="text-3xl font-bold text-gray-900">
+            {{ account.customer.name }}
+        </h1>
+
+        <p class="mt-2 text-gray-600">
+            Temporada {{ account.season.name }}
+        </p>
+
+        <p class="text-sm text-gray-500">
+            Cuenta creada el {{ account.created_at|date:"d/m/Y" }}
+        </p>
+
+    </div>
+
+</div>
 
 <div class="grid gap-6 md:grid-cols-3">
 
-    {% include "components/cards/stat_card_money.html" with title="Saldo actual: " value=account.balance %}
+    {% include "components/cards/stat_card_money.html" with title="Saldo actual: " value=account.balance subtitle="Actualizado automáticamente." %}
 
-    {% include "components/cards/stat_card_money.html" with title="Pedidos: " value=account.total_charges %}
+    {% include "components/cards/stat_card_money.html" with title="Pedidos: " value=account.total_charges subtitle="Importe acumulado." %}
 
-    {% include "components/cards/stat_card_money.html" with title="Pagos: " value=account.total_payments %}
+    {% include "components/cards/stat_card_money.html" with title="Pagos: " value=account.total_payments subtitle="Total recibido" %}
 </div>
+
 
 <div class="mt-8 flex flex-wrap gap-3">
 
@@ -31,17 +48,20 @@ Cuenta
         + Registrar pago
     </a>
 
-    <button
-        disabled
-        class="rounded-lg bg-gray-300 px-4 py-2 text-gray-600 cursor-not-allowed">
-        Estado de cuenta (Próximamente)
-    </button>
+    <a
+    href="{% url 'statements:statement_detail' account.id %}"
+    class="rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
+>
+    Generar estado de cuenta
+    </a>
 
 </div>
 
 <hr>
 
-<h3>Movimientos</h3>
+<h2 class="mb-4 text-xl font-semibold">
+    Movimientos ({{ account.transactions.count }})
+</h2>
 
 <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
 
@@ -62,6 +82,9 @@ Cuenta
                 </th>
                 <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
                     Importe
+                </th>
+                <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    Acciones
                 </th>
             </tr>
         </thead>
@@ -93,6 +116,12 @@ Cuenta
                 <td class="px-6 py-4 text-right font-mono font-semibold">
 
                     {{ transaction.formatted_amount }}
+
+                </td>
+
+                <td class="px-6 py-4 text-right">
+
+                    Ver
 
                 </td>
 

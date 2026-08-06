@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'apps.seasons',
     'apps.dashboard',
     'apps.core',
+    'apps.statements',
 
     'tailwind',
     'theme',

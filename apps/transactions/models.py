@@ -73,7 +73,7 @@ class Transaction(models.Model):
     class Meta:
         verbose_name = 'Movimiento'
         verbose_name_plural = 'Movimientos'
-        ordering = ["date", "id"]
+        ordering = ["-date", "-id"]
 
     @property
     def is_charge(self):

@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block title %}
+Estado de cuenta
+{% endblock %}
+
+{% block content %}
+
+<div class="mx-auto max-w-5xl bg-white p-10 shadow-lg">
+
+    <div class="text-center">
+
+        <h1 class="text-4xl font-bold tracking-wide">
+
+            ESTADO DE CUENTA
+
+        </h1>
+
+        <p class="mt-2 text-gray-500">
+
+            Club Ledger
+
+        </p>
+
+    </div>
+
+    <div class="mt-10 grid grid-cols-2 gap-8">
+
+        <div>
+
+            <h2 class="text-sm uppercase tracking-widest text-gray-500">
+
+                Cliente
+
+            </h2>
+
+            <p class="mt-2 text-xl font-semibold">
+
+                {{ customer.name }}
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <h2 class="text-sm uppercase tracking-widest text-gray-500">
+
+                Temporada
+
+            </h2>
+
+            <p class="mt-2 text-xl font-semibold">
+
+                {{ season.name }}
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="mt-8">
+
+        <span class="text-sm text-gray-500">
+
+            Fecha de emisión
+
+        </span>
+
+        <p class="font-semibold">
+
+            {% now "d/m/Y" %}
+
+        </p>
+
+    </div>
+
+    <div class="mt-10 grid grid-cols-3 gap-6">
+
+        {% include "components/cards/stat_card_money.html" with title="Pedidos" value=total_charges %}
+
+        {% include "components/cards/stat_card_money.html" with title="Pagos" value=total_payments %}
+
+        {% include "components/cards/stat_card_money.html" with title="Saldo pendiente" value=balance %}
+
+    </div>
+
+    <table class="mt-10 w-full border-collapse">
+
+        <thead>
+
+            <tr class="border-b-2">
+
+                <th class="py-3 text-left">
+
+                    Fecha
+
+                </th>
+
+                <th class="text-left">
+
+                    Concepto
+
+                </th>
+
+                <th class="text-right">
+
+                    Cargo
+
+                </th>
+
+                <th class="text-right">
+
+                    Pago
+
+                </th>
+
+                <th class="text-right">
+
+                    Saldo
+
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+            {% for row in rows %}
+
+                <tr class="border-b">
+
+                    <td class="py-3">
+
+                        {{ row.transaction.date|date:"d/m/Y" }}
+
+                    </td>
+
+                    <td>
+
+                        {{ row.transaction.description }}
+
+                    </td>
+
+                    <td class="text-right">
+
+                        {% if row.transaction.is_charge %}
+
+                            {{ row.transaction.amount }} €
+
+                        {% endif %}
+
+                    </td>
+
+                    <td class="text-right">
+
+                        {% if row.transaction.is_payment %}
+
+                            {{ row.transaction.amount }} €
+
+                        {% endif %}
+
+                    </td>
+
+                    <td class="text-right font-semibold">
+
+                        {{ row.running_balance }} €
+
+                    </td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+    <div class="mt-10 border-t pt-6">
+
+        <div class="flex justify-end">
+
+            <div class="text-right">
+
+                <p class="text-gray-500">
+
+                    Saldo pendiente
+
+                </p>
+
+                <p class="text-3xl font-bold">
+
+                    {{ balance }} €
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="mt-16 text-center text-sm text-gray-500">
+
+        Gracias por confiar en nosotros.
+
+    </div>
+
+</div>
+
+{% endblock %}
+            
+
+

@@ -24,6 +24,7 @@ urlpatterns = [
     path("accounts/", include("apps.accounts.urls", namespace='accounts')),
     path("", include("apps.dashboard.urls", namespace='dashboard')),
     path("transactions/", include("apps.transactions.urls", namespace='transactions')),
+    path("statements/", include("apps.statements.urls", namespace='statements')),
 
     path("__reload__/", include("django_browser_reload.urls")),
 ]
