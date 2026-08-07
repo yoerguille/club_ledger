@@ -25,12 +25,12 @@ Estado de cuenta
         🖨 Imprimir
     </button>
 
-    <button
-        disabled
-        class="cursor-not-allowed rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white opacity-60"
+    <a
+        href="{% url 'statements:statement_pdf' account.pk %}"
+        class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
     >
         📄 Descargar PDF
-    </button>
+    </a>
 
     <button
         disabled
@@ -44,7 +44,7 @@ Estado de cuenta
 {% block content %}
 
 
-<div class="mx-auto max-w-5xl bg-white p-10 shadow-lg">
+<div class="p-10">
 
 
     <div class="text-center">

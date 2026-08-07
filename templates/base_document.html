@@ -18,7 +18,7 @@
 
     </title>
 
-    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <link rel="stylesheet" href="{% static 'css/print.css' %}">
     {% block extra_css %}
     {% endblock %}
 
@@ -35,13 +35,32 @@
             }
 
             main {
-                margin: 0;
-                max-width: 100%;
+                margin: 0 !important;
+
                 width: 100%;
+
+                max-width: none;
+
                 box-shadow: none;
+
             }
 
+            tr {
+
+                page-break-inside: avoid;
+
+            }
+
+            .grid {
+
+                break-inside: avoid;
+
+            }
+
+            
         }
+
+    
 
     </style>
    
@@ -71,8 +90,7 @@
 
     </div>
 
-    <main
-        class="mx-auto my-10 max-w-5xl bg-white shadow-lg">
+    <main class="mx-auto my-10 max-w-5xl bg-white shadow-lg">
 
         {% block content %}
         {% endblock %}
