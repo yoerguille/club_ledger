@@ -1,0 +1,371 @@
+/* ==========================================================
+   DOCUMENTO
+========================================================== */
+
+.document {
+    max-width: 1100px;
+    margin: 2.5rem auto;
+    padding: 3rem;
+
+    background: #ffffff;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, .08);
+}
+
+
+/* ==========================================================
+   TOOLBAR
+========================================================== */
+
+.document-toolbar {
+
+    background: white;
+
+    border-bottom: 1px solid #e5e7eb;
+
+}
+
+.document-toolbar__container {
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    padding: 1rem 0;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+.document-toolbar__actions {
+
+    display: flex;
+
+    gap: .75rem;
+
+}
+
+
+/* ==========================================================
+   CABECERA
+========================================================== */
+
+.document-header {
+
+    text-align: center;
+
+    margin-bottom: 3rem;
+
+}
+
+.document-title {
+
+    font-size: 2.4rem;
+
+    font-weight: 700;
+
+    letter-spacing: .08em;
+
+    text-transform: uppercase;
+
+}
+
+.document-subtitle {
+
+    margin-top: .5rem;
+
+    color: #6b7280;
+
+}
+
+
+/* ==========================================================
+   INFORMACIÓN GENERAL
+========================================================== */
+
+.document-meta {
+
+    margin-top: 2.5rem;
+
+    display: grid;
+
+    grid-template-columns: repeat(2,1fr);
+
+    gap: 2rem;
+
+}
+
+.document-meta-title {
+
+    font-size: .8rem;
+
+    text-transform: uppercase;
+
+    color: #6b7280;
+
+    letter-spacing: .08em;
+
+}
+
+.document-meta-value {
+
+    margin-top: .35rem;
+
+    font-size: 1.2rem;
+
+    font-weight: 600;
+
+}
+
+
+/* ==========================================================
+   TARJETAS RESUMEN
+========================================================== */
+
+.summary-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(3,1fr);
+
+    gap: 1.5rem;
+
+    margin-top: 3rem;
+
+}
+
+.summary-card {
+
+    background: #fafafa;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: .75rem;
+
+    padding: 1.5rem;
+
+}
+
+.summary-title {
+
+    color: #6b7280;
+
+    font-size: .85rem;
+
+    text-transform: uppercase;
+
+}
+
+.summary-value {
+
+    margin-top: .75rem;
+
+    font-size: 2rem;
+
+    font-weight: bold;
+
+}
+
+
+/* ==========================================================
+   TABLA
+========================================================== */
+
+.document-table {
+
+    width: 100%;
+
+    margin-top: 3rem;
+
+    border-collapse: collapse;
+
+}
+
+.document-table thead {
+
+    border-bottom: 2px solid #d1d5db;
+
+}
+
+.document-table th {
+
+    padding: .9rem;
+
+    text-align: left;
+
+    font-weight: 600;
+
+}
+
+.document-table td {
+
+    padding: .9rem;
+
+    border-bottom: 1px solid #ececec;
+
+}
+
+.document-table td:last-child,
+.document-table th:last-child {
+
+    text-align: right;
+
+}
+
+
+/* ==========================================================
+   SALDO FINAL
+========================================================== */
+
+.balance-box {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    margin-top: 3rem;
+
+}
+
+.balance-content {
+
+    text-align: right;
+
+}
+
+.balance-label {
+
+    color: #6b7280;
+
+}
+
+.balance-value {
+
+    font-size: 2.5rem;
+
+    font-weight: 700;
+
+}
+
+
+/* ==========================================================
+   PIE
+========================================================== */
+
+.document-footer {
+
+    margin-top: 4rem;
+
+    padding-top: 2rem;
+
+    border-top: 1px solid #e5e7eb;
+
+    text-align: center;
+
+    color: #6b7280;
+
+    font-size: .9rem;
+
+}
+
+/* ==========================================================
+   DOCUMENT ACTIONS
+========================================================== */
+
+.document-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: .5rem;
+
+    padding: .65rem 1rem;
+
+    border-radius: .5rem;
+
+    font-size: .9rem;
+
+    font-weight: 500;
+
+    text-decoration: none;
+
+    transition: all .2s ease;
+
+    cursor: pointer;
+
+    border: none;
+
+}
+
+.document-btn:hover {
+
+    transform: translateY(-1px);
+
+}
+
+.document-btn:disabled {
+
+    opacity: .55;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+}
+
+
+/* ---------- Variantes ---------- */
+
+.document-btn-secondary {
+
+    background: #374151;
+
+    color: white;
+
+}
+
+.document-btn-secondary:hover {
+
+    background: #1f2937;
+
+}
+
+
+.document-btn-primary {
+
+    background: #4f46e5;
+
+    color: white;
+
+}
+
+.document-btn-primary:hover {
+
+    background: #4338ca;
+
+}
+
+
+.document-btn-success {
+
+    background: #16a34a;
+
+    color: white;
+
+}
+
+.document-btn-success:hover {
+
+    background: #15803d;
+
+}
