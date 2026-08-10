@@ -15,17 +15,10 @@
         ← Volver
     </a>
 
-    <button
-        type="button"
-        onclick="window.print()"
-        class="document-btn document-btn-secondary"
-    >
-        🖨 Imprimir
-    </button>
 
     <a
         href="{% url 'statements:statement_pdf' account.pk %}"
-        class="document-btn document-btn-primary"
+        class="document-btn document-btn-primary "
     >
         📄 Descargar PDF
     </a>
