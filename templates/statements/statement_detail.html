@@ -1,15 +1,57 @@
 {% extends "base_document.html" %}
 
+
 {% block title %}
-Estado de cuenta
+    Estado de cuenta · {{ customer.name }}
 {% endblock %}
 
+
+{% block document_actions %}
+
+    <a
+        href="{% url 'accounts:account_detail' account.pk %}"
+        class="document-btn document-btn-secondary"
+    >
+        ← Volver
+    </a>
+
+    <button
+        type="button"
+        onclick="window.print()"
+        class="document-btn document-btn-secondary"
+    >
+        🖨 Imprimir
+    </button>
+
+    <a
+        href="{% url 'statements:statement_pdf' account.pk %}"
+        class="document-btn document-btn-primary"
+    >
+        📄 Descargar PDF
+    </a>
+
+    <button
+        type="button"
+        disabled
+        class="document-btn document-btn-success"
+    >
+        ✉ Enviar por email
+    </button>
+
+{% endblock %}
+
+
 {% block content %}
+
+
+<!-- ===================================================== -->
+<!-- CABECERA -->
+<!-- ===================================================== -->
 
 <header class="document-header">
 
     <h1 class="document-title">
-        ESTADO DE CUENTA
+        Estado de cuenta
     </h1>
 
     <p class="document-subtitle">
@@ -18,9 +60,14 @@ Estado de cuenta
 
 </header>
 
+
+<!-- ===================================================== -->
+<!-- INFORMACIÓN DEL DOCUMENTO -->
+<!-- ===================================================== -->
+
 <section class="document-meta">
 
-    <div>
+    <div class="document-meta__item">
 
         <h2 class="document-meta-title">
             Cliente
@@ -32,7 +79,8 @@ Estado de cuenta
 
     </div>
 
-    <div>
+
+    <div class="document-meta__item">
 
         <h2 class="document-meta-title">
             Temporada
@@ -46,7 +94,8 @@ Estado de cuenta
 
 </section>
 
-<section class="mt-8">
+
+<section class="document-date">
 
     <p class="document-meta-title">
         Fecha de emisión
@@ -58,15 +107,57 @@ Estado de cuenta
 
 </section>
 
+
+<!-- ===================================================== -->
+<!-- RESUMEN -->
+<!-- ===================================================== -->
+
 <section class="summary-grid">
 
-    {% include "components/cards/stat_card_money.html" with title="Pedidos" value=total_charges %}
+    <div class="summary-card">
 
-    {% include "components/cards/stat_card_money.html" with title="Pagos" value=total_payments %}
+        <p class="summary-title">
+            Pedidos
+        </p>
 
-    {% include "components/cards/stat_card_money.html" with title="Saldo pendiente" value=balance %}
+        <p class="summary-value">
+            {{ total_charges }} €
+        </p>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <p class="summary-title">
+            Pagos
+        </p>
+
+        <p class="summary-value">
+            {{ total_payments }} €
+        </p>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <p class="summary-title">
+            Saldo pendiente
+        </p>
+
+        <p class="summary-value">
+            {{ balance }} €
+        </p>
+
+    </div>
 
 </section>
+
+
+<!-- ===================================================== -->
+<!-- MOVIMIENTOS -->
+<!-- ===================================================== -->
 
 <table class="document-table">
 
@@ -74,57 +165,72 @@ Estado de cuenta
 
         <tr>
 
-            <th>Fecha</th>
+            <th>
+                Fecha
+            </th>
 
-            <th>Concepto</th>
+            <th>
+                Concepto
+            </th>
 
-            <th>Cargo</th>
+            <th>
+                Cargo
+            </th>
 
-            <th>Pago</th>
+            <th>
+                Pago
+            </th>
 
-            <th>Saldo</th>
+            <th>
+                Saldo
+            </th>
 
         </tr>
 
     </thead>
 
+
     <tbody>
 
         {% for row in rows %}
 
-        <tr>
+            <tr>
 
-            <td>
-                {{ row.transaction.date|date:"d/m/Y" }}
-            </td>
+                <td>
+                    {{ row.transaction.date|date:"d/m/Y" }}
+                </td>
 
-            <td>
-                {{ row.transaction.description }}
-            </td>
 
-            <td>
+                <td>
+                    {{ row.transaction.description }}
+                </td>
 
-                {% if row.transaction.is_charge %}
-                    {{ row.transaction.amount }} €
-                {% endif %}
 
-            </td>
+                <td>
 
-            <td>
+                    {% if row.transaction.is_charge %}
+                        {{ row.transaction.amount }} €
+                    {% endif %}
 
-                {% if row.transaction.is_payment %}
-                    {{ row.transaction.amount }} €
-                {% endif %}
+                </td>
 
-            </td>
 
-            <td class="font-semibold">
+                <td>
 
-                {{ row.running_balance }} €
+                    {% if row.transaction.is_payment %}
+                        {{ row.transaction.amount }} €
+                    {% endif %}
 
-            </td>
+                </td>
 
-        </tr>
+
+                <td>
+
+                    {{ row.running_balance }} €
+
+                </td>
+
+            </tr>
 
         {% endfor %}
 
@@ -132,25 +238,31 @@ Estado de cuenta
 
 </table>
 
+
+<!-- ===================================================== -->
+<!-- SALDO FINAL -->
+<!-- ===================================================== -->
+
 <section class="balance-box">
 
     <div class="balance-content">
 
         <p class="balance-label">
-
             Saldo pendiente
-
         </p>
 
         <p class="balance-value">
-
             {{ balance }} €
-
         </p>
 
     </div>
 
 </section>
+
+
+<!-- ===================================================== -->
+<!-- PIE -->
+<!-- ===================================================== -->
 
 <footer class="document-footer">
 
@@ -158,36 +270,5 @@ Estado de cuenta
 
 </footer>
 
-{% block document_actions %}
-
-<a
-    href="{% url 'accounts:account_detail' account.pk %}"
-    class="document-btn document-btn-secondary"
->
-    ← Volver
-</a>
-
-<button
-    onclick="window.print()"
-    class="document-btn document-btn-secondary"
->
-    🖨 Imprimir
-</button>
-
-<a
-    href="{% url 'statements:statement_pdf' account.pk %}"
-    class="document-btn document-btn-primary"
->
-    📄 Descargar PDF
-</a>
-
-<button
-    disabled
-    class="document-btn document-btn-success"
->
-    ✉ Enviar por email
-</button>
-
-{% endblock %}
 
 {% endblock %}

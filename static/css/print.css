@@ -1,7 +1,444 @@
+/* ==========================================================
+   CONFIGURACIÓN DE PÁGINA
+========================================================== */
+
 @page {
 
     size: A4 portrait;
 
-    margin: 18mm 15mm 18mm 15mm;
+    margin: 12mm 12mm 15mm 12mm;
+}
 
+
+/* ==========================================================
+   OCULTAR INTERFAZ
+========================================================== */
+
+.no-print,
+.document-toolbar {
+
+    display: none !important;
+}
+
+
+/* ==========================================================
+   CONFIGURACIÓN GENERAL
+========================================================== */
+
+html,
+body {
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    width: auto !important;
+
+    min-width: 0 !important;
+
+    background: #ffffff !important;
+
+    color: #111827 !important;
+
+    font-size: 10pt !important;
+}
+
+
+/* ==========================================================
+   PÁGINA DEL DOCUMENTO
+========================================================== */
+
+.document-page {
+
+    width: auto !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+}
+
+
+/* ==========================================================
+   DOCUMENTO
+========================================================== */
+
+.document {
+
+    width: 100% !important;
+
+    max-width: none !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    border: none !important;
+
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+
+    background: #ffffff !important;
+
+    box-sizing: border-box;
+}
+
+
+/* ==========================================================
+   CABECERA
+========================================================== */
+
+.document-header {
+
+    margin-bottom: 16pt !important;
+
+    padding-bottom: 10pt !important;
+
+    border-bottom: 1px solid #d1d5db !important;
+}
+
+.document-title {
+
+    margin: 0 !important;
+
+    font-size: 19pt !important;
+
+    line-height: 1.1 !important;
+
+    letter-spacing: 0.05em !important;
+}
+
+.document-subtitle {
+
+    margin-top: 4pt !important;
+
+    font-size: 9pt !important;
+}
+
+
+/* ==========================================================
+   INFORMACIÓN
+========================================================== */
+
+.document-meta {
+
+    display: grid !important;
+
+    grid-template-columns: 1fr 1fr !important;
+
+    gap: 14pt 30pt !important;
+
+    margin-top: 14pt !important;
+}
+
+.document-meta-title {
+
+    font-size: 7pt !important;
+
+    line-height: 1.2 !important;
+}
+
+.document-meta-value {
+
+    margin-top: 3pt !important;
+
+    font-size: 9.5pt !important;
+
+    line-height: 1.3 !important;
+}
+
+.document-date {
+
+    margin-top: 10pt !important;
+}
+
+
+/* ==========================================================
+   RESUMEN
+========================================================== */
+
+.summary-grid {
+
+    display: grid !important;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+
+    gap: 8pt !important;
+
+    margin-top: 16pt !important;
+}
+
+.summary-card {
+
+    padding: 8pt !important;
+
+    border: 1px solid #d1d5db !important;
+
+    border-radius: 5pt !important;
+
+    background: #f9fafb !important;
+
+    box-sizing: border-box;
+}
+
+.summary-title {
+
+    font-size: 7pt !important;
+
+    line-height: 1.2 !important;
+}
+
+.summary-value {
+
+    margin-top: 3pt !important;
+
+    font-size: 11pt !important;
+
+    line-height: 1.2 !important;
+}
+
+
+/* ==========================================================
+   TABLA
+========================================================== */
+
+.document-table {
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    margin-top: 16pt !important;
+
+    border-collapse: collapse !important;
+
+    table-layout: fixed !important;
+
+    font-size: 8pt !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* ==========================================================
+   CABECERA
+========================================================== */
+
+.document-table thead {
+
+    display: table-header-group;
+
+    border-bottom: 1.5pt solid #9ca3af !important;
+}
+
+.document-table th {
+
+    padding: 5pt 3pt !important;
+
+    font-size: 7pt !important;
+
+    line-height: 1.2 !important;
+
+    font-weight: 700 !important;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.02em;
+
+    color: #374151 !important;
+
+    text-align: left;
+
+    box-sizing: border-box !important;
+}
+
+
+/* ==========================================================
+   CELDAS
+========================================================== */
+
+.document-table td {
+
+    padding: 5pt 3pt !important;
+
+    font-size: 8pt !important;
+
+    line-height: 1.25 !important;
+
+    border-bottom: 0.5pt solid #e5e7eb !important;
+
+    vertical-align: top !important;
+
+    overflow-wrap: anywhere !important;
+
+    word-break: normal !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* ==========================================================
+   ANCHOS DE COLUMNA
+========================================================== */
+
+/*
+    Fecha       13%
+    Concepto    41%
+    Cargo       15%
+    Pago        15%
+    Saldo       16%
+
+    Total       100%
+*/
+
+
+.document-table th:nth-child(1),
+.document-table td:nth-child(1) {
+
+    width: 13% !important;
+
+    white-space: nowrap !important;
+}
+
+
+.document-table th:nth-child(2),
+.document-table td:nth-child(2) {
+
+    width: 41% !important;
+
+    overflow-wrap: anywhere !important;
+}
+
+
+.document-table th:nth-child(3),
+.document-table td:nth-child(3) {
+
+    width: 15% !important;
+
+    text-align: right !important;
+
+    white-space: nowrap !important;
+}
+
+
+.document-table th:nth-child(4),
+.document-table td:nth-child(4) {
+
+    width: 15% !important;
+
+    text-align: right !important;
+
+    white-space: nowrap !important;
+}
+
+
+.document-table th:nth-child(5),
+.document-table td:nth-child(5) {
+
+    width: 16% !important;
+
+    text-align: right !important;
+
+    white-space: nowrap !important;
+}
+
+.document-table tr {
+
+    break-inside: avoid;
+
+    page-break-inside: avoid;
+}
+
+
+/* ==========================================================
+   SALDO
+========================================================== */
+
+.balance-box {
+
+    display: flex !important;
+
+    justify-content: flex-end !important;
+
+    margin-top: 15pt !important;
+
+    padding-top: 8pt !important;
+
+    border-top: 1.5pt solid #9ca3af !important;
+}
+
+.balance-content {
+
+    min-width: 150pt;
+
+    text-align: right !important;
+}
+
+.balance-label {
+
+    font-size: 7.5pt !important;
+
+    line-height: 1.2 !important;
+}
+
+.balance-value {
+
+    margin-top: 3pt !important;
+
+    font-size: 16pt !important;
+
+    line-height: 1.1 !important;
+}
+
+
+/* ==========================================================
+   PIE
+========================================================== */
+
+.document-footer {
+
+    margin-top: 20pt !important;
+
+    padding-top: 8pt !important;
+
+    font-size: 7.5pt !important;
+
+    border-top: 0.5pt solid #e5e7eb !important;
+}
+
+
+/* ==========================================================
+   EVITAR ELEMENTOS INTERACTIVOS
+========================================================== */
+
+button,
+input,
+select,
+textarea {
+
+    display: none !important;
+}
+
+
+/* ==========================================================
+   ENLACES
+========================================================== */
+
+a {
+
+    color: inherit !important;
+
+    text-decoration: none !important;
+}
+
+
+/* ==========================================================
+   COLORES DE IMPRESIÓN
+========================================================== */
+
+* {
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
 }
