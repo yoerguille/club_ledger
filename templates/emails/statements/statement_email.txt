@@ -1,0 +1,11 @@
+Hola, {{ customer.name }}.
+
+Te adjuntamos el estado de cuenta correspondiente a la temporada {{ season.name }}.
+
+Saldo pendiente: {{ balance }} €
+
+Encontrarás el estado de cuenta completo adjunto a este correo en formato PDF.
+
+Un saludo,
+
+Club Ledger

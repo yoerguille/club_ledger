@@ -1,17 +1,60 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
+from django.contrib import messages
 
 from apps.accounts.models import Account
 
 from .services import StatementBuilder
 
 from .pdf import PdfRenderer
+from .email import StatementEmailSender
 
 from django.views import View
 
 from django.http import HttpResponse
 
 # Create your views here.
+
+
+class StatementEmailView(View):
+
+    def post(self, request, account_pk):
+
+        account = get_object_or_404(
+            Account,
+            pk=account_pk,
+        )
+
+        customer = account.customer
+
+        if not customer.email:
+
+            messages.error(
+                request,
+                "El cliente no tiene una dirección de email registrada."
+            )
+
+            return redirect(
+                "statements:statement_detail",
+                account_pk=account.pk
+            )
+
+        base_url = request.build_absolute_uri("/")
+
+        StatementEmailSender(account).send(
+            base_url=base_url,
+        )
+
+        messages.success(
+            request,
+            f"Estado de cuenta enviado correctamente a {customer.email}.",
+        )
+
+        return redirect(
+            "statements:statement_detail",
+            account_pk=account.pk
+        )
+            
 
 
 class StatementPdfView(View):

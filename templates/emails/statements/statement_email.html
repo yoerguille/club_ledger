@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Estado de cuenta</title>
+</head>
+
+<body>
+
+    <h2>Hola, {{ customer.name }}</h2>
+
+    <p>
+        Te adjuntamos el estado de cuenta correspondiente
+        a la temporada <strong>{{ season.name }}</strong>.
+    </p>
+
+    <p>
+        <strong>Saldo pendiente:</strong>
+        {{ balance }} €
+    </p>
+
+    <p>
+        Encontrarás el estado de cuenta completo
+        adjunto a este correo en formato PDF.
+    </p>
+
+    <p>
+        Un saludo,<br>
+        <strong>Club Ledger</strong>
+    </p>
+
+</body>
+
+</html>
