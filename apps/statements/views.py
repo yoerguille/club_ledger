@@ -35,8 +35,8 @@ class StatementEmailView(View):
             )
 
             return redirect(
-                "statements:statement_detail",
-                account_pk=account.pk
+                "accounts:account_detail",
+                pk=account.pk,
             )
 
         base_url = request.build_absolute_uri("/")
@@ -51,8 +51,8 @@ class StatementEmailView(View):
         )
 
         return redirect(
-            "statements:statement_detail",
-            account_pk=account.pk
+            "accounts:account_detail",
+            pk=account.pk,
         )
             
 
