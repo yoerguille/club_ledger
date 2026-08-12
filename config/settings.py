@@ -11,9 +11,12 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
@@ -139,6 +142,15 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-DEFAULT_FROM_EMAIL = "Club Ledger <noreply@clubledger.local>"
+EMAIL_HOST = os.environ["EMAIL_HOST"]
+EMAIL_PORT = int(os.environ["EMAIL_PORT"])
+
+EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
+EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
+
+EMAIL_USE_TLS = os.environ["EMAIL_USE_TLS"].lower() == "true"
+EMAIL_USE_SSL = False
+
+DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]

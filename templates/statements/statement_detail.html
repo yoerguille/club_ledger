@@ -23,13 +23,21 @@
         📄 Descargar PDF
     </a>
 
-    <button
-        type="button"
-        disabled
-        class="document-btn document-btn-success"
+    <form
+        method="post"
+        action="{% url 'statements:statement_email' account.pk %}"
+        class="inline"
     >
-        ✉ Enviar por email
-    </button>
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="document-btn document-btn-success"
+        >
+            ✉ Enviar por email
+        </button>
+
+    </form>
 
 {% endblock %}
 
