@@ -8,6 +8,7 @@ class AccountForm(forms.ModelForm):
 
         fields = [
             'season',
+            'name',
             'notes',
         ]
 
@@ -15,23 +16,3 @@ class AccountForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.customer = customer
-
-    def clean(self):
-        cleaned_data = super().clean()
-
-        season = cleaned_data.get("season")
-
-        if (
-            self.customer
-            and season
-            and Account.objects.filter(
-                customer = self.customer,
-                season = season,
-            ).exists()
-        ):
-            self.add_error(
-                "season",
-                "Este cliente ya tiene una cuenta en esa temporada."
-            )
-        
-        return cleaned_data

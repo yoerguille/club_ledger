@@ -21,6 +21,11 @@ class Account(models.Model):
         verbose_name="Temporada",
     )
 
+    name = models.CharField(
+        max_length=100,
+        verbose_name="Nombre"
+    )
+
     notes = models.TextField(
         blank=True,
         null=True,
@@ -40,15 +45,9 @@ class Account(models.Model):
         verbose_name_plural = 'Cuentas'
         ordering = ["-created_at"]
 
-        constraints = [
-            models.UniqueConstraint(
-                fields=["customer", "season"],
-                name="unique_customer_season_account"
-            )
-        ]
-
+        
     def __str__(self):
-        return f"{self.customer.name} - {self.season.name}"
+        return f"{self.customer.name} - {self.season.name} - {self.name}"
     
     @property
     def balance(self):

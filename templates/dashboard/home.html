@@ -10,22 +10,22 @@
 
 {% block content %}
 
-    <div class="grid grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 
-        {% include "components/cards/stat_card.html" with title="Clientes" value=total_customers %}
+        {% include "components/cards/stat_card.html" with title="Clientes" value=total_customers subtitle="Clientes activos" %}    
 
-        {% if active_season %}
+        {% include "components/cards/stat_card.html" with title="Cuentas" value=total_accounts subtitle="Temporada activa" %}
 
-            {% include "components/cards/stat_card.html" with title="Temporada" value=active_season.name %}
+        {% include "components/cards/stat_card_money.html" with title="Cargos" value=total_charges subtitle="Temporada activa" %}
 
-        {% else %}
-            —
-        {% endif %}
+        {% include "components/cards/stat_card_money.html" with title="Pagos" value=total_payments subtitle="Temporada activa" %}
 
-        {% include "components/cards/stat_card_money.html" with title="Saldo pendiente" value=total_balance %}
 
-        {% include "components/cards/stat_card.html" with title="Transacciones" value=total_transactions %}
-            
+    </div>
+
+    <div class="mt-6">
+
+        {% include "components/cards/stat_card_money.html" with title="Saldo pendiente" value=total_balance subtitle="Temporada activa" %}
 
     </div>
 
