@@ -68,7 +68,7 @@ def get_dashboard_stats():
     )["total"]
 
     total_balance = (
-        Transaction.objects.aggregate(
+        transactions.aggregate(
             balance=Coalesce(
                 Sum(
                     Case(
