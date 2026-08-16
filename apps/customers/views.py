@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Customer
+from apps.seasons.models import Season
+from apps.accounts.models import Account
 from .forms import CustomerForm
 from django.urls import reverse_lazy
 
@@ -14,6 +16,39 @@ class CustomerDetailView(DetailView):
     model = Customer
     template_name ="customers/customers_detail.html"
     context_object_name = 'customer'
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        active_season = Season.objects.filter(
+            is_active = True
+        ).first()
+
+        season_id = self.request.GET.get("season")
+
+        if active_season:
+            selected_season = Season.objects.filter(
+                pk=season_id
+            ).first()
+
+        else:
+            selected_season = active_season
+
+        accounts = Account.objects.filter(
+            customer = self.object,
+            season = selected_season,
+        ).select_related(
+            "season",
+        )
+
+        context["active_season"] = active_season
+        context["selected_season"] = selected_season
+        context["seasons"] = Season.objects.all().order_by("-name")
+        context["accounts"] = accounts
+
+        return context
+
 
 class CustomerCreateView(CreateView):
     model = Customer
