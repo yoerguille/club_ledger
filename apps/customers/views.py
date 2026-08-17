@@ -5,14 +5,15 @@ from apps.seasons.models import Season
 from apps.accounts.models import Account
 from .forms import CustomerForm
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
-class CustomerListView(ListView):
+class CustomerListView(LoginRequiredMixin, ListView):
     model = Customer
     template_name = "customers/customers_list.html"
     context_object_name = "customers"
 
-class CustomerDetailView(DetailView):
+class CustomerDetailView(LoginRequiredMixin, DetailView):
     model = Customer
     template_name ="customers/customers_detail.html"
     context_object_name = 'customer'
@@ -52,7 +53,7 @@ class CustomerDetailView(DetailView):
         return context
 
 
-class CustomerCreateView(CreateView):
+class CustomerCreateView(LoginRequiredMixin, CreateView):
     model = Customer
 
     form_class = CustomerForm
@@ -60,7 +61,7 @@ class CustomerCreateView(CreateView):
 
     success_url = reverse_lazy("customers:customer_list")
 
-class CustomerUpdateView(UpdateView):
+class CustomerUpdateView(LoginRequiredMixin, UpdateView):
     model = Customer
 
     form_class = CustomerForm

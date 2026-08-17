@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -154,3 +156,9 @@ EMAIL_USE_TLS = os.environ["EMAIL_USE_TLS"].lower() == "true"
 EMAIL_USE_SSL = False
 
 DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
+
+# Login
+
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/login/"

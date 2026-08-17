@@ -13,10 +13,12 @@ from django.views import View
 
 from django.http import HttpResponse
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 # Create your views here.
 
 
-class StatementEmailView(View):
+class StatementEmailView(LoginRequiredMixin, View):
 
     def post(self, request, account_pk):
 
@@ -57,7 +59,7 @@ class StatementEmailView(View):
             
 
 
-class StatementPdfView(View):
+class StatementPdfView(LoginRequiredMixin, View):
 
     def get(self, request, account_pk):
 
@@ -86,7 +88,7 @@ class StatementPdfView(View):
 
         return response
 
-class StatementDetailView(TemplateView):
+class StatementDetailView(LoginRequiredMixin, TemplateView):
 
     template_name = "statements/statement_detail.html"
 

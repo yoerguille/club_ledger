@@ -6,10 +6,11 @@ from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404 , redirect
 from apps.accounts.models import Account
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
-class ChargeCreateView(CreateView):
+class ChargeCreateView(LoginRequiredMixin, CreateView):
     model = Transaction
 
     form_class = ChargeForm
@@ -49,7 +50,7 @@ class ChargeCreateView(CreateView):
 
 
 
-class PaymentCreateView(CreateView):
+class PaymentCreateView(LoginRequiredMixin, CreateView):
     model = Transaction
 
     form_class = PaymentForm

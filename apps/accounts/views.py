@@ -6,16 +6,17 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.urls import reverse
 from .forms import AccountForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
-class AccountDetailView(DetailView):
+class AccountDetailView(LoginRequiredMixin, DetailView):
     model = Account
     context_object_name = "account"
     template_name = "accounts/accounts_detail.html"
 
 
-class AccountCreateView(CreateView):
+class AccountCreateView(LoginRequiredMixin, CreateView):
     model = Account
     context_object_name = "account"
     template_name = "accounts/account_form.html"
