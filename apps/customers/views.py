@@ -27,7 +27,7 @@ class CustomerDetailView(DetailView):
 
         season_id = self.request.GET.get("season")
 
-        if active_season:
+        if season_id:
             selected_season = Season.objects.filter(
                 pk=season_id
             ).first()
@@ -44,7 +44,9 @@ class CustomerDetailView(DetailView):
 
         context["active_season"] = active_season
         context["selected_season"] = selected_season
-        context["seasons"] = Season.objects.all().order_by("-name")
+        context["seasons"] = Season.objects.filter(
+            accounts__customer=self.object
+        ).distinct().order_by("-name")
         context["accounts"] = accounts
 
         return context

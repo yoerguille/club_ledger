@@ -66,16 +66,6 @@
 
         <div class="mb-4 flex items-center justify-between">
 
-            <div>
-                <h2 class="text-lg font-semibold text-gray-900">
-                    Cuentas
-                </h2>
-
-                <p class="text-sm text-gray-500">
-                    Historial de cuentas por temporada
-                </p>
-            </div>
-
             <div class="flex items-center justify-between gap-3">
                 <a
                     href="{% url 'customers:customer_update' customer.pk %}"
@@ -93,8 +83,98 @@
 
         </div>
 
+        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 
-        {% if customer.accounts.all %}
+            <div>
+                <h2 class="text-xl font-semibold text-gray-900">
+                    Cuentas
+                </h2>
+
+                <p class="mt-1 text-sm text-gray-500">
+                    {{ accounts|length }}
+                    {% if accounts|length == 1 %}
+                        cuenta
+                    {% else %}
+                        cuentas
+                    {% endif %}
+                    · Temporada {{ selected_season.name }}
+                </p>
+            </div>
+
+
+            <div class="flex items-end gap-3">
+
+                {% if selected_season.is_active %}
+
+                    <span
+                        class="mb-1 inline-flex items-center rounded-full
+                            bg-green-50 px-2.5 py-1 text-xs font-medium
+                            text-green-700"
+                    >
+                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-green-500"></span>
+                        Activa
+                    </span>
+
+                {% else %}
+
+                    <span
+                        class="mb-1 inline-flex items-center rounded-full
+                            bg-gray-100 px-2.5 py-1 text-xs font-medium
+                            text-gray-600"
+                    >
+                        Histórica
+                    </span>
+
+                {% endif %}
+
+
+                <form method="get">
+
+                    <label
+                        for="season"
+                        class="mb-1.5 block text-xs font-medium
+                            uppercase tracking-wide text-gray-500"
+                    >
+                        Temporada
+                    </label>
+
+                    <select
+                        id="season"
+                        name="season"
+                        onchange="this.form.submit()"
+                        class="min-w-48 rounded-lg border border-gray-300
+                            bg-white px-3 py-2.5 text-sm font-medium
+                            text-gray-700 shadow-sm transition
+                            hover:border-gray-400
+                            focus:border-indigo-500 focus:outline-none
+                            focus:ring-2 focus:ring-indigo-500"
+                    >
+
+                        {% for season in seasons %}
+
+                            <option
+                                value="{{ season.pk }}"
+                                {% if season.pk == selected_season.pk %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ season.name }}
+                                {% if season.is_active %}
+                                    · Activa
+                                {% endif %}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        {% if accounts %}
 
             <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
 
