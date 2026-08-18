@@ -1,23 +1,26 @@
 from django.shortcuts import render
 from .models import Account
 from ..customers.models import Customer
-from django.views.generic import DetailView, CreateView
+from django.views.generic import UpdateView, DetailView, CreateView
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.urls import reverse
 from .forms import AccountForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.urls import reverse_lazy
 
 # Create your views here.
 
-class AccountDetailView(LoginRequiredMixin, DetailView):
+class AccountDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView):
     model = Account
+    permission_required="accounts.view_account"
     context_object_name = "account"
     template_name = "accounts/accounts_detail.html"
 
 
-class AccountCreateView(LoginRequiredMixin, CreateView):
+class AccountCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     model = Account
+    permission_required="accounts.add_account"
     context_object_name = "account"
     template_name = "accounts/account_form.html"
     form_class=AccountForm
@@ -60,3 +63,15 @@ class AccountCreateView(LoginRequiredMixin, CreateView):
         context["title"] = "Nueva cuenta"
 
         return context
+
+class AccountUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+    model = Account
+    permission_required = "accounts.change_account"
+    form_class = AccountForm
+    template_name = "accounts/account_form.html"
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "accounts:account_detail",
+            kwargs = {"pk": self.object.pk},
+        )

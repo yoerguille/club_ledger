@@ -55,6 +55,13 @@ Cuenta
     Generar estado de cuenta
     </a>
 
+    <a
+        href="{% url 'accounts:account_update' account.id %}"
+        class="rounded-lg bg-pink-600 px-4 py-2 text-white hover:bg-pink-700"
+    >
+        Editar cuenta
+    </a>
+
     <div class="ml-auto">
         <a
         href="{% url 'customers:customer_detail' account.customer.id %}"
@@ -129,9 +136,15 @@ Cuenta
                 </td>
 
                 <td class="px-6 py-4 text-right">
-
-                    Ver
-
+                    <button
+                        type="button"
+                        data-delete-url="{% url 'transactions:transaction_delete' transaction.pk %}"
+                        data-description="{{ transaction.description }}"
+                        onclick="openDeleteModal(this.dataset.deleteUrl, this.dataset.description)"
+                        class="text-red-600 hover:text-red-800 text-sm font-medium"
+                    >
+                        Eliminar
+                    </button>
                 </td>
 
             </tr>
@@ -151,3 +164,57 @@ Cuenta
 </div>
 
 {% endblock %}
+
+<!-- Modal de confirmación de borrado -->
+<div
+    id="delete-modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50"
+>
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-sm p-6">
+        <h3 class="text-lg font-semibold text-gray-900">
+            Eliminar movimiento
+        </h3>
+        <p class="mt-2 text-sm text-gray-600">
+            ¿Seguro que quieres eliminar
+            <span id="delete-modal-description" class="font-medium"></span>?
+            Esta acción no se puede deshacer.
+        </p>
+
+        <form id="delete-modal-form" method="POST" class="mt-6 flex justify-end gap-3">
+            {% csrf_token %}
+            <button
+                type="button"
+                onclick="closeDeleteModal()"
+                class="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+            >
+                Cancelar
+            </button>
+            <button
+                type="submit"
+                class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md"
+            >
+                Eliminar
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openDeleteModal(url, description) {
+        const modal = document.getElementById('delete-modal');
+        const form = document.getElementById('delete-modal-form');
+        const desc = document.getElementById('delete-modal-description');
+
+        form.setAttribute('action', url);
+        desc.textContent = description;
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeDeleteModal() {
+        const modal = document.getElementById('delete-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+</script>

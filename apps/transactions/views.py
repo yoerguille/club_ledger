@@ -1,18 +1,19 @@
 from django.shortcuts import render
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DeleteView
 from .models import Transaction
 from .forms import ChargeForm, PaymentForm
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404 , redirect
 from apps.accounts.models import Account
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.http import HttpResponseNotAllowed
 
 # Create your views here.
 
-class ChargeCreateView(LoginRequiredMixin, CreateView):
+class ChargeCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     model = Transaction
-
+    permission_required="transactions.add_transaction"
     form_class = ChargeForm
     template_name = 'transactions/transaction_form.html'
 
@@ -50,9 +51,9 @@ class ChargeCreateView(LoginRequiredMixin, CreateView):
 
 
 
-class PaymentCreateView(LoginRequiredMixin, CreateView):
+class PaymentCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     model = Transaction
-
+    permission_required="transactions.add_transaction"
     form_class = PaymentForm
     template_name = 'transactions/transaction_form.html'
 
@@ -84,4 +85,29 @@ class PaymentCreateView(LoginRequiredMixin, CreateView):
         context["account"] = self.account
         context["title"] = "Registar pago"
         return  context
+
+class TransactionDelteView(DeleteView):
+    model = Transaction
+
+    def get_success_url(self):
+        return reverse("accounts:account_detail", kwargs={"pk": self.account.pk})
+
+    def get(self, request, *args, **kwargs):
+        # Como la confirmación se hace vía modal (POST directo),
+        # no necesitamos la página de confirmación por defecto de Django.
+
+        return HttpResponseNotAllowed(["POST"])
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        messages.success(
+            self.request,
+            "El movimiento se ha eliminado correctamente."
+        )
+        
+        return response
+
+
+
     
