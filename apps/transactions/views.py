@@ -86,27 +86,12 @@ class PaymentCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView)
         context["title"] = "Registar pago"
         return  context
 
-class TransactionDelteView(DeleteView):
+class TransactionDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     model = Transaction
+    permission_required ="transactions.delete_transaction"
 
     def get_success_url(self):
-        return reverse("accounts:account_detail", kwargs={"pk": self.account.pk})
-
-    def get(self, request, *args, **kwargs):
-        # Como la confirmación se hace vía modal (POST directo),
-        # no necesitamos la página de confirmación por defecto de Django.
-
-        return HttpResponseNotAllowed(["POST"])
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-
-        messages.success(
-            self.request,
-            "El movimiento se ha eliminado correctamente."
-        )
-        
-        return response
+        return reverse_lazy("accounts:account_detail", kwargs={"pk": self.object.account.pk})
 
 
 
