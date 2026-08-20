@@ -13,6 +13,36 @@ class CustomerListView(LoginRequiredMixin, ListView):
     template_name = "customers/customers_list.html"
     context_object_name = "customers"
 
+    def get_queryset(self):
+        queryset= super().get_queryset()
+
+        search = self.request.GET.get("q", "").strip()
+        status = self.request.GET.get("status", "")
+
+        if search:
+            queryset = queryset.filter(
+                name__icontains=search
+            )
+
+        if status == "active":
+            queryset = queryset.filter(
+                is_active=True
+            )
+
+        elif status == "inactive":
+                    queryset = queryset.filter(
+                        is_active=False
+                    )
+
+        return queryset.order_by("name")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["customers_count"] = self.get_queryset().count()
+
+        return context
+
 class CustomerDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView):
     model = Customer
     permission_required = "customers.view_customer"
