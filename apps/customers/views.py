@@ -3,9 +3,13 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Customer
 from apps.seasons.models import Season
 from apps.accounts.models import Account
+from apps.transactions.models import Transaction
 from .forms import CustomerForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+
+from django.db.models import Case, DecimalField, F, Sum, Value, When
+from django.db.models.functions import Coalesce
 
 # Create your views here.
 class CustomerListView(LoginRequiredMixin, ListView):
@@ -33,6 +37,40 @@ class CustomerListView(LoginRequiredMixin, ListView):
                     queryset = queryset.filter(
                         is_active=False
                     )
+
+
+        queryset = queryset.annotate(
+             customer_balance = Coalesce(
+                  Sum(
+                       Case(
+                            When(
+                                 accounts__transactions__movement_type=Transaction.MovementType.CHARGE,
+                                 then=F("accounts__transactions__amount"),
+                            ),
+                            When(
+                                 accounts__transactions__movement_type=Transaction.MovementType.PAYMENT,
+                                 then=-F("accounts__transactions__amount"),
+                            ),
+                            output_field=DecimalField(
+                                 max_digits=12,
+                                 decimal_places=2,
+                            ),
+                       )
+                  ),
+                  Value(0),
+                  output_field=DecimalField(
+                       max_digits=12,
+                       decimal_places=2,
+                  ),
+             )
+        )
+
+        for customer in queryset:
+            print(
+            customer.name,
+            "->",
+            customer.customer_balance
+            )
 
         return queryset.order_by("name")
 

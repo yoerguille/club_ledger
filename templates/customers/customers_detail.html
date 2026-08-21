@@ -299,6 +299,14 @@
                     Crea una cuenta para comenzar a registrar movimientos.
                 </p>
 
+                <a
+                    href="{% url 'accounts:account_create' customer.pk %}"
+                    class="mt-4 inline-flex text-sm font-medium
+                        text-blue-600 hover:text-blue-800"
+                >
+                    Crear una cuenta
+                </a>
+
             </div>
 
         {% endif %}

@@ -216,7 +216,7 @@
 
                             <th
                                 scope="col"
-                                class="px-6 py-3 text-left
+                                class="px-4 py-3 text-left
                                     text-xs font-semibold uppercase
                                     tracking-wider text-gray-500"
                             >
@@ -225,7 +225,7 @@
 
                             <th
                                 scope="col"
-                                class="px-6 py-3 text-left
+                                class="px-4 py-3 text-left
                                     text-xs font-semibold uppercase
                                     tracking-wider text-gray-500"
                             >
@@ -234,7 +234,16 @@
 
                             <th
                                 scope="col"
-                                class="px-6 py-3 text-left
+                                class="px-4 py-3 text-left
+                                    text-xs font-semibold uppercase
+                                    tracking-wider text-gray-500"
+                            >
+                                Saldo pendiente
+                            </th>
+
+                            <th
+                                scope="col"
+                                class="px-4 py-3 text-left
                                     text-xs font-semibold uppercase
                                     tracking-wider text-gray-500"
                             >
@@ -243,7 +252,7 @@
 
                             <th
                                 scope="col"
-                                class="px-6 py-3 text-right
+                                class="px-4 py-3 text-right
                                     text-xs font-semibold uppercase
                                     tracking-wider text-gray-500"
                             >
@@ -292,6 +301,23 @@
                                             Sin email
                                         </span>
 
+                                    {% endif %}
+
+                                </td>
+
+                                <!-- SALDO PENDIENTE -->
+
+                                <td class="font-medium py-4 text-left">
+                                    {% if customer.customer_balance %}
+
+                                        {{ customer.customer_balance }} €
+
+                                    {% else %}
+
+                                        <span class="text-gray-400">
+                                            No tiene cuenta
+                                        </span>
+                                      
                                     {% endif %}
 
                                 </td>

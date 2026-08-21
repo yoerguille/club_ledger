@@ -29,6 +29,11 @@
             Crear cuenta
         </button>
 
+        <a href="{% url 'customers:customer_detail' customer.pk %}"
+            class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50">
+            Cancelar
+        </a>
+
     </form>
 
 </div>
