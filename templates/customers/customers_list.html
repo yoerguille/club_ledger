@@ -307,10 +307,19 @@
 
                                 <!-- SALDO PENDIENTE -->
 
-                                <td class="font-medium py-4 text-left">
+                                <td class="font-medium px-6 py-4 text-left">
                                     {% if customer.customer_balance %}
 
-                                        {{ customer.customer_balance }} €
+                                        <span
+                                            class="text-base font-mono font-semibold
+                                                {% if customer.customer_balance > 0 %}
+                                                    text-emerald-600
+                                                {% else %}
+                                                    text-red-600
+                                                {% endif %}"
+                                        >
+                                            {{ customer.customer_balance }} €
+                                        </span>
 
                                     {% else %}
 
