@@ -20,6 +20,8 @@ class CustomerListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset= super().get_queryset()
 
+        sort = self.request.GET.get("sort", "name_asc")
+
         search = self.request.GET.get("q", "").strip()
         status = self.request.GET.get("status", "")
 
@@ -72,7 +74,19 @@ class CustomerListView(LoginRequiredMixin, ListView):
             customer.customer_balance
             )
 
-        return queryset.order_by("name")
+        if sort == "name_desc":
+             queryset   = queryset.order_by("-name")
+
+        elif sort == "balance_desc":
+             queryset = queryset.order_by("-customer_balance")
+
+        elif sort == "balance_asc":
+             queryset = queryset.order_by("customer_balance")
+
+        else:
+             queryset = queryset.order_by("name")
+
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

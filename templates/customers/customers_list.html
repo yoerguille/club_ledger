@@ -53,6 +53,7 @@
         <div class="mb-6 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
 
             <form
+                id="customer-filters"
                 method="get"
                 class="flex flex-col gap-4 md:flex-row md:items-end"
             >
@@ -141,21 +142,66 @@
 
                 </div>
 
+                <!-- ORDENACIÓN -->
 
-                <!-- BOTONES -->
+                <div class="w-full md:w-56">
 
-                <div class="flex gap-2">
-
-                    <button
-                        type="submit"
-                        class="inline-flex items-center gap-2 rounded-lg
-                                bg-blue-600 px-4 py-2.5
-                                text-sm font-medium text-white
-                                hover:bg-blue-700"
+                    <label
+                        for="sort"
+                        class="mb-1.5 block text-sm font-medium text-gray-700"
                     >
-                        <span>⌕</span>
-                        Buscar
-                    </button>
+                        Ordenar por
+                    </label>
+
+                    <select
+                        id="sort"
+                        name="sort"
+                        class="w-full rounded-lg border border-gray-300
+                            bg-white px-3 py-2.5
+                            text-sm text-gray-900
+                            focus:border-blue-500
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-blue-500/20"
+                    >
+
+                        <option
+                            value="name_asc"
+                            {% if request.GET.sort == "name_asc" or not request.GET.sort %}
+                                selected
+                            {% endif %}
+                        >
+                            Nombre A → Z
+                        </option>
+
+                        <option
+                            value="name_desc"
+                            {% if request.GET.sort == "name_desc" %}
+                                selected
+                            {% endif %}
+                        >
+                            Nombre Z → A
+                        </option>
+
+                        <option
+                            value="balance_desc"
+                            {% if request.GET.sort == "balance_desc" %}
+                                selected
+                            {% endif %}
+                        >
+                            Saldo mayor → menor
+                        </option>
+
+                        <option
+                            value="balance_asc"
+                            {% if request.GET.sort == "balance_asc" %}
+                                selected
+                            {% endif %}
+                        >
+                            Saldo menor → mayor
+                        </option>
+
+                    </select>
 
                 </div>
 
@@ -400,7 +446,7 @@
                             <tr>
 
                                 <td
-                                    colspan="4"
+                                    colspan="5"
                                     class="px-6 py-14 text-center"
                                 >
 
