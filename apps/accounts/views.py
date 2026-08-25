@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Account
 from ..customers.models import Customer
-from django.views.generic import UpdateView, DetailView, CreateView
+from django.views.generic import UpdateView, DetailView, CreateView, ListView
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.urls import reverse
@@ -10,6 +10,13 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from django.urls import reverse_lazy
 
 # Create your views here.
+
+class AccountListView(ListView):
+    model=Account
+    template_name ="accounts/accounts_list.html"
+    context_object_name ="accounts"
+
+    
 
 class AccountDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView):
     model = Account

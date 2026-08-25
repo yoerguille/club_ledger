@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Lista de Cuentas
+{% endblock %}
+
+
+{% block content %}
+
+    <hr class="mt-4">
+
+    <h2 class="mb-4 text-xl font-semibold">
+        Listado de cuentas: Temporada X
+    </h2>
+
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                        Cliente
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                        N.Cuenta
+                    </th>
+                    <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500">
+                        Temporada
+                    </th>
+                    <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500">
+                        Total Cargos
+                    </th>
+                    <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
+                        Total Pagos
+                    </th>
+                    <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
+                        Saldo Pendiente
+                    </th>
+                    <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
+                        Acceso a la cuenta
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-100 bg-white">
+                {% for account in accounts.all %}
+                <tr class="hover:bg-gray-50 transition-colors">
+
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {{ account.customer }}
+                    </td>
+
+                    <td class="px-6 py-4">
+                        {{ account.name }}
+                    </td>
+
+                    <td class="px-6 py-4 text-center">
+                        {{ account.season }}
+                    </td>
+
+                    <td class="px-6 py-4 text-center">
+                        {{ account.total_charges }}€
+                    </td>
+
+                    <td class="px-6 py-4 text-right font-mono font-semibold">
+
+                        {{ account.total_payments }}€
+
+                    </td>
+
+                    <td class="px-6 py-4 text-right">
+                        {{ account.balance }}€
+
+                    </td>
+
+                    <td class="px-6 py-4 text-right">
+                        <a
+                            href="{% url 'accounts:account_detail' account.pk %}"
+                            class="text-sm font-medium text-blue-600
+                                hover:text-blue-800"
+                        >
+                            Ver cuenta →
+                        </a>
+
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+
+                    <td colspan="7" class="px-6 py-10 text-center text-gray-500">
+
+                        No existen cuentas en la temporada seleccionada.
+
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+
+
+
