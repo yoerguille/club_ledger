@@ -8,6 +8,98 @@ Lista de Cuentas
 
 {% block content %}
 
+
+    <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+
+        <div>
+            <h2 class="text-xl font-semibold text-gray-900">
+                Listado de Cuentas
+            </h2>
+
+            <p class="mt-1 text-sm text-gray-500">
+                {{ accounts|length }}
+                {% if accounts|length == 1 %}
+                    cuenta
+                {% else %}
+                    cuentas
+                {% endif %}
+                · Temporada {{ selected_season.name }}
+            </p>
+        </div>
+
+
+        <div class="flex items-end gap-3">
+
+            {% if selected_season.is_active %}
+
+                <span
+                    class="mb-1 inline-flex items-center rounded-full
+                        bg-green-50 px-2.5 py-1 text-xs font-medium
+                        text-green-700"
+                >
+                    <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-green-500"></span>
+                    Activa
+                </span>
+
+            {% else %}
+
+                <span
+                    class="mb-1 inline-flex items-center rounded-full
+                        bg-gray-100 px-2.5 py-1 text-xs font-medium
+                        text-gray-600"
+                >
+                    Histórica
+                </span>
+
+            {% endif %}
+
+
+            <form method="get">
+
+                <label
+                    for="season"
+                    class="mb-1.5 block text-xs font-medium
+                        uppercase tracking-wide text-gray-500"
+                >
+                    Temporada
+                </label>
+
+                <select
+                    id="season"
+                    name="season"
+                    onchange="this.form.submit()"
+                    class="min-w-48 rounded-lg border border-gray-300
+                        bg-white px-3 py-2.5 text-sm font-medium
+                        text-gray-700 shadow-sm transition
+                        hover:border-gray-400
+                        focus:border-indigo-500 focus:outline-none
+                        focus:ring-2 focus:ring-indigo-500"
+                >
+
+                    {% for season in seasons %}
+
+                        <option
+                            value="{{ season.pk }}"
+                            {% if season.pk == selected_season.pk %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ season.name }}
+                            {% if season.is_active %}
+                                · Activa
+                            {% endif %}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </form>
+
+        </div>
+
+    </div>
+
     <hr class="mt-4">
 
     <h2 class="mb-4 text-xl font-semibold">
@@ -20,19 +112,16 @@ Lista de Cuentas
             <thead class="bg-gray-50">
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
-                        Cliente
+                        Nombre de la Cuenta
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
-                        N.Cuenta
+                        Cliente
                     </th>
                     <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500">
-                        Temporada
-                    </th>
-                    <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500">
-                        Total Cargos
+                        Total Encargado
                     </th>
                     <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
-                        Total Pagos
+                        Total Pagado
                     </th>
                     <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
                         Saldo Pendiente
@@ -47,40 +136,87 @@ Lista de Cuentas
                 {% for account in accounts.all %}
                 <tr class="hover:bg-gray-50 transition-colors">
 
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        {{ account.customer }}
-                    </td>
-
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                            
                         {{ account.name }}
+
                     </td>
+
+                    <td class="px-6 py-4 text-s ">
+                        <a href="{% url 'customers:customer_detail' account.customer.pk%}"
+                            class="uppercase text-gray-600 hover:text-blue-800" 
+                        >
+                            {{ account.customer }}
+                        </a>
+                        
+                    </td>
+
 
                     <td class="px-6 py-4 text-center">
-                        {{ account.season }}
+
+                        <span class="text-gray-900 font-mono  text-sm">
+                            {{ account.total_charges }} €
+                        </span>
+                        
                     </td>
 
-                    <td class="px-6 py-4 text-center">
-                        {{ account.total_charges }}€
-                    </td>
+                    <td class="px-6 py-4 text-right">
 
-                    <td class="px-6 py-4 text-right font-mono font-semibold">
-
-                        {{ account.total_payments }}€
+                        <span class="font-mono text-sm font-medium text-emerald-600">
+                            {{ account.total_payments }} €
+                        </span>
 
                     </td>
 
                     <td class="px-6 py-4 text-right">
-                        {{ account.balance }}€
+
+                        {% if account.balance > 0 %}
+
+                            <div class="font-mono text-s font-semibold text-amber-600">
+                                {{ account.balance }} €
+                            </div>
+
+                            <div class="mt-0.5 text-xs text-gray-500">
+                                Pendiente de cobro
+                            </div>
+
+                        {% elif account.balance < 0 %}
+
+                            <div class="font-mono text-sm font-semibold text-blue-600">
+                                {{ account.balance }} €
+                            </div>
+
+                            <div class="mt-0.5 text-xs text-blue-600">
+                                A favor del cliente
+                            </div>
+
+                        {% else %}
+
+                            <div class="font-mono text-sm font-semibold text-emerald-600">
+                                0,00 €
+                            </div>
+
+                            <div class="mt-0.5 text-xs text-gray-500">
+                                Cuenta saldada
+                            </div>
+
+                        {% endif %}
 
                     </td>
 
                     <td class="px-6 py-4 text-right">
                         <a
                             href="{% url 'accounts:account_detail' account.pk %}"
-                            class="text-sm font-medium text-blue-600
-                                hover:text-blue-800"
+                            class="inline-flex items-center
+                            rounded-lg border border-gray-300
+                            bg-white px-3 py-2
+                            text-sm font-medium text-gray-700
+                            shadow-sm
+                            transition
+                            hover:bg-gray-50
+                            hover:text-gray-900"
                         >
-                            Ver cuenta →
+                            VER CUENTA →
                         </a>
 
                     </td>
@@ -89,7 +225,7 @@ Lista de Cuentas
                 {% empty %}
                 <tr>
 
-                    <td colspan="7" class="px-6 py-10 text-center text-gray-500">
+                    <td colspan="6" class="px-6 py-10 text-center text-gray-500">
 
                         No existen cuentas en la temporada seleccionada.
 

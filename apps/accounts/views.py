@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Account
 from ..customers.models import Customer
+from apps.seasons.models import Season
 from django.views.generic import UpdateView, DetailView, CreateView, ListView
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
@@ -15,6 +16,36 @@ class AccountListView(ListView):
     model=Account
     template_name ="accounts/accounts_list.html"
     context_object_name ="accounts"
+
+    def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+    
+            active_season = Season.objects.filter(
+                is_active = True
+            ).first()
+    
+            season_id = self.request.GET.get("season")
+    
+            if season_id:
+                selected_season = Season.objects.filter(
+                    pk=season_id
+                ).first()
+    
+            else:
+                selected_season = active_season
+    
+            accounts = Account.objects.filter(
+                season = selected_season,
+            ).select_related(
+                "season",
+            )
+    
+            context["active_season"] = active_season
+            context["selected_season"] = selected_season
+            context["seasons"] = Season.objects.all().order_by("start_date")
+            context["accounts"] = accounts
+
+            return context
 
     
 
