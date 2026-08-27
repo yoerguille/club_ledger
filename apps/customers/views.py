@@ -67,25 +67,6 @@ class CustomerListView(LoginRequiredMixin, ListView):
              )
         )
 
-        for customer in queryset:
-            print(
-            customer.name,
-            "->",
-            customer.customer_balance
-            )
-
-        if sort == "name_desc":
-             queryset   = queryset.order_by("-name")
-
-        elif sort == "balance_desc":
-             queryset = queryset.order_by("-customer_balance")
-
-        elif sort == "balance_asc":
-             queryset = queryset.order_by("customer_balance")
-
-        else:
-             queryset = queryset.order_by("name")
-
         return queryset
 
     def get_context_data(self, **kwargs):

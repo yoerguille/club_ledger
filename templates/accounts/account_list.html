@@ -7,59 +7,108 @@ Lista de Cuentas
 
 
 {% block content %}
+    <div class="mb-8">
+
+        <!-- CABECERA -->
+
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+
+            <div>
+
+                <h2 class="text-xl font-semibold text-gray-900">
+                    Listado de Cuentas
+                </h2>
+
+                <p class="mt-1 text-sm text-gray-500">
+                    {{ accounts|length }}
+                    {% if accounts|length == 1 %}
+                        cuenta
+                    {% else %}
+                        cuentas
+                    {% endif %}
+                    · Temporada {{ selected_season.name }}
+                </p>
+
+            </div>
 
 
-    <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-
-        <div>
-            <h2 class="text-xl font-semibold text-gray-900">
-                Listado de Cuentas
-            </h2>
-
-            <p class="mt-1 text-sm text-gray-500">
-                {{ accounts|length }}
-                {% if accounts|length == 1 %}
-                    cuenta
-                {% else %}
-                    cuentas
-                {% endif %}
-                · Temporada {{ selected_season.name }}
-            </p>
-        </div>
-
-
-        <div class="flex items-end gap-3">
+            <!-- ESTADO DE TEMPORADA -->
 
             {% if selected_season.is_active %}
 
                 <span
-                    class="mb-1 inline-flex items-center rounded-full
-                        bg-green-50 px-2.5 py-1 text-xs font-medium
-                        text-green-700"
+                    class="inline-flex w-fit items-center rounded-full
+                        bg-green-50 px-2.5 py-1
+                        text-xs font-medium text-green-700"
                 >
-                    <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-green-500"></span>
+                    <span
+                        class="mr-1.5 h-1.5 w-1.5 rounded-full bg-green-500"
+                    ></span>
+
                     Activa
                 </span>
 
             {% else %}
 
                 <span
-                    class="mb-1 inline-flex items-center rounded-full
-                        bg-gray-100 px-2.5 py-1 text-xs font-medium
-                        text-gray-600"
+                    class="inline-flex w-fit items-center rounded-full
+                        bg-gray-100 px-2.5 py-1
+                        text-xs font-medium text-gray-600"
                 >
                     Histórica
                 </span>
 
             {% endif %}
 
+        </div>
 
-            <form method="get">
+
+        <!-- FILTROS -->
+
+        <form
+            method="get"
+            id="account-filters"
+            class="mt-6 flex flex-col gap-4
+                sm:flex-row sm:items-end"
+        >
+
+            <!-- BÚSQUEDA -->
+
+            <div class="flex-1">
+
+                <label
+                    for="search"
+                    class="mb-1.5 block text-sm font-medium text-gray-700"
+                >
+                    Buscar cuenta
+                </label>
+
+                <input
+                    type="search"
+                    id="search"
+                    name="q"
+                    value="{{ request.GET.q|default:'' }}"
+                    placeholder="Nombre del cliente..."
+                    class="w-full rounded-lg border border-gray-300
+                        bg-white px-3 py-2.5
+                        text-sm text-gray-900
+                        placeholder-gray-400
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500/20"
+                >
+
+            </div>
+
+
+            <!-- TEMPORADA -->
+
+            <div class="w-full sm:w-52">
 
                 <label
                     for="season"
-                    class="mb-1.5 block text-xs font-medium
-                        uppercase tracking-wide text-gray-500"
+                    class="mb-1.5 block text-sm font-medium text-gray-700"
                 >
                     Temporada
                 </label>
@@ -68,12 +117,15 @@ Lista de Cuentas
                     id="season"
                     name="season"
                     onchange="this.form.submit()"
-                    class="min-w-48 rounded-lg border border-gray-300
-                        bg-white px-3 py-2.5 text-sm font-medium
-                        text-gray-700 shadow-sm transition
+                    class="w-full rounded-lg border border-gray-300
+                        bg-white px-3 py-2.5
+                        text-sm font-medium text-gray-700
+                        shadow-sm transition
                         hover:border-gray-400
-                        focus:border-indigo-500 focus:outline-none
-                        focus:ring-2 focus:ring-indigo-500"
+                        focus:border-indigo-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-indigo-500"
                 >
 
                     {% for season in seasons %}
@@ -94,16 +146,36 @@ Lista de Cuentas
 
                 </select>
 
-            </form>
+            </div>
 
-        </div>
+        </form>
+
+
+        <!-- FILTROS ACTIVOS -->
+
+        {% if request.GET.q %}
+
+            <div class="mt-3 flex items-center gap-2 text-sm text-gray-500">
+
+                <span>
+                    Filtros activos
+                </span>
+
+                <a
+                    href="{% url 'accounts:account_list' %}"
+                    class="font-medium text-blue-600 hover:text-blue-800"
+                >
+                    Limpiar filtros
+                </a>
+
+            </div>
+
+        {% endif %}
 
     </div>
 
-    <hr class="mt-4">
-
     <h2 class="mb-4 text-xl font-semibold">
-        Listado de cuentas: Temporada X
+        Listado de cuentas - {{selected_season}}
     </h2>
 
     <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
@@ -218,7 +290,6 @@ Lista de Cuentas
                         >
                             VER CUENTA →
                         </a>
-
                     </td>
 
                 </tr>

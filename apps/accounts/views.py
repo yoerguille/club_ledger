@@ -17,6 +17,36 @@ class AccountListView(ListView):
     template_name ="accounts/accounts_list.html"
     context_object_name ="accounts"
 
+    def get_season(self):
+        if not hasattr(self, "_selected_season"):
+            # Solo entra aquí la PRIMERA vez que se llama a get_season()
+            season_id = self.request.GET.get("season")
+            if season_id:
+                self._selected_season = Season.objects.filter(pk=season_id).first()
+
+            else:
+                self._selected_season = Season.objects.filter(is_active=True).first()
+
+        return self._selected_season
+
+    def get_queryset(self):
+
+        selected_season = self.get_season()
+
+        queryset = Account.objects.filter(
+            season=selected_season
+        ).select_related("season")
+
+        search = self.request.GET.get("q", "").strip()
+
+        if search:
+            queryset = queryset.filter(
+                name__icontains=search
+            )
+
+        return queryset
+
+
     def get_context_data(self, **kwargs):
             context = super().get_context_data(**kwargs)
     
@@ -24,26 +54,11 @@ class AccountListView(ListView):
                 is_active = True
             ).first()
     
-            season_id = self.request.GET.get("season")
-    
-            if season_id:
-                selected_season = Season.objects.filter(
-                    pk=season_id
-                ).first()
-    
-            else:
-                selected_season = active_season
-    
-            accounts = Account.objects.filter(
-                season = selected_season,
-            ).select_related(
-                "season",
-            )
+            selected_season = self.get_season()
     
             context["active_season"] = active_season
             context["selected_season"] = selected_season
             context["seasons"] = Season.objects.all().order_by("start_date")
-            context["accounts"] = accounts
 
             return context
 
