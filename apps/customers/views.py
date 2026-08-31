@@ -40,7 +40,6 @@ class CustomerListView(LoginRequiredMixin, ListView):
                         is_active=False
                     )
 
-
         queryset = queryset.annotate(
              customer_balance = Coalesce(
                   Sum(
@@ -66,6 +65,18 @@ class CustomerListView(LoginRequiredMixin, ListView):
                   ),
              )
         )
+
+        if sort == "name_desc":
+            queryset = queryset.order_by("-name")
+
+        elif sort == "balance_desc":
+            queryset = queryset.order_by("-customer_balance")
+
+        elif sort == "balance_asc":
+            queryset = queryset.order_by("customer_balance")
+
+        else:
+            queryset = queryset.order_by("name") 
 
         return queryset
 

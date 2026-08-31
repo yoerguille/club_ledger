@@ -1,17 +1,28 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const customerFilters = document.getElementById("customer-filters");
+    const filters = [
+        "customer-filters",
+        "account-filters",
+    ];
 
-    if (!customerFilters) {
-        return;
-    }
+    filters.forEach((filterId) => {
 
-    const selects = customerFilters.querySelectorAll("select");
+        const form = document.getElementById(filterId);
 
-    selects.forEach((select) => {
-        select.addEventListener("change", () => {
-            customerFilters.submit();
+        if (!form) {
+            return;
+        }
+
+        const selects = form.querySelectorAll("select");
+
+        selects.forEach((select) => {
+
+            select.addEventListener("change", () => {
+                form.submit();
+            });
+
         });
+
     });
 
 });
