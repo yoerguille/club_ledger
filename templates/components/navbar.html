@@ -1,8 +1,8 @@
-<header class="bg-white shadow">
+<header class="bg-white shadow dark:bg-gray-900 dark:shadow-gray-950/30">
 
     <div class="px-8 py-4 flex justify-between items-center">
 
-        <h2 class="text-x1 font-semibold">
+        <h2 class="text-xl font-semibold">
 
                 {% block page_title %}
 
@@ -15,12 +15,32 @@
         {% if user.is_authenticated %}
             <div class="flex items-center gap-4">
 
+                <button
+                    id="theme-toggle"
+                    type="button"
+                    aria-label="Cambiar tema"
+                    class="inline-flex h-9 w-9 items-center justify-center
+                        rounded-lg border border-gray-200
+                        bg-white text-gray-600
+                        transition
+                        hover:bg-gray-50 hover:text-gray-900
+                        dark:border-gray-700
+                        dark:bg-gray-800
+                        dark:text-gray-300
+                        dark:hover:bg-gray-700
+                        dark:hover:text-white"
+                >
+                    <span id="theme-toggle-icon" class="text-base">
+                        ☾
+                    </span>
+                </button>
+
                 <div class="text-right">
-                    <p class="text-sm font-medium text-gray-900">
+                    <p class="text-sm font-medium text-gray-900 dark:text-gray-200">
                         {{ user.get_username }}
                     </p>
 
-                    <p class="text-xs text-gray-500">
+                    <p class="text-xs text-gray-500 dark:text-emerald-200">
                         Sesión activa
                     </p>
                 </div>
@@ -31,10 +51,15 @@
                     <button
                         type="submit"
                         class="rounded-lg border border-gray-300
-                            bg-white px-3 py-2 text-sm font-medium
-                            text-gray-700 transition
-                            hover:bg-gray-50 hover:text-gray-900"
-                    >
+                        bg-white px-3 py-2 text-sm font-medium
+                        text-gray-700 transition
+                        hover:bg-gray-50 hover:text-gray-900
+                        dark:border-gray-700
+                        dark:bg-gray-800
+                        dark:text-gray-200
+                        dark:hover:bg-gray-700
+                        dark:hover:text-white"
+                                    >
                         Cerrar sesión
                     </button>
                 </form>

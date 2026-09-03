@@ -9,91 +9,112 @@ Lista de Cuentas
     <div class="mb-8">
 
         <!-- CABECERA -->
-
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 
             <div>
+                <div class="flex items-center gap-3">
+                    <h2 class="text-3xl font-semibold tracking-tight text-gray-950">
+                        Cuentas
+                    </h2>
 
-                <h2 class="text-3xl font-semibold text-gray-900">
-                    Listado de Cuentas
-                </h2>
+                    {% if selected_season.is_active %}
+                        <span
+                            class="inline-flex items-center gap-1.5 rounded-full
+                                bg-emerald-50 px-2.5 py-1
+                                text-xs font-medium text-emerald-700"
+                        >
+                            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                            Temporada activa
+                        </span>
+                    {% endif %}
+                </div>
 
-                <p class="mt-1 text-sm text-gray-500">
+                <p class="mt-1.5 text-sm text-gray-500">
                     {{ accounts|length }}
                     {% if accounts|length == 1 %}
                         cuenta
                     {% else %}
                         cuentas
                     {% endif %}
-                    · Temporada {{ selected_season.name }}
+                    <span class="mx-1 text-gray-300">·</span>
+                    {{ selected_season.name }}
                 </p>
-
             </div>
-
-
-            <!-- ESTADO DE TEMPORADA -->
-
 
         </div>
 
 
         <!-- FILTROS -->
-        <div class=" mt-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+        <div
+            class="mt-6 rounded-xl border border-gray-200
+                bg-white shadow-sm"
+        >
+
             <form
                 id="account-filters"
                 method="get"
-                class="mt-6 flex flex-col gap-4
-                    sm:flex-row sm:items-end"
+                class="grid grid-cols-1 gap-4 p-5
+                    md:grid-cols-12 md:items-end"
             >
 
                 <!-- BÚSQUEDA -->
-                <div class="sm:max-w-sm sm:flex-1">
+                <div class="md:col-span-5">
 
                     <label
                         for="search"
-                        class="mb-1.5 block text-sm font-medium text-gray-700"
+                        class="mb-1.5 block text-xs font-medium
+                            uppercase tracking-wide text-gray-500"
                     >
                         Buscar cuenta
                     </label>
 
-                    <input
-                        type="search"
-                        id="search"
-                        name="q"
-                        value="{{ request.GET.q|default:'' }}"
-                        placeholder="Nombre de la cuenta..."
-                        class="w-full rounded-lg border border-gray-300
-                            bg-white px-3 py-2.5
-                            text-sm text-gray-900
-                            placeholder-gray-400
-                            focus:border-blue-500
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-blue-500/20"
-                    >
+                    <div class="relative">
+
+                        <input
+                            type="search"
+                            id="search"
+                            name="q"
+                            value="{{ request.GET.q|default:'' }}"
+                            placeholder="Nombre de la cuenta..."
+                            class="w-full rounded-lg border border-gray-300
+                                bg-white px-3.5 py-2.5
+                                text-sm text-gray-900
+                                placeholder-gray-400
+                                transition
+                                focus:border-gray-400
+                                focus:outline-none
+                                focus:ring-2
+                                focus:ring-gray-900/10"
+                        >
+
+                    </div>
 
                 </div>
 
-                <div class="w-full md:w-56">
+
+                <!-- ORDENAR -->
+                <div class="md:col-span-3">
 
                     <label
                         for="sort"
-                        class="mb-1.5 block text-sm font-medium text-gray-700"
+                        class="mb-1.5 block text-xs font-medium
+                            uppercase tracking-wide text-gray-500"
                     >
                         Ordenar por
                     </label>
-                    
-                    <!--FILTRAR POR BALANCE Y A-Z-->
+
                     <select
                         id="sort"
                         name="sort"
                         class="w-full rounded-lg border border-gray-300
-                            bg-white px-3 py-2.5
+                            bg-white px-3.5 py-2.5
                             text-sm text-gray-900
-                            focus:border-blue-500
+                            transition
+                            hover:border-gray-400
+                            focus:border-gray-400
                             focus:outline-none
                             focus:ring-2
-                            focus:ring-blue-500/20"
+                            focus:ring-gray-900/10"
                     >
 
                         <option
@@ -133,15 +154,17 @@ Lista de Cuentas
                         </option>
 
                     </select>
+
                 </div>
 
 
-                <!-- Filtrar TEMPORADA -->
-                <div class="sm:shrink-0">
+                <!-- TEMPORADA -->
+                <div class="md:col-span-4">
 
                     <label
                         for="season"
-                        class="mb-1.5 block text-sm font-medium text-gray-700"
+                        class="mb-1.5 block text-xs font-medium
+                            uppercase tracking-wide text-gray-500"
                     >
                         Temporada
                     </label>
@@ -151,17 +174,20 @@ Lista de Cuentas
                         <select
                             id="season"
                             name="season"
-                            class="min-w-[180px] rounded-lg border border-gray-300
-                                bg-white px-3 py-2.5
-                                text-sm font-medium text-gray-700
-                                shadow-sm transition
+                            class="min-w-0 flex-1 rounded-lg
+                                border border-gray-300
+                                bg-white px-3.5 py-2.5
+                                text-sm font-medium text-gray-900
+                                transition
                                 hover:border-gray-400
-                                focus:border-indigo-500
+                                focus:border-gray-400
                                 focus:outline-none
                                 focus:ring-2
-                                focus:ring-indigo-500"
+                                focus:ring-gray-900/10"
                         >
+
                             {% for season in seasons %}
+
                                 <option
                                     value="{{ season.pk }}"
                                     {% if season.pk == selected_season.pk %}
@@ -169,30 +195,39 @@ Lista de Cuentas
                                     {% endif %}
                                 >
                                     {{ season.name }}
-                                    {% if season.is_active %}
-                                        · Activa
-                                    {% endif %}
                                 </option>
+
                             {% endfor %}
+
                         </select>
 
+
                         {% if selected_season.is_active %}
+
                             <span
-                                class="inline-flex w-fit items-center rounded-full
-                                    bg-green-50 px-2.5 py-1
-                                    text-xs font-medium text-green-700"
+                                class="inline-flex shrink-0 items-center gap-1.5
+                                    rounded-full
+                                    bg-emerald-50 px-2.5 py-1
+                                    text-xs font-medium text-emerald-700"
                             >
-                                <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-green-500"></span>
+                                <span
+                                    class="h-1.5 w-1.5 rounded-full bg-emerald-500"
+                                ></span>
+
                                 Activa
                             </span>
+
                         {% else %}
+
                             <span
-                                class="inline-flex w-fit items-center rounded-full
+                                class="inline-flex shrink-0 items-center
+                                    rounded-full
                                     bg-gray-100 px-2.5 py-1
                                     text-xs font-medium text-gray-600"
                             >
                                 Histórica
                             </span>
+
                         {% endif %}
 
                     </div>
@@ -200,22 +235,23 @@ Lista de Cuentas
                 </div>
 
             </form>
+
         </div>
 
 
         <!-- FILTROS ACTIVOS -->
+        {% if request.GET.q or request.GET.sort or request.GET.season %}
 
-        {% if request.GET.q %}
+            <div class="mt-3 flex items-center justify-between">
 
-            <div class="mt-3 flex items-center gap-2 text-sm text-gray-500">
-
-                <span>
-                    Filtros activos
-                </span>
+                <p class="text-xs text-gray-500">
+                    Mostrando resultados filtrados
+                </p>
 
                 <a
                     href="{% url 'accounts:account_list' %}"
-                    class="font-medium text-blue-600 hover:text-blue-800"
+                    class="text-xs font-medium text-blue-600
+                        transition hover:text-gray-900"
                 >
                     Limpiar filtros
                 </a>
@@ -241,14 +277,14 @@ Lista de Cuentas
                     <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                         Cliente
                     </th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                        Saldo Pendiente
+                    </th>
                     <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500">
                         Total Encargado
                     </th>
                     <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
                         Total Pagado
-                    </th>
-                    <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
-                        Saldo Pendiente
                     </th>
                     <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
                         Acceso a la cuenta
@@ -276,6 +312,43 @@ Lista de Cuentas
                     </td>
 
 
+                    <td class="px-6 py-4 text-left">
+
+                        {% if account.balance > 0 %}
+
+                            <div class="font-mono text-xl font-semibold text-amber-600">
+                                {{ account.balance }} €
+                            </div>
+
+                            <div class="mt-0.5 text-xs text-gray-500">
+                                Pendiente de cobro
+                            </div>
+
+                        {% elif account.balance < 0 %}
+
+                            <div class="font-mono text-xl font-semibold text-blue-600">
+                                {{ account.balance }} €
+                            </div>
+
+                            <div class="mt-0.5 text-xs text-blue-600">
+                                A favor del cliente
+                            </div>
+
+                        {% else %}
+
+                            <div class="font-mono text-xl font-semibold text-emerald-600">
+                                0,00 €
+                            </div>
+
+                            <div class="mt-0.5 text-xs text-gray-500">
+                                Cuenta saldada
+                            </div>
+
+                        {% endif %}
+
+                    </td>
+
+
                     <td class="px-6 py-4 text-center">
 
                         <span class="text-gray-900 font-mono  text-sm">
@@ -289,42 +362,6 @@ Lista de Cuentas
                         <span class="font-mono text-sm font-medium text-emerald-600">
                             {{ account.total_payments }} €
                         </span>
-
-                    </td>
-
-                    <td class="px-6 py-4 text-right">
-
-                        {% if account.balance > 0 %}
-
-                            <div class="font-mono text-s font-semibold text-amber-600">
-                                {{ account.balance }} €
-                            </div>
-
-                            <div class="mt-0.5 text-xs text-gray-500">
-                                Pendiente de cobro
-                            </div>
-
-                        {% elif account.balance < 0 %}
-
-                            <div class="font-mono text-sm font-semibold text-blue-600">
-                                {{ account.balance }} €
-                            </div>
-
-                            <div class="mt-0.5 text-xs text-blue-600">
-                                A favor del cliente
-                            </div>
-
-                        {% else %}
-
-                            <div class="font-mono text-sm font-semibold text-emerald-600">
-                                0,00 €
-                            </div>
-
-                            <div class="mt-0.5 text-xs text-gray-500">
-                                Cuenta saldada
-                            </div>
-
-                        {% endif %}
 
                     </td>
 

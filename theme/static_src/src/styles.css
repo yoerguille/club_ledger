@@ -1,4 +1,9 @@
 @import "tailwindcss";
+@theme {
+  --font-sans: "Onest", sans-serif;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 /**
   * A catch-all path to Django template files, JavaScript, and Python files
@@ -8,3 +13,12 @@
   * the scope of this path.
   */
 @source "../../../**/*.{html,py,js}";
+
+
+
+
+
+body {
+    font-family: var(--font-sans);
+}
+

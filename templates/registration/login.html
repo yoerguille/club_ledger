@@ -8,17 +8,17 @@ Login
 
 {% load static %}
 
-    <div class="w-full max-w-md">
+    <div class="w-full max-w-md  mx-auto">
 
-        <div class="rounded-2xl bg-white p-8 shadow-sm">
+        <div class="rounded-2xl bg-white p-8 shadow-sm dark:bg-gray-900">
 
             <div class="mb-8 text-center">
 
-                <h1 class="text-2xl font-bold text-gray-900">
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
                     Club Ledger
                 </h1>
 
-                <p class="mt-2 text-sm text-gray-500">
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                     Inicia sesión para continuar
                 </p>
 
@@ -31,7 +31,7 @@ Login
 
                 {% if form.errors %}
 
-                    <div class="mb-6 rounded-lg bg-red-50 p-4 text-sm text-red-700">
+                    <div class="mb-6 rounded-lg bg-red-50 p-4 text-sm text-red-700 dark:text-gray-400">
 
                         El usuario o la contraseña no son correctos.
 
@@ -44,7 +44,7 @@ Login
 
                     <label
                         for="id_username"
-                        class="mb-2 block text-sm font-medium text-gray-700"
+                        class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-400"
                     >
                         Usuario
                     </label>
@@ -69,7 +69,7 @@ Login
 
                     <label
                         for="id_password"
-                        class="mb-2 block text-sm font-medium text-gray-700"
+                        class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-400"
                     >
                         Contraseña
                     </label>
