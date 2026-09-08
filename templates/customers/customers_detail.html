@@ -79,6 +79,22 @@
                 >
                 + Nueva cuenta
                 </a>
+
+                {% if customer.is_active %}
+                    <form
+                    method="post"
+                    action="{% url 'customers:customer_deactivate' customer.pk %}"
+                    onsubmit="return confirm('¿Seguro que quieres desactivar este cliente?');"
+                >
+                    {% csrf_token %}
+
+                    <button type="submit" class="rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700">
+                        Desactivar cliente
+                    </button>
+                </form>
+                {% endif %}
+                
+
             </div>
 
         </div>

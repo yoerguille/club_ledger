@@ -7,6 +7,11 @@ from apps.transactions.models import Transaction
 from .forms import CustomerForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.views import View
+from django.shortcuts import get_object_or_404
+from django.contrib import messages 
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from django.db.models import Case, DecimalField, F, Sum, Value, When
 from django.db.models.functions import Coalesce
@@ -147,3 +152,29 @@ class CustomerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView
             "customers:customer_detail",
             kwargs = {"pk": self.object.pk},
         )
+
+class CustomerDesactivatedView(View):
+
+    def post(self, request, pk):
+
+        customer = get_object_or_404(Customer, pk=pk)
+
+        if not customer.is_active:
+            messages.warning(
+                request,
+                f"El cliente {customer.name} ya está desactivado."
+            )
+
+        else:
+
+            customer.is_active = False
+            customer.save(update_fields=["is_active"])
+
+            messages.success(
+                request,
+                f"El cliente {customer.name} ha sido desactivado correctamente."
+            )
+
+            return HttpResponseRedirect(
+                reverse("customers:customer_detail", kwargs={"pk": customer.pk})
+            )
