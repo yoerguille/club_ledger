@@ -64,7 +64,7 @@
 
                     <label
                         for="search"
-                        class="mb-1.5 block text-sm font-medium text-gray-700"
+                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300 "
                     >
                         Buscar cliente
                     </label>
@@ -82,7 +82,10 @@
                             focus:border-blue-500
                             focus:outline-none
                             focus:ring-2
-                            focus:ring-blue-500/20"
+                            focus:ring-blue-500/20
+                            dark:border-gray-700
+                            dark:bg-gray-700
+                            dark:text-gray-300"
                     >
 
                 </div>
@@ -94,7 +97,7 @@
 
                     <label
                         for="status"
-                        class="mb-1.5 block text-sm font-medium text-gray-700"
+                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300"
                     >
                         Estado
                     </label>
@@ -108,7 +111,10 @@
                             focus:border-blue-500
                             focus:outline-none
                             focus:ring-2
-                            focus:ring-blue-500/20"
+                            focus:ring-blue-500/20
+                            dark:border-gray-700
+                            dark:bg-gray-700
+                            dark:text-gray-300"
                     >
 
                         <option
@@ -148,7 +154,7 @@
 
                     <label
                         for="sort"
-                        class="mb-1.5 block text-sm font-medium text-gray-700"
+                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300"
                     >
                         Ordenar por
                     </label>
@@ -162,7 +168,10 @@
                             focus:border-blue-500
                             focus:outline-none
                             focus:ring-2
-                            focus:ring-blue-500/20"
+                            focus:ring-blue-500/20
+                            dark:border-gray-700
+                            dark:bg-gray-700
+                            dark:text-gray-300"
                     >
 
                         <option
@@ -324,8 +333,8 @@
 
                                     <a
                                         href="{% url 'customers:customer_detail' customer.pk %}"
-                                        class="font-medium text-gray-900
-                                            hover:text-blue-600 dark:text-gray-200"
+                                        class="font-bold text-gray-900
+                                            hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-700"
                                     >
                                         {{ customer.name }}
                                     </a>
@@ -362,6 +371,7 @@
                                                     text-emerald-600
                                                 {% else %}
                                                     text-red-600
+                                                    dark:text-red-800
                                                 {% endif %}"
                                         >
                                             {{ customer.customer_balance }} €
@@ -389,13 +399,16 @@
                                                 rounded-full
                                                 bg-green-50
                                                 px-2.5 py-1
-                                                text-xs font-medium
-                                                text-green-700"
+                                                text-xs font-bold
+                                                text-green-700
+                                                dark:bg-green-700
+                                                dark:text-gray-100"
                                         >
                                             <span
                                                 class="mr-1.5 h-1.5 w-1.5
                                                     rounded-full
-                                                    bg-green-500"
+                                                    bg-green-500
+                                                    dark:bg-green-100"
                                             ></span>
 
                                             Activo
@@ -431,8 +444,8 @@
 
                                     <a
                                         href="{% url 'customers:customer_detail' customer.pk %}"
-                                        class="text-sm font-medium text-blue-600
-                                            hover:text-blue-800"
+                                        class="text-sm font-medium text-blue-600 
+                                            hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-700"
                                     >
                                         Ver cliente →
                                     </a>
