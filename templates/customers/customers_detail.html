@@ -17,25 +17,25 @@
 
         <div>
 
-            <p><strong>Persona de contacto:</strong></p>
+            <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-200">Persona de contacto:</p>
 
-            <p>{{ customer.contact_person|default:"—" }}</p>
-
-        </div>
-
-        <div>
-
-            <p><strong>Email:</strong></p>
-
-            <p>{{ customer.email|default:"—" }}</p>
+            <p class="text-base dark:text-gray-300">{{ customer.contact_person|default:"—" }}</p>
 
         </div>
 
         <div>
 
-            <p><strong>Teléfono:</strong></p>
+            <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-200">Email:</p>
 
-            <p>{{ customer.phone|default:"—" }}</p>
+            <p class="text-base dark:text-gray-300">{{ customer.email|default:"—" }}</p>
+
+        </div>
+
+        <div>
+
+            <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-200">Teléfono:</p>
+
+            <p class="text-base dark:text-gray-300">{{ customer.phone|default:"—" }}</p>
 
         </div>
 
@@ -67,32 +67,77 @@
         <div class="mb-4 flex items-center justify-between">
 
             <div class="flex items-center justify-between gap-3">
+                            
+                <!-- Acción principal -->
                 <a
-                    href="{% url 'customers:customer_update' customer.pk %}"
-                    class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                    href="{% url 'accounts:account_create' customer.pk %}"
+                    class="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700"
                 >
-                    Editar cliente
-                </a>
-                <a
-                href="{% url 'accounts:account_create' customer.pk %}"
-                class="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700"
-                >
-                + Nueva cuenta
+                    + Crear nueva cuenta
                 </a>
 
-                {% if customer.is_active %}
-                    <form
-                    method="post"
-                    action="{% url 'customers:customer_deactivate' customer.pk %}"
-                    onsubmit="return confirm('¿Seguro que quieres desactivar este cliente?');"
-                >
-                    {% csrf_token %}
 
-                    <button type="submit" class="rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700">
-                        Desactivar cliente
+                <!-- Otras acciones -->
+                <div class="relative">
+
+                    <button
+                        id="customer-actions-button"
+                        data-dropdown-toggle="customer-actions-menu"
+                        type="button"
+                        ...
+                    >
+                        ⋮
                     </button>
-                </form>
-                {% endif %}
+
+                    <div
+                        id="customer-actions-menu"
+                        class="z-10 hidden w-48 rounded-lg border
+                            border-gray-200 bg-white shadow-lg
+                            dark:border-gray-700 dark:bg-gray-900"
+                    >
+
+                        <ul class="p-2 text-sm font-medium">
+
+                            <li>
+                                <a
+                                    href="{% url 'customers:customer_update' customer.pk %}"
+                                    class="flex w-full rounded-lg px-3 py-2
+                                        text-gray-700 hover:bg-gray-100
+                                        dark:text-gray-300 dark:hover:bg-gray-800"
+                                >
+                                    Editar cliente
+                                </a>
+                            </li>
+
+                            {% if customer.is_active %}
+                                <li class="my-1 border-t border-gray-200 dark:border-gray-700"></li>
+
+                                <li>
+                                    <form
+                                        method="post"
+                                        action="{% url 'customers:customer_deactivate' customer.pk %}"
+                                        onsubmit="return confirm('¿Seguro que quieres desactivar este cliente?');"
+                                    >
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="flex w-full rounded-lg px-3 py-2
+                                                text-left text-red-600
+                                                hover:bg-red-50
+                                                dark:text-red-400
+                                                dark:hover:bg-red-950"
+                                        >
+                                            Desactivar cliente
+                                        </button>
+                                    </form>
+                                </li>
+                            {% endif %}
+
+                        </ul>
+                    </div>
+
+                </div>
                 
 
             </div>
@@ -102,11 +147,11 @@
         <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 
             <div>
-                <h2 class="text-xl font-semibold text-gray-900">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
                     Cuentas
                 </h2>
 
-                <p class="mt-1 text-sm text-gray-500">
+                <p class="mt-1 text-sm text-gray-500  dark:text-gray-200">
                     {{ accounts|length }}
                     {% if accounts|length == 1 %}
                         cuenta
@@ -125,10 +170,10 @@
                     <span
                         class="mb-1 inline-flex items-center rounded-full
                             bg-green-50 px-2.5 py-1 text-xs font-medium
-                            text-green-700"
+                            text-green-700 dark:bg-green-700 dark:text-gray-100"
                     >
                         <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-green-500"></span>
-                        Activa
+                        Temporada actual
                     </span>
 
                 {% else %}
@@ -136,7 +181,7 @@
                     <span
                         class="mb-1 inline-flex items-center rounded-full
                             bg-gray-100 px-2.5 py-1 text-xs font-medium
-                            text-gray-600"
+                            text-gray-600 dark:bg-gray-300 dark:text-gray-800""
                     >
                         Histórica
                     </span>
@@ -149,7 +194,7 @@
                     <label
                         for="season"
                         class="mb-1.5 block text-xs font-medium
-                            uppercase tracking-wide text-gray-500"
+                            uppercase tracking-wide text-gray-500  dark:text-gray-300"
                     >
                         Temporada
                     </label>
@@ -163,7 +208,10 @@
                             text-gray-700 shadow-sm transition
                             hover:border-gray-400
                             focus:border-indigo-500 focus:outline-none
-                            focus:ring-2 focus:ring-indigo-500"
+                            focus:ring-2 focus:ring-indigo-500
+                            dark:border-gray-700
+                            dark:bg-gray-700
+                            dark:text-gray-300"
                     >
 
                         {% for season in seasons %}
@@ -199,7 +247,8 @@
                     <article
                         class="rounded-xl border border-gray-200 bg-white p-5
                             shadow-sm transition
-                            hover:border-gray-300 hover:shadow-md"
+                            hover:border-gray-300 hover:shadow-md
+                            dark:bg-gray-900 dark:border-gray-800 dark:hover:border-gray-900"
                     >
 
                         <!-- Temporada -->
@@ -208,11 +257,11 @@
 
                             <div>
 
-                                <p class="text-s font-medium uppercase tracking-wide text-gray-500">
+                                <p class="text-s font-medium uppercase tracking-wide text-gray-500 dark:text-gray-200">
                                     Temporada - {{account.season.name}}
                                 </p>
 
-                                <h3 class="mt-1 text-lg font-semibold text-gray-900">
+                                <h3 class="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-300">
                                     {{account.name}}
                                 </h3>
 
@@ -220,7 +269,8 @@
 
                             <span
                                 class="rounded-full bg-gray-100 px-2.5 py-1
-                                    text-xs font-medium text-gray-600"
+                                    text-xs font-medium text-gray-600 dark:bg-gray-300
+                                                dark:text-gray-800"
                             >
                                 Cuenta
                             </span>
@@ -232,11 +282,11 @@
 
                         <div class="mt-6">
 
-                            <p class="text-sm text-gray-500">
+                            <p class="text-sm text-gray-500 dark:text-gray-200">
                                 Saldo pendiente
                             </p>
 
-                            <p class="mt-1 text-2xl font-bold text-gray-900">
+                            <p class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">
                                 {{ account.balance }} €
                             </p>
 
@@ -247,16 +297,16 @@
 
                         <div
                             class="mt-5 grid grid-cols-2 gap-4
-                                border-t border-gray-100 pt-4"
+                                border-t border-gray-700 pt-4"
                         >
 
                             <div>
 
-                                <p class="text-xs text-gray-500">
+                                <p class="text-xs text-gray-500 dark:text-gray-200">
                                     Cargos
                                 </p>
 
-                                <p class="mt-1 font-medium text-gray-900">
+                                <p class="mt-1 font-medium text-gray-900 dark:text-gray-200">
                                     {{ account.total_charges }} €
                                 </p>
 
@@ -265,11 +315,11 @@
 
                             <div>
 
-                                <p class="text-xs text-gray-500">
+                                <p class="text-xs text-gray-500 dark:text-gray-200">
                                     Pagos
                                 </p>
 
-                                <p class="mt-1 font-medium text-gray-900">
+                                <p class="mt-1 font-medium text-gray-900 dark:text-gray-200">
                                     {{ account.total_payments }} €
                                 </p>
 
@@ -288,7 +338,10 @@
                                     rounded-lg border border-gray-300
                                     px-4 py-2
                                     text-sm font-medium text-gray-700
-                                    hover:bg-gray-50"
+                                    hover:bg-gray-50
+                                    hover:dark:bg-gray-800
+                                    dark:text-gray-200
+                                    dark:border-gray-700"
                             >
                                 Ver cuenta
                                 <span class="ml-2">→</span>
@@ -326,6 +379,8 @@
             </div>
 
         {% endif %}
+
+        
 
     </section>
     
