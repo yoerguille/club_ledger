@@ -17,15 +17,15 @@ Cuenta
 
         <div>
 
-            <h1 class="text-3xl font-bold text-gray-900">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
                 {{ account.name }}
             </h1>
 
-            <p class="mt-2 text-gray-600">
+            <p class="mt-2 text-gray-600 dark:text-gray-300">
                 {{ account.customer.name }} . Temporada {{ account.season.name}}
             </p>
 
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-gray-500 dark:text-gray-400">
                 Cuenta creada el {{ account.created_at|date:"d/m/Y" }}
             </p>
 
@@ -80,47 +80,47 @@ Cuenta
 
     </div>
 
-    <hr class="mt-4">
+    <hr class="mt-4 border-gray-700 pt-4">
 
-    <h2 class="mb-4 text-xl font-semibold">
+    <h2 class="mb-4 text-xl font-semibold mt-2 dark:text-gray-300">
         Movimientos ({{ account.transactions.count }})
     </h2>
 
-    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
 
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+            <thead class="bg-gray-50 dark:bg-gray-800">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300">
                         Fecha
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300">
                         Concepto
                     </th>
-                    <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300">
                         Tipo
                     </th>
-                    <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300">
                         Método
                     </th>
-                    <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300">
                         Importe
                     </th>
-                    <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300">
                         Acciones
                     </th>
                 </tr>
             </thead>
 
-            <tbody class="divide-y divide-gray-100 bg-white">
+            <tbody class="divide-y divide-gray-100 bg-white dark:bg-gray-900">
                 {% for transaction in account.transactions.all %}
-                <tr class="hover:bg-gray-50 transition-colors">
+                <tr class="hover:bg-gray-50 transition-colors hover:dark:bg-gray-800">
 
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                         {{ transaction.date|date:"d/m/Y" }}
                     </td>
 
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-4 uppercase dark:text-gray-200">
                         {{ transaction.description }}
                     </td>
 
@@ -128,7 +128,7 @@ Cuenta
                         {% include "components/badges/movement_badge.html" %}
                     </td>
 
-                    <td class="px-6 py-4 text-center">
+                    <td class="px-6 py-4 text-center text-sm dark:text-gray-400">
                         {% if transaction.payment_method %}
                             {{ transaction.get_payment_method_display }}
                         {% else %}
@@ -136,7 +136,7 @@ Cuenta
                         {% endif %}
                     </td>
 
-                    <td class="px-6 py-4 text-right font-mono font-semibold">
+                    <td class="px-6 py-4 text-right font-mono font-semibold text-lg {{transaction.balance_classes}}">
 
                         {{ transaction.formatted_amount }}
 

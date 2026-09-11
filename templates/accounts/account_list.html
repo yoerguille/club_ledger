@@ -13,20 +13,9 @@ Lista de Cuentas
 
             <div>
                 <div class="flex items-center gap-3">
-                    <h2 class="text-3xl font-semibold tracking-tight text-gray-950">
+                    <h2 class="text-3xl font-semibold tracking-tight text-gray-950 dark:text-gray-100">
                         Cuentas
                     </h2>
-
-                    {% if selected_season.is_active %}
-                        <span
-                            class="inline-flex items-center gap-1.5 rounded-full
-                                bg-emerald-50 px-2.5 py-1
-                                text-xs font-medium text-emerald-700"
-                        >
-                            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                            Temporada activa
-                        </span>
-                    {% endif %}
                 </div>
 
                 <p class="mt-1.5 text-sm text-gray-500">
@@ -47,7 +36,7 @@ Lista de Cuentas
         <!-- FILTROS -->
         <div
             class="mt-6 rounded-xl border border-gray-200
-                bg-white shadow-sm"
+                bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900"
         >
 
             <form
@@ -63,7 +52,7 @@ Lista de Cuentas
                     <label
                         for="search"
                         class="mb-1.5 block text-xs font-medium
-                            uppercase tracking-wide text-gray-500"
+                            uppercase tracking-wide text-gray-500 dark:text-gray-200"
                     >
                         Buscar cuenta
                     </label>
@@ -84,7 +73,10 @@ Lista de Cuentas
                                 focus:border-gray-400
                                 focus:outline-none
                                 focus:ring-2
-                                focus:ring-gray-900/10"
+                                focus:ring-gray-900/10
+                                dark:border-gray-700
+                                dark:bg-gray-700
+                                dark:text-gray-300"
                         >
 
                     </div>
@@ -98,7 +90,7 @@ Lista de Cuentas
                     <label
                         for="sort"
                         class="mb-1.5 block text-xs font-medium
-                            uppercase tracking-wide text-gray-500"
+                            uppercase tracking-wide text-gray-500 dark:text-gray-200"
                     >
                         Ordenar por
                     </label>
@@ -114,7 +106,10 @@ Lista de Cuentas
                             focus:border-gray-400
                             focus:outline-none
                             focus:ring-2
-                            focus:ring-gray-900/10"
+                            focus:ring-gray-900/10
+                            dark:border-gray-700
+                            dark:bg-gray-700
+                            dark:text-gray-300"
                     >
 
                         <option
@@ -164,7 +159,7 @@ Lista de Cuentas
                     <label
                         for="season"
                         class="mb-1.5 block text-xs font-medium
-                            uppercase tracking-wide text-gray-500"
+                            uppercase tracking-wide text-gray-500 dark:text-gray-200"
                     >
                         Temporada
                     </label>
@@ -183,7 +178,10 @@ Lista de Cuentas
                                 focus:border-gray-400
                                 focus:outline-none
                                 focus:ring-2
-                                focus:ring-gray-900/10"
+                                focus:ring-gray-900/10
+                                dark:border-gray-700
+                                dark:bg-gray-700
+                                dark:text-gray-300"
                         >
 
                             {% for season in seasons %}
@@ -206,15 +204,17 @@ Lista de Cuentas
 
                             <span
                                 class="inline-flex shrink-0 items-center gap-1.5
-                                    rounded-full
-                                    bg-emerald-50 px-2.5 py-1
-                                    text-xs font-medium text-emerald-700"
+                                    rounded-full 
+                                    bg-emerald-50 px-2.5 py-2 
+                                    text-xs font-bold
+                                     text-emerald-700
+                                    dark:bg-green-700 dark:text-gray-100"
                             >
                                 <span
-                                    class="h-1.5 w-1.5 rounded-full bg-emerald-500"
+                                    class="h-1.5 w-1.5 rounded-full bg-emerald-500 dark:bg-green-100"
                                 ></span>
 
-                                Activa
+                                Temporada actual
                             </span>
 
                         {% else %}
@@ -222,8 +222,8 @@ Lista de Cuentas
                             <span
                                 class="inline-flex shrink-0 items-center
                                     rounded-full
-                                    bg-gray-100 px-2.5 py-1
-                                    text-xs font-medium text-gray-600"
+                                    bg-gray-100 dark:bg-gray-500 px-2.5 py-2
+                                    text-xs font-bold text-gray-600 dark:text-gray-200"
                             >
                                 Histórica
                             </span>
@@ -266,37 +266,38 @@ Lista de Cuentas
         Listado de cuentas - {{selected_season}}
     </h2>
 
-    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
 
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+            <thead class="bg-gray-50 dark:bg-gray-800">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300">
                         Nombre de la Cuenta
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300">
                         Cliente
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300">
                         Saldo Pendiente
                     </th>
-                    <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300">
                         Total Encargado
                     </th>
-                    <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300">
                         Total Pagado
                     </th>
-                    <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300">
                         Acceso a la cuenta
                     </th>
                 </tr>
             </thead>
 
-            <tbody class="divide-y divide-gray-100 bg-white">
+            <tbody class="divide-y divide-gray-100 bg-white dark:bg-gray-900 dark:divide-gray-800">
                 {% for account in accounts.all %}
-                <tr class="hover:bg-gray-50 transition-colors">
+                <tr class="hover:bg-gray-50 transition-colors hover:dark:bg-gray-800">
 
-                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                    <td class="px-6 py-4 whitespace-nowrap font-bold text-gray-900
+                                             dark:text-gray-300 ">
                             
                         {{ account.name }}
 
@@ -304,7 +305,7 @@ Lista de Cuentas
 
                     <td class="px-6 py-4 text-s ">
                         <a href="{% url 'customers:customer_detail' account.customer.pk%}"
-                            class="uppercase text-gray-600 hover:text-blue-800" 
+                            class="font-semibold lowercase text-gray-600 hover:text-blue-800 dark:hover:text-blue-700 dark:text-gray-400" 
                         >
                             {{ account.customer }}
                         </a>
@@ -351,7 +352,7 @@ Lista de Cuentas
 
                     <td class="px-6 py-4 text-center">
 
-                        <span class="text-gray-900 font-mono  text-sm">
+                        <span class="text-gray-900 font-mono dark:text-gray-400  text-sm">
                             {{ account.total_charges }} €
                         </span>
                         
@@ -375,7 +376,12 @@ Lista de Cuentas
                             shadow-sm
                             transition
                             hover:bg-gray-50
-                            hover:text-gray-900"
+                            hover:text-gray-900
+                            dark:border-gray-700
+                            dark:bg-gray-800
+                            dark:text-gray-300
+                            dark:hover:bg-gray-800
+                            dark:hover:text-white"
                         >
                             VER CUENTA →
                         </a>
