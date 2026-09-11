@@ -112,7 +112,7 @@ Cuenta
                 </tr>
             </thead>
 
-            <tbody class="divide-y divide-gray-100 bg-white dark:bg-gray-900">
+            <tbody class="divide-y divide-gray-100 bg-white dark:bg-gray-900 dark:divide-gray-800">
                 {% for transaction in account.transactions.all %}
                 <tr class="hover:bg-gray-50 transition-colors hover:dark:bg-gray-800">
 
@@ -120,7 +120,7 @@ Cuenta
                         {{ transaction.date|date:"d/m/Y" }}
                     </td>
 
-                    <td class="px-6 py-4 uppercase dark:text-gray-200">
+                    <td class="px-6 py-4 text-sm uppercase dark:text-gray-200">
                         {{ transaction.description }}
                     </td>
 
@@ -136,7 +136,7 @@ Cuenta
                         {% endif %}
                     </td>
 
-                    <td class="px-6 py-4 text-right font-mono font-semibold text-lg {{transaction.balance_classes}}">
+                    <td class="px-6 py-4 text-right font-mono font-semibold text-sm {{transaction.balance_classes}}">
 
                         {{ transaction.formatted_amount }}
 
