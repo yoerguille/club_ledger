@@ -11,7 +11,7 @@
 {% block content %}
 
 <div class="max-w-2xl">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 dark:border-gray-800 dark:bg-gray-900">
 
 
         <h2 class="text-2xl font-bold mb-6">
@@ -36,12 +36,12 @@
 
             <div class="flex gap-3 pt-4">
                 <button type="submit"
-                        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:text-gray-100 dark:bg-blue-800 dark:hover:bg-blue-900 dark:border-gray-300">
                     Guardar
                 </button>
 
                 <a href="{% url 'customers:customer_list' %}"
-                    class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50">
+                    class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800 dark:text-red-300">
                     Cancelar
                 </a>
             </div>

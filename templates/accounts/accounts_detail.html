@@ -45,29 +45,85 @@ Cuenta
 
     <div class="mt-8 flex flex-wrap gap-3">
 
-        <a href="{% url 'transactions:charge_create' account.id %}"
-        class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
-            + Registrar pedido
-        </a>
-
-        <a href="{% url 'transactions:payment_create' account.id %}"
-        class="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700">
-            + Registrar pago
-        </a>
-
         <a
         href="{% url 'statements:statement_detail' account.id %}"
-        class="rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
-    >
+        class="rounded-lg  bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 dark:text-gray-200"
+        >
         Generar estado de cuenta
         </a>
 
-        <a
-            href="{% url 'accounts:account_update' account.id %}"
-            class="rounded-lg bg-pink-600 px-4 py-2 text-white hover:bg-pink-700"
-        >
-            Editar cuenta
-        </a>
+        <!-- Otras acciones -->
+
+        <div class="relative">
+            <button
+                id="account-actions-button"
+                data-dropdown-toggle="account-actions-menu"
+                type="button"
+                aria-label="Acciones de la cuenta del cliente"
+                class="inline-flex h-10 w-10 items-center justify-center
+                rounded-lg border border-gray-200
+                bg-white text-gray-600
+                transition
+                hover:bg-gray-50 hover:text-gray-900
+                focus:outline-none focus:ring-2 focus:ring-gray-900/10
+                dark:border-gray-700
+                dark:bg-gray-800
+                dark:text-gray-300
+                dark:hover:bg-gray-700
+                dark:hover:text-white"
+            >
+                <svg
+                    class="h-5 w-5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-width="3"
+                        d="M6 12h.01m6 0h.01m5.99 0h.01"
+                    />
+                </svg>   
+            
+            </button>
+
+            <div
+                id="account-actions-menu"
+                class="z-10 hidden w-48 rounded-lg border
+                    border-gray-200 bg-white shadow-lg
+                    dark:border-gray-700 dark:bg-gray-900"
+            >
+
+                <ul class="p-2 text-sm font-medium"
+                    aria-labelledby="account-actions-button"    
+                >
+
+                    <li>
+                        <a
+                            href="{% url 'transactions:charge_create' account.id %}"
+                            class="flex w-full rounded-lg px-3 py-2
+                                text-gray-700 hover:bg-gray-100
+                                dark:text-gray-300 dark:hover:bg-gray-800"
+                        >
+                            + Registrar cargo
+                        </a>
+                    </li>
+
+                    <li>
+                        <a
+                            href="{% url 'transactions:payment_create' account.id %}"
+                            class="flex w-full rounded-lg px-3 py-2
+                                text-gray-700 hover:bg-gray-100
+                                dark:text-gray-300 dark:hover:bg-gray-800"
+                        >
+                            + Registrar pago
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
         <div class="ml-auto">
             <a

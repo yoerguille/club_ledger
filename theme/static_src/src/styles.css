@@ -2,6 +2,7 @@
 @theme {
   --font-sans: "Onest", sans-serif;
 }
+@plugin "flowbite/plugin";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -13,6 +14,7 @@
   * the scope of this path.
   */
 @source "../../../**/*.{html,py,js}";
+@source "../../../node_modules/flowbite";
 
 
 
