@@ -1,8 +1,8 @@
-<header class="bg-white shadow dark:bg-gray-900 dark:shadow-gray-950/30">
+<header class="bg-white/0">
 
     <div class="px-8 py-4 flex justify-between items-center">
 
-        <h2 class="text-xl font-semibold">
+        <h2 class="text-xl font-semibold opaci">
 
                 {% block page_title %}
 
@@ -12,7 +12,7 @@
         </h2>
 
 
-        {% if user.is_authenticated %}
+        
             <div class="flex items-center gap-4">
 
                 <button
@@ -35,6 +35,8 @@
                     </span>
                 </button>
 
+        {% if user.is_authenticated %}
+        
                 <div class="text-right">
                     <p class="text-sm font-medium text-gray-900 dark:text-gray-200">
                         {{ user.get_username }}

@@ -1,4 +1,4 @@
-<aside class="w-64 bg-slate-800 text-white dark:bg-gray-900">
+<aside class="w-64 bg-slate-800 text-white dark:bg-gray-900 opacity-50">
 
         <div class="p-6">
 
@@ -9,7 +9,7 @@
             </h1>
 
         </div>
-
+    {% if user.is_authenticated %}
         <nav class="mt-6">
 
                 <a href="{% url 'dashboard:dashboard' %}" 
@@ -33,4 +33,6 @@
 
                 </a>
         </nav>
+        
+    {%endif%}
 </aside>
