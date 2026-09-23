@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import AccountDetailView, AccountCreateView, AccountUpdateView, AccountListView
+from .views import AccountDetailView, AccountCreateView, AccountUpdateView, AccountListView, closed_account
 
 app_name = 'accounts'
 
@@ -9,5 +9,7 @@ urlpatterns = [
     path("customers/<int:customer_pk>/create/", AccountCreateView.as_view(), name="account_create"),
     path("<int:pk>/edit", AccountUpdateView.as_view(), name="account_update"),
     path("list/", AccountListView.as_view(), name="account_list"),
+    path("<int:pk>/close/", closed_account, name="account_close",
+),
     
 ]

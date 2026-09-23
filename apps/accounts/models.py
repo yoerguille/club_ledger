@@ -40,6 +40,11 @@ class Account(models.Model):
         auto_now=True,
     )
 
+    is_closed = models.BooleanField(
+        default=False,
+        
+    )
+
     class Meta:
         verbose_name = 'Cuenta'
         verbose_name_plural = 'Cuentas'

@@ -15,6 +15,44 @@ from apps.transactions.models import Transaction
 
 # Create your views here.
 
+def closed_account(request, pk):
+    account = get_object_or_404(Account, pk=pk)
+    
+    if account.is_closed:
+        messages.warning(
+            request,
+            "La cuenta ya está cerrada."
+        )
+        return redirect(
+        "accounts:account_detail",
+        pk=account.pk
+        )
+
+    if account.balance != 0:
+        messages.error(
+            request,
+            "No se puede cerrar una cuenta con saldo pendiente."
+        )
+
+        return redirect(
+        "accounts:account_detail",
+        pk=account.pk
+        )
+
+    account.is_closed = True
+    account.save(update_fields=["is_closed"])
+
+
+    messages.success(
+        request,
+        "La cuenta ha sido cerrada correctamente."
+    )
+
+    return redirect(
+    "accounts:account_detail",
+    pk=account.pk
+    )
+
 class AccountListView(ListView):
     model=Account
     template_name ="accounts/accounts_list.html"
@@ -31,6 +69,9 @@ class AccountListView(ListView):
                 self._selected_season = Season.objects.filter(is_active=True).first()
 
         return self._selected_season
+    
+            
+
 
     def get_queryset(self):
 
@@ -104,6 +145,7 @@ class AccountListView(ListView):
 
             return context
 
+
     
 
 class AccountDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView):
@@ -111,6 +153,7 @@ class AccountDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView)
     permission_required="accounts.view_account"
     context_object_name = "account"
     template_name = "accounts/accounts_detail.html"
+
 
 
 class AccountCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
