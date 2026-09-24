@@ -335,18 +335,16 @@ Lista de Cuentas
                                 A favor del cliente
                             </div>
 
-                        {% else %}
-
-                            <div class="font-mono text-base text-emerald-600">
-                                0,00 €
-                            </div>
-
-                            <div class="mt-0.5 text-xs text-gray-500">
-                                Cuenta saldada
-                            </div>
-
                         {% endif %}
 
+                        {% if account.is_closed %}
+                            <div class="mt-0.5 text-xs text-green-600">
+                            Cuenta cerrada ✅
+                            </div>
+                            
+                        {% endif %}
+ 
+                        
                     </td>
 
 
