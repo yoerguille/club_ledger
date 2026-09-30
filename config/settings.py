@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'apps.dashboard',
     'apps.core',
     'apps.statements',
+    'apps.collection',
 
     'tailwind',
     'theme',
@@ -162,3 +163,5 @@ DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/login/"
+
+COLLECTION_PAYMENT_TERM_DAYS = 30

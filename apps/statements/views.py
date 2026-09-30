@@ -1,6 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.contrib import messages
+from ..collection.models import CollectionFollowUp
+from config.settings import COLLECTION_PAYMENT_TERM_DAYS
+from django.utils import timezone
+from datetime import timedelta
 
 from apps.accounts.models import Account
 
@@ -45,6 +49,13 @@ class StatementEmailView(LoginRequiredMixin, View):
 
         StatementEmailSender(account).send(
             base_url=base_url,
+        )
+
+        CollectionFollowUp.objects.create(
+            account=account,
+            amount=account.balance,
+            sent_at=timezone.now(),
+            due_date=timezone.now().date() + timedelta(days=COLLECTION_PAYMENT_TERM_DAYS)
         )
 
         messages.success(
