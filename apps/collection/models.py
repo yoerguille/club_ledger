@@ -50,6 +50,14 @@ class CollectionFollowUp(models.Model):
         verbose_name_plural = "Seguimientos de cobro"
         ordering = ["-sent_at"]
 
+        constraints = [
+            models.UniqueConstraint(
+                fields=["account"],
+                condition=models.Q(is_closed=False),
+                name="unique_active_follow_up_per_account"
+            )
+        ]
+
     def __str__(self):
         return (
             f"{self.account.customer.name} - "
