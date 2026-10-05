@@ -8,6 +8,8 @@ from django.db import models
 
 from apps.accounts.models import Account
 
+from django.utils import timezone
+
 
 class CollectionFollowUp(models.Model):
 
@@ -90,3 +92,17 @@ class CollectionFollowUp(models.Model):
                 raise ValidationError(
                     "Esta cuenta ya tiene un seguimiento de cobro activo."
                 )
+
+    @property
+    def is_overdue(self):
+        return (
+            self.status == self.Status.ACTIVE
+            and self.due_date < timezone.localdate()
+        )
+
+    @property
+    def days_overdue(self):
+        if not self.is_overdue:
+            return 0
+
+        return (timezone.localdate() - self.due_date).days

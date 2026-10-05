@@ -31,6 +31,30 @@ class StatementEmailView(LoginRequiredMixin, View):
             pk=account_pk,
         )
 
+        if account.active_collection_follow_up:
+
+            messages.error(
+                request,
+                "Esta cuenta ya tiene un seguimiento de cobro activo. "
+                "Cancélalo antes de iniciar uno nuevo."
+            )
+            return redirect(
+                "accounts:account_detail",
+                pk=account.pk,
+            )
+
+        if account.balance <= 0:
+            
+            messages.error(
+                request,
+                "Esta cuenta no tiene saldo pendiente. "
+                "No se puede enviar un estado de cuenta."
+            )
+            return redirect(
+                "accounts:account_detail",
+                pk=account.pk,
+            )
+
         customer = account.customer
 
         if not customer.email:
