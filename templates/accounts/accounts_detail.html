@@ -99,6 +99,7 @@ Cuenta
                 <ul class="p-2 text-sm font-medium"
                     aria-labelledby="account-actions-button"    
                 >
+                {% if not account.is_closed and not account.active_collection_follow_up %}
 
                     <li>
                         <a
@@ -110,6 +111,7 @@ Cuenta
                             + Registrar cargo
                         </a>
                     </li>
+                {% endif %}
 
                     <li>
                         <a
@@ -141,6 +143,26 @@ Cuenta
                             </button>
                         </form>
                     </li>
+
+                    {% if account.active_collection_follow_up %}
+                        <li>
+                            <form
+                                method="post"
+                                action="{% url 'collection:follow_up_cancel' account.active_collection_follow_up.pk %}"
+                            >
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="flex w-full rounded-lg px-3 py-2
+                                        text-left text-red-600 hover:bg-red-50
+                                        dark:text-red-400 dark:hover:bg-red-950"
+                                >
+                                    Cancelar seguimiento
+                                </button>
+                            </form>
+                        </li>
+                    {% endif %}
                     
                 </ul>
             </div>

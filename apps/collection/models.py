@@ -11,6 +11,11 @@ from apps.accounts.models import Account
 
 class CollectionFollowUp(models.Model):
 
+    class Status(models.TextChoices):
+        ACTIVE = "active", "Activo"
+        COMPLETED = "completed", "Completo"
+        CANCELED = "canceled", "Cancelado" 
+
     account = models.ForeignKey(
         Account,
         on_delete=models.PROTECT,
@@ -24,17 +29,19 @@ class CollectionFollowUp(models.Model):
         verbose_name="Importe",
     )
 
+    status = models.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.ACTIVE,
+        verbose_name="Estado",
+    )
+
     sent_at = models.DateTimeField(
         verbose_name="Fecha de envío",
     )
 
     due_date = models.DateField(
         verbose_name="Fecha de vencimiento",
-    )
-
-    is_closed = models.BooleanField(
-        default=False,
-        verbose_name="Cerrado",
     )
 
     created_at = models.DateTimeField(
@@ -53,7 +60,7 @@ class CollectionFollowUp(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=["account"],
-                condition=models.Q(is_closed=False),
+                condition=models.Q(status="active"),
                 name="unique_active_follow_up_per_account"
             )
         ]
@@ -71,10 +78,10 @@ class CollectionFollowUp(models.Model):
                 "amount": "El importe debe ser mayor que cero."
             })
 
-        if not self.is_closed:
+        if self.status == self.Status.ACTIVE:
             active_follow_up = CollectionFollowUp.objects.filter(
                 account=self.account,
-                is_closed=False,
+                status = self.Status.ACTIVE,
             ).exclude(
                 pk=self.pk,
             ).exists()

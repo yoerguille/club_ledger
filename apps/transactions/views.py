@@ -8,6 +8,7 @@ from apps.accounts.models import Account
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.http import HttpResponseNotAllowed
+from apps.collection.models import CollectionFollowUp
 
 # Create your views here.
 
@@ -17,8 +18,28 @@ class ChargeCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     form_class = ChargeForm
     template_name = 'transactions/transaction_form.html'
 
+
     def dispatch(self, request, *args, **kwargs):
         self.account = get_object_or_404(Account, pk=kwargs["account_pk"])
+
+        if self.account.is_closed:
+            messages.error(
+                self.request,
+                "No se puede registrar un cargo en una cuenta cerrada."
+            )
+            return redirect("accounts:account_detail", pk=self.account.pk)
+
+        has_active_followup = self.account.collection_followups.filter(
+            status=CollectionFollowUp.Status.ACTIVE,
+        ).exists()
+
+        if has_active_followup:
+            messages.error(
+                self.request,
+                "No se puede registrar un nuevo cargo mientras la cuenta tenga un seguimiento de cobro activo."
+            )
+            return redirect("accounts:account_detail", pk=self.account.pk)
+
         return super().dispatch(request, *args, **kwargs)
     
     def get_success_url(self):
@@ -72,6 +93,12 @@ class PaymentCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView)
 
         transaction.save()
 
+        if self.account.balance <= 0:
+            active_follow_up = self.account.active_collection_follow_up
+            if active_follow_up:
+                active_follow_up.status = CollectionFollowUp.Status.COMPLETED
+                active_follow_up.save(update_fields=["status"])
+                
         messages.success(
             self.request,
             "El pago se ha registrado correctamente."

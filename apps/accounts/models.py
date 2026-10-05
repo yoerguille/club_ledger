@@ -92,4 +92,10 @@ class Account(models.Model):
             total += transaction.amount
 
         return total
+
+    @property
+    def active_collection_follow_up(self):
+        return self.collection_followups.filter(
+            status="active",
+        ).first()
     
