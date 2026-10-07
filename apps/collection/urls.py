@@ -12,4 +12,9 @@ urlpatterns = [
         views.CollectionFollowUpCancelView.as_view(),
         name="follow_up_cancel",
     ),
+    path(
+        "<int:pk>/prepare-reminder/",
+        views.CollectionReminderPrepareView.as_view(),
+        name="prepare_reminder",
+    ),
 ]
