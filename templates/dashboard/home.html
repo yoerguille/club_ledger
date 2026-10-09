@@ -29,12 +29,12 @@
 
     </div>
     {% if overdue_follow_ups %}
-        <section class="mt-8">
+        <section class="mt-20">
             <div class="mb-4">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                     Seguimientos que requieren atención
                 </h2>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                <p class="mt-1 text-sm text-gray-500 dark:text-secondary">
                     Cuentas con un seguimiento de cobro cuyo plazo de pago ha vencido.
                 </p>
             </div>
@@ -42,7 +42,7 @@
             <div class="space-y-3">
                 {% for follow_up in overdue_follow_ups %}
                     <div class="rounded-lg border border-gray-200 bg-white p-5
-                                dark:border-gray-800 dark:bg-gray-900">
+                                dark:border-zinc-800 dark:bg-dark-primary">
 
                         <div class="flex items-center justify-between gap-4">
 
@@ -59,7 +59,7 @@
                                     </span>
                                 </div>
 
-                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                <p class="mt-1 text-sm text-gray-500 dark:text-secondary">
                                     {{ follow_up.account.name }}
                                     · {{ follow_up.account.season.name }}
                                 </p>

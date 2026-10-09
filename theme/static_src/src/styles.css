@@ -17,7 +17,11 @@
 @source "../../../node_modules/flowbite";
 
 
-
+@theme {
+  --color-dark-primary: #101010;
+  --color-dark-secondary: #212121;
+  --color-secondary: #7A7180;
+}
 
 
 body {
