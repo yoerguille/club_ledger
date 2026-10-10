@@ -1,11 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 
 from .models import CollectionFollowUp
 from .integrations import CollectionReminderService
-
 
 class CollectionFollowUpCancelView(LoginRequiredMixin, View):
 
@@ -50,7 +49,7 @@ class CollectionReminderPrepareView(LoginRequiredMixin, View):
         )
 
         try:
-            CollectionReminderService.prepare(follow_up)
+            reminder =CollectionReminderService.prepare(follow_up)
         except Exception:
             messages.error(
                 request,
@@ -58,9 +57,11 @@ class CollectionReminderPrepareView(LoginRequiredMixin, View):
             )
             return redirect("dashboard:dashboard")
 
-        messages.success(
+        return render(
             request,
-            "Solicitud de recordatorio enviada correctamente."
+            "collection/reminder_review.html",
+            {
+                "follow_up": follow_up,
+                "reminder": reminder,
+            },
         )
-
-        return redirect("dashboard:dashboard")

@@ -26,4 +26,10 @@ class CollectionReminderService:
 
         response.raise_for_status()
 
-        return response
+        data = response.json()
+        reminder = data["reminder"]
+
+        if not isinstance(reminder, str) or not reminder.strip():
+            raise ValueError("n8n no ha devuelto un recordatorio válido.")
+
+        return reminder
