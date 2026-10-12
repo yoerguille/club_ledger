@@ -17,4 +17,9 @@ urlpatterns = [
         views.CollectionReminderPrepareView.as_view(),
         name="prepare_reminder",
     ),
+    path(
+    "<int:pk>/send-reminder/",
+    views.CollectionReminderSendView.as_view(),
+    name="send_reminder",
+),
 ]
