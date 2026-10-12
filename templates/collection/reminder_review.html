@@ -70,11 +70,6 @@
             Mensaje generado por IA
         </h2>
 
-        <label for="reminder" class="mb-2 block text-sm
-               text-gray-600 dark:text-gray-400">
-            Puedes editar el contenido antes de enviarlo.
-        </label>
-
         <form
             method="post"
             action="{% url 'collection:send_reminder' follow_up.pk %}"
@@ -89,7 +84,7 @@
 
             <label
                 for="reminder"
-                class="mb-2 block text-sm text-gray-600 dark:text-gray-400"
+                class="mb-2 block text-sm text-gray-600 dark:text-secondary"
             >
                 Puedes editar el contenido antes de enviarlo.
             </label>
