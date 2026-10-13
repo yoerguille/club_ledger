@@ -12,6 +12,7 @@ from django.urls import reverse_lazy
 from django.db.models.functions import Coalesce
 from django.db.models import Case, DecimalField, F, Sum, Value, When
 from apps.transactions.models import Transaction
+from apps.collection.models import CollectionReminder
 
 # Create your views here.
 
@@ -154,7 +155,17 @@ class AccountDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView)
     context_object_name = "account"
     template_name = "accounts/accounts_detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
+        context["collection_reminders"] = (
+            CollectionReminder.objects
+            .filter(follow_up__account=self.object)
+            .select_related("follow_up")
+            .order_by("-sent_at")
+        )
+
+        return context
 
 class AccountCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     model = Account

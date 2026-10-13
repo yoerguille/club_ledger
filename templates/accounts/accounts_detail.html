@@ -42,6 +42,77 @@ Cuenta
         {% include "components/cards/stat_card_money.html" with title="Pagos: " value=account.total_payments subtitle="Total recibido" %}
     </div>
 
+    {% with follow_up=account.active_collection_follow_up %}
+        {% if follow_up %}
+            <section class="mt-6 rounded-lg border border-amber-200 bg-amber-50 p-5
+                            dark:border-amber-900 dark:bg-gray-900">
+
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 class="font-semibold text-gray-900 dark:text-white">
+                        Seguimiento de cobro activo
+                    </h2>
+
+                    {% if follow_up.is_overdue %}
+                        <span class="rounded-full bg-red-100 px-3 py-1 text-xs
+                                    font-medium text-red-700 dark:bg-red-900
+                                    dark:text-red-300">
+                            Vencido
+                        </span>
+                    {% else %}
+                        <span class="rounded-full bg-amber-100 px-3 py-1 text-xs
+                                    font-medium text-amber-700 dark:bg-amber-900
+                                    dark:text-amber-300">
+                            Dentro de plazo
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Saldo pendiente
+                        </p>
+                        <p class="font-semibold text-gray-900 dark:text-white">
+                            {{ account.balance|floatformat:2 }} €
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Fecha de vencimiento
+                        </p>
+                        <p class="font-semibold text-gray-900 dark:text-white">
+                            {{ follow_up.due_date|date:"d/m/Y" }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Estado
+                        </p>
+
+                        {% if follow_up.is_overdue %}
+                            <p class="font-medium text-red-600 dark:text-red-400">
+                                {{ follow_up.days_overdue }} días de retraso
+                            </p>
+                        {% else %}
+                            <p class="font-medium text-gray-900 dark:text-white">
+                                Pendiente de vencimiento
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <p class="mt-4 border-t border-amber-200 pt-4 text-sm
+                        text-gray-600 dark:border-gray-800 dark:text-gray-400">
+                    Los nuevos cargos están bloqueados mientras este seguimiento
+                    permanezca activo. Puedes seguir registrando pagos.
+                </p>
+
+            </section>
+        {% endif %}
+    {% endwith %}
+
 
     <div class="mt-8 flex flex-wrap gap-3">
 
@@ -281,7 +352,82 @@ Cuenta
                 {% endfor %}
             </tbody>
         </table>
-    </div>    
+    </div>
+    
+    <!-- HISTORIAL DE RECORDATORIOS -->
+
+    <section class="mt-8">
+
+        <div class="mb-4">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                Historial de recordatorios
+            </h2>
+
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                Comunicaciones de cobro enviadas al cliente.
+            </p>
+        </div>
+
+        <div class="overflow-hidden rounded-lg border border-gray-200
+                    bg-white dark:border-gray-800 dark:bg-gray-900">
+
+            {% for reminder in collection_reminders %}
+
+                <div class="flex flex-col gap-4 border-b border-gray-200 p-5
+                            last:border-b-0 dark:border-gray-800
+                            sm:flex-row sm:items-center sm:justify-between">
+
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+
+                            <h3 class="font-medium text-gray-900 dark:text-white">
+                                {{ reminder.subject }}
+                            </h3>
+
+                            <span class="rounded-full bg-green-100 px-2.5 py-0.5
+                                        text-xs font-medium text-green-700
+                                        dark:bg-green-900 dark:text-green-300">
+                                Enviado
+                            </span>
+
+                        </div>
+
+                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                            {{ reminder.sent_at|date:"d/m/Y H:i" }}
+                            · {{ reminder.recipient_email }}
+                        </p>
+
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            Seguimiento #{{ reminder.follow_up.pk }}
+                        </p>
+                    </div>
+
+                    <div class="sm:text-right">
+
+                        <p class="font-semibold text-gray-900 dark:text-white">
+                            {{ reminder.balance_at_send|floatformat:2 }} €
+                        </p>
+
+                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                            Saldo al enviar
+                        </p>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <div class="p-6 text-center text-sm
+                            text-gray-500 dark:text-gray-400">
+                    Todavía no se han enviado recordatorios de cobro.
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
 
     <!-- ================================================= -->
     <!-- MODAL DE ELIMINACIÓN -->

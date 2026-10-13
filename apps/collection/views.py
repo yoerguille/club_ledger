@@ -7,7 +7,7 @@ from decimal import Decimal, InvalidOperation
 from django.core.exceptions import ValidationError
 
 from .email import CollectionReminderEmailSender
-from .models import CollectionFollowUp
+from .models import CollectionFollowUp, CollectionReminder 
 from .integrations import CollectionReminderService
 
 class CollectionFollowUpCancelView(LoginRequiredMixin, View):
@@ -139,7 +139,8 @@ class CollectionReminderSendView(LoginRequiredMixin, View):
             )
 
         try:
-            CollectionReminderEmailSender(follow_up).send(reminder)
+            sender = CollectionReminderEmailSender(follow_up)
+            sent_count=sender.send(reminder)
         except Exception:
             messages.error(
                 request,
@@ -154,6 +155,22 @@ class CollectionReminderSendView(LoginRequiredMixin, View):
                     "original_balance": original_balance,
                 },
             )
+        if sent_count != 1:
+            messages.error(
+                request,
+                "El servidor de correo no ha confirmado el envío."
+            )
+            return redirect(
+                "accounts:account_detail",
+                pk=account.pk
+            )
+        CollectionReminder.objects.create(
+            follow_up=follow_up,
+            recipient_email=customer.email,
+            subject=f"Recordatorio de pago - {account.season.name}",
+            message=reminder,
+            balance_at_send=account.balance,
+        )
 
         messages.success(
             request,

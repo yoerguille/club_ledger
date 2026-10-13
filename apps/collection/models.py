@@ -106,3 +106,49 @@ class CollectionFollowUp(models.Model):
             return 0
 
         return (timezone.localdate() - self.due_date).days
+
+
+class CollectionReminder(models.Model):
+
+    follow_up = models.ForeignKey(
+        CollectionFollowUp,
+        on_delete=models.PROTECT,
+        related_name="reminders",
+        verbose_name="Seguimiento de cobro",
+    )
+
+    recipient_email = models.EmailField(
+        verbose_name="Email destinatario",
+    )
+
+    subject = models.CharField(
+        max_length=255,
+        verbose_name="Asunto",
+    )
+
+    message = models.TextField(
+        verbose_name="Mensaje enviado",
+    )
+
+    balance_at_send = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name="Saldo en el momento del envío",
+    )
+
+    sent_at = models.DateTimeField(
+        default=timezone.now,
+        verbose_name="Fecha de envío",
+    )
+
+    class Meta:
+        verbose_name = "Recordatorio de cobro"
+        verbose_name_plural = "Recordatorios de cobro"
+        ordering = ["-sent_at"]
+
+    def __str__(self):
+        return (
+            f"Recordatorio - "
+            f"{self.follow_up.account.customer.name} - "
+            f"{self.sent_at:%d/%m/%Y}"
+        )
