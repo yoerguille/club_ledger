@@ -21,6 +21,39 @@ Cuenta
                 {{ account.name }}
             </h1>
 
+            {% with follow_up=account.active_collection_follow_up %}
+
+                {% if follow_up %}
+
+                    {% if follow_up.is_overdue %}
+                        <span class="inline-flex items-center rounded-full
+                                    bg-red-100 px-3 py-1 text-xs font-medium
+                                    text-red-700 dark:bg-red-900
+                                    dark:text-red-300">
+                            Cobro vencido
+                        </span>
+                    {% else %}
+                        <span class="inline-flex items-center rounded-full
+                                    bg-amber-100 px-3 py-1 text-xs font-medium
+                                    text-amber-700 dark:bg-amber-900
+                                    dark:text-amber-300">
+                            En seguimiento
+                        </span>
+                    {% endif %}
+
+                {% elif not account.is_closed %}
+
+                    <span class="inline-flex items-center rounded-full
+                                bg-green-100 px-3 py-1 text-xs font-medium
+                                text-green-700 dark:bg-green-900
+                                dark:text-green-300">
+                        Sin seguimiento activo
+                    </span>
+
+                {% endif %}
+
+            {% endwith %}
+
             <p class="mt-2 text-gray-600 dark:text-gray-300">
                 {{ account.customer.name }} . Temporada {{ account.season.name}}
             </p>
@@ -45,7 +78,7 @@ Cuenta
     {% with follow_up=account.active_collection_follow_up %}
         {% if follow_up %}
             <section class="mt-6 rounded-lg border border-amber-200 bg-amber-50 p-5
-                            dark:border-amber-900 dark:bg-gray-900">
+                            dark:border-amber-900 dark:bg-dark-primary">
 
                 <div class="mb-4 flex items-center justify-between">
                     <h2 class="font-semibold text-gray-900 dark:text-white">
@@ -104,7 +137,7 @@ Cuenta
                 </div>
 
                 <p class="mt-4 border-t border-amber-200 pt-4 text-sm
-                        text-gray-600 dark:border-gray-800 dark:text-gray-400">
+                        text-gray-600 dark:border-gray-800 dark:text-secondary">
                     Los nuevos cargos están bloqueados mientras este seguimiento
                     permanezca activo. Puedes seguir registrando pagos.
                 </p>
@@ -118,7 +151,7 @@ Cuenta
 
         <a
         href="{% url 'statements:statement_detail' account.id %}"
-        class="rounded-lg  bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 dark:text-gray-200"
+        class="rounded-lg  bg-blue-600 px-4 py-2 text-white hover:bg-btn-hover-primary bg-btn-primary dark:text-gray-200"
         >
         Generar estado de cuenta
         </a>
