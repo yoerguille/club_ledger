@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.http import HttpResponseNotAllowed
 from apps.collection.models import CollectionFollowUp
+from apps.transactions.services import register_payment
 
 # Create your views here.
 
@@ -86,19 +87,15 @@ class PaymentCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView)
         return reverse("accounts:account_detail", kwargs={"pk": self.account.pk})
     
     def form_valid(self, form):
-        transaction = form.save(commit=False)
+        register_payment(
+            account=self.account,
+            date=form.cleaned_data["date"],
+            description=form.cleaned_data["description"],
+            amount=form.cleaned_data["amount"],
+            payment_method=form.cleaned_data["payment_method"],
+            notes=form.cleaned_data.get("notes") or "",
+        )
 
-        transaction.account = self.account
-        transaction.movement_type = Transaction.MovementType.PAYMENT
-
-        transaction.save()
-
-        if self.account.balance <= 0:
-            active_follow_up = self.account.active_collection_follow_up
-            if active_follow_up:
-                active_follow_up.status = CollectionFollowUp.Status.COMPLETED
-                active_follow_up.save(update_fields=["status"])
-                
         messages.success(
             self.request,
             "El pago se ha registrado correctamente."
