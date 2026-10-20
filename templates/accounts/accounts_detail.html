@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
+
 {% block title %}
 Cuenta
 {% endblock %}
@@ -8,6 +9,8 @@ Cuenta
 {% block extra_js %}
 
     <script src="{% static 'js/transaction_delete.js' %}"></script>
+    <script src="{% static 'js/payment-create.js' %}" defer></script>
+    <script src="{% static 'js/charge-create.js' %}" defer></script>
 
 {% endblock %}
 
@@ -206,14 +209,16 @@ Cuenta
                 {% if not account.is_closed and not account.active_collection_follow_up %}
 
                     <li>
-                        <a
-                            href="{% url 'transactions:charge_create' account.id %}"
+                        <button
+                            type="button"
+                            data-modal-target="charge-create-modal"
+                            data-modal-toggle="charge-create-modal"
                             class="flex w-full rounded-lg px-3 py-2
-                                text-gray-700 hover:bg-gray-100
+                                text-left text-gray-700 hover:bg-gray-100
                                 dark:text-gray-300 dark:hover:bg-gray-800"
                         >
                             + Registrar cargo
-                        </a>
+                        </button>
                     </li>
                 {% endif %}
 
@@ -544,389 +549,12 @@ Cuenta
         </div>
 
     </div>
-    <!-- ================================================= -->
-    <!-- MODAL DE MENSAJE -->
-    <!-- ================================================= -->
-        {% for reminder in collection_reminders %}
 
-            <div
-                id="reminder-modal-{{ reminder.pk }}"
-                tabindex="-1"
-                aria-hidden="true"
-                class="fixed inset-0 z-50 hidden h-full w-full
-                    items-center justify-center overflow-y-auto
-                    overflow-x-hidden bg-gray-900/50 p-4"
-            >
+    {% include "accounts/modals/reminder_message_modal.html" %}
 
-                <div class="relative w-full max-w-2xl">
+    {% include "accounts/modals/payment_create_modal.html" %}
 
-                    <div class="relative rounded-lg bg-white shadow
-                                dark:bg-gray-800">
-
-                        <!-- Cabecera -->
-                        <div class="flex items-center justify-between
-                                    border-b border-gray-200 p-5
-                                    dark:border-gray-700">
-
-                            <h3 class="text-lg font-semibold
-                                    text-gray-900 dark:text-white">
-                                Recordatorio enviado
-                            </h3>
-
-                            <button
-                                type="button"
-                                data-modal-hide="reminder-modal-{{ reminder.pk }}"
-                                class="rounded-lg p-2 text-gray-400
-                                    hover:bg-gray-100 hover:text-gray-900
-                                    dark:hover:bg-gray-700 dark:hover:text-white"
-                            >
-                                ✕
-                                <span class="sr-only">Cerrar modal</span>
-                            </button>
-
-                        </div>
-
-                        <!-- Información -->
-                        <div class="space-y-4 p-6">
-
-                            <div class="text-sm text-gray-500 dark:text-gray-400">
-                                <p>
-                                    <strong>Para:</strong>
-                                    {{ reminder.recipient_email }}
-                                </p>
-
-                                <p>
-                                    <strong>Fecha:</strong>
-                                    {{ reminder.sent_at|date:"d/m/Y H:i" }}
-                                </p>
-
-                                <p>
-                                    <strong>Asunto:</strong>
-                                    {{ reminder.subject }}
-                                </p>
-                            </div>
-
-                            <div class="border-t border-gray-200 pt-4
-                                        dark:border-gray-700">
-
-                                <p class="mb-2 text-sm font-medium
-                                        text-gray-900 dark:text-white">
-                                    Mensaje
-                                </p>
-
-                                <div class="whitespace-pre-wrap break-words
-                                            rounded-lg bg-gray-50 p-4
-                                            text-sm text-gray-700
-                                            dark:bg-gray-900 dark:text-gray-300">{{ reminder.message }}</div>
-
-                            </div>
-
-                        </div>
-
-                        <!-- Pie -->
-                        <div class="flex justify-end border-t
-                                    border-gray-200 p-4 dark:border-gray-700">
-
-                            <button
-                                type="button"
-                                data-modal-hide="reminder-modal-{{ reminder.pk }}"
-                                class="rounded-lg bg-gray-200 px-4 py-2
-                                    text-sm font-medium text-gray-800
-                                    hover:bg-gray-300
-                                    dark:bg-gray-700 dark:text-white
-                                    dark:hover:bg-gray-600"
-                            >
-                                Cerrar
-                            </button>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-        {% endfor %}
-
-    <!-- ================================================= -->
-    <!-- MODAL DE FORMULARIO API REST -->
-    <!-- ================================================= -->
-
-        {% if not account.is_closed %}
-
-            <div
-                id="payment-create-modal"
-                tabindex="-1"
-                aria-hidden="true"
-                class="fixed inset-0 z-50 hidden h-full w-full
-                    items-center justify-center overflow-y-auto
-                    overflow-x-hidden bg-gray-900/50 p-4"
-            >
-                <div class="relative w-full max-w-xl">
-
-                    <div class="relative rounded-xl bg-white shadow-lg
-                                dark:bg-gray-800">
-
-                        <!-- Cabecera -->
-                        <div class="flex items-center justify-between
-                                    border-b border-gray-200 p-5
-                                    dark:border-gray-700">
-
-                            <div>
-                                <h3 class="text-lg font-semibold
-                                        text-gray-900 dark:text-white">
-                                    Registrar pago
-                                </h3>
-
-                                <p class="mt-1 text-sm text-gray-500
-                                        dark:text-gray-400">
-                                    {{ account.customer.name }}
-                                </p>
-                            </div>
-
-                            <button
-                                type="button"
-                                data-modal-hide="payment-create-modal"
-                                class="rounded-lg p-2 text-gray-400
-                                    hover:bg-gray-100 hover:text-gray-900
-                                    dark:hover:bg-gray-700 dark:hover:text-white"
-                                aria-label="Cerrar"
-                            >
-                                ✕
-                            </button>
-                        </div>
-
-                        <!-- Formulario -->
-                        <form
-                            id="payment-create-form"
-                            data-api-url="{% url 'api_payment_create' account.pk %}"
-                        >
-                            {% csrf_token %}
-                           <div class="space-y-4 p-6">
-
-                                <div>
-                                    <label for="payment-date"
-                                        class="mb-2 block text-sm font-medium
-                                                text-gray-900 dark:text-white">
-                                        Fecha
-                                    </label>
-                                    <input
-                                        type="date"
-                                        id="payment-date"
-                                        name="date"
-                                        required
-                                        class="block w-full rounded-lg border
-                                            border-gray-300 bg-gray-50 p-2.5
-                                            text-sm text-gray-900
-                                            dark:border-gray-600 dark:bg-gray-700
-                                            dark:text-white"
-                                    >
-                                </div>
-
-                                <div>
-                                    <label for="payment-description"
-                                        class="mb-2 block text-sm font-medium
-                                                text-gray-900 dark:text-white">
-                                        Descripción
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="payment-description"
-                                        name="description"
-                                        maxlength="255"
-                                        required
-                                        class="block w-full rounded-lg border
-                                            border-gray-300 bg-gray-50 p-2.5
-                                            text-sm text-gray-900
-                                            dark:border-gray-600 dark:bg-gray-700
-                                            dark:text-white"
-                                    >
-                                </div>
-
-                                <div>
-                                    <label for="payment-amount"
-                                        class="mb-2 block text-sm font-medium
-                                                text-gray-900 dark:text-white">
-                                        Importe (€)
-                                    </label>
-                                    <input
-                                        type="number"
-                                        id="payment-amount"
-                                        name="amount"
-                                        min="0.01"
-                                        step="0.01"
-                                        required
-                                        class="block w-full rounded-lg border
-                                            border-gray-300 bg-gray-50 p-2.5
-                                            text-sm text-gray-900
-                                            dark:border-gray-600 dark:bg-gray-700
-                                            dark:text-white"
-                                    >
-                                </div>
-
-                                <div>
-                                    <label for="payment-method"
-                                        class="mb-2 block text-sm font-medium
-                                                text-gray-900 dark:text-white">
-                                        Método de pago
-                                    </label>
-
-                                    <select
-                                        id="payment-method"
-                                        name="payment_method"
-                                        required
-                                        class="block w-full rounded-lg border
-                                            border-gray-300 bg-gray-50 p-2.5
-                                            text-sm text-gray-900
-                                            dark:border-gray-600 dark:bg-gray-700
-                                            dark:text-white"
-                                    >
-                                        <option value="">Seleccionar método</option>
-                                        {% for value, label in payment_methods %}
-                                            <option value="{{ value }}">{{ label }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label for="payment-notes"
-                                        class="mb-2 block text-sm font-medium
-                                                text-gray-900 dark:text-white">
-                                        Notas (opcional)
-                                    </label>
-
-                                    <textarea
-                                        id="payment-notes"
-                                        name="notes"
-                                        rows="3"
-                                        class="block w-full rounded-lg border
-                                            border-gray-300 bg-gray-50 p-2.5
-                                            text-sm text-gray-900
-                                            dark:border-gray-600 dark:bg-gray-700
-                                            dark:text-white"
-                                    ></textarea>
-                                </div>
-
-                            </div>
-
-                            <div
-                                id="payment-form-error"
-                                role="alert"
-                                class="mx-6 hidden rounded-lg bg-red-50 p-3
-                                    text-sm text-red-700
-                                    dark:bg-red-900/20 dark:text-red-400"
-                            ></div>
-
-                            <!-- Pie -->
-                            <div class="flex justify-end gap-3
-                                        border-t border-gray-200 p-5
-                                        dark:border-gray-700">
-
-                                <button
-                                    type="button"
-                                    data-modal-hide="payment-create-modal"
-                                    class="rounded-lg bg-gray-200 px-4 py-2
-                                        text-sm font-medium text-gray-800
-                                        hover:bg-gray-300
-                                        dark:bg-gray-700 dark:text-white"
-                                >
-                                    Cancelar
-                                </button>
-
-                                <button
-                                    type="submit"
-                                    id="payment-submit-btn"
-                                    class="rounded-lg bg-blue-600 px-4 py-2
-                                        text-sm font-medium text-white"
-                                >
-                                    Guardar pago
-                                </button>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-                </div>
-            </div>
-
-        {% endif %}
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const form = document.getElementById("payment-create-form");
-
-            if (!form) return;
-
-            const submitButton = document.getElementById("payment-submit-btn");
-            const errorContainer = document.getElementById("payment-form-error");
-
-            form.addEventListener("submit", async (event) => {
-                event.preventDefault();
-
-                errorContainer.classList.add("hidden");
-                errorContainer.textContent = "";
-
-                submitButton.disabled = true;
-                submitButton.textContent = "Guardando...";
-
-                const formData = new FormData(form);
-
-                const paymentData = {
-                    date: formData.get("date"),
-                    description: formData.get("description"),
-                    amount: formData.get("amount"),
-                    payment_method: formData.get("payment_method"),
-                    notes: formData.get("notes"),
-                };
-
-                try {
-                    const response = await fetch(form.dataset.apiUrl, {
-                        method: "POST",
-                        credentials: "same-origin",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Accept": "application/json",
-                            "X-CSRFToken": formData.get("csrfmiddlewaretoken"),
-                        },
-                        body: JSON.stringify(paymentData),
-                    });
-
-                    const result = await response.json();
-
-                    if (!response.ok) {
-                        const messages = [];
-
-                        for (const [field, errors] of Object.entries(result)) {
-                            const details = Array.isArray(errors)
-                                ? errors.join(", ")
-                                : String(errors);
-
-                            messages.push(`${field}: ${details}`);
-                        }
-
-                        throw new Error(
-                            messages.join("\n") ||
-                            "No se ha podido registrar el pago."
-                        );
-                    }
-
-                    if (response.status !== 201) {
-                        throw new Error("Respuesta inesperada del servidor.");
-                    }
-
-                    window.location.reload();
-
-                } catch (error) {
-                    errorContainer.textContent = error.message;
-                    errorContainer.classList.remove("hidden");
-
-                } finally {
-                    submitButton.disabled = false;
-                    submitButton.textContent = "Guardar pago";
-                }
-            });
-        });
-    </script>
+    {% include "accounts/modals/charge_create_modal.html" %}
 
 {% endblock %}
 

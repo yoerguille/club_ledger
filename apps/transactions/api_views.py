@@ -6,8 +6,10 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 
 from apps.accounts.models import Account
-from apps.transactions.serializers import PaymentSerializer
-from apps.transactions.services import register_payment
+from apps.transactions.serializers import PaymentSerializer, ChargeSerializer
+from apps.transactions.services import register_payment, register_charge
+from django.core.exceptions import ValidationError as DjangoValidationError
+from rest_framework.exceptions import ValidationError as DRFValidationError
 
 
 class PaymentCreateAPIView(APIView):
@@ -42,6 +44,47 @@ class PaymentCreateAPIView(APIView):
                 "account": account.pk,
                 "amount": str(payment.amount),
                 "message": "Pago registrado correctamente.",
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+
+class ChargeCreateAPIView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, account_pk):
+        # 1. Comprobar permisos
+        if not request.user.has_perm("transactions.add_transaction"):
+            return Response(
+                {"detail": "No tienes permiso para registrar cargos."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        # 2. Recuperar la cuenta
+        account = get_object_or_404(Account, pk=account_pk)
+
+        # 3. Validar los datos
+        serializer = ChargeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # 4. Registrar el cargo
+        try:
+            charge = register_charge(
+                account=account,
+                **serializer.validated_data,
+            )
+        except DjangoValidationError as e:
+            raise DRFValidationError({"detail": e.messages}) from e
+        
+
+        # 5. Devolver la respuesta HTTP
+        return Response(
+            {
+                "id": charge.pk,
+                "account": account.pk,
+                "amount": str(charge.amount),
+                "message": "Cargo registrado correctamente.",
             },
             status=status.HTTP_201_CREATED,
         )
