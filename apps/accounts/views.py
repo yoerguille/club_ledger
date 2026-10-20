@@ -164,6 +164,7 @@ class AccountDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView)
             .select_related("follow_up")
             .order_by("-sent_at")
         )
+        context["payment_methods"] = Transaction.PaymentMethod.choices
 
         return context
 
