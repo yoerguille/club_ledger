@@ -9,7 +9,8 @@ from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.http import HttpResponseNotAllowed
 from apps.collection.models import CollectionFollowUp
-from apps.transactions.services import register_payment
+from apps.transactions.services import register_payment, register_charge
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 
@@ -47,12 +48,21 @@ class ChargeCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
         return reverse("accounts:account_detail", kwargs={"pk": self.account.pk})
     
     def form_valid(self, form):
-        transaction = form.save(commit=False)
+        try:
 
-        transaction.account = self.account
-        transaction.movement_type = Transaction.MovementType.CHARGE
+            register_charge(
+                account=self.account,
+                date=form.cleaned_data["date"],
+                description=form.cleaned_data["description"],
+                amount=form.cleaned_data["amount"],
+                notes=form.cleaned_data.get("notes") or "",
+            )
 
-        transaction.save()
+        except ValidationError as e:
+            for message in e.messages:
+                form.add_error(None, message)
+
+            return self.form_invalid(form)
 
         messages.success(
             self.request,

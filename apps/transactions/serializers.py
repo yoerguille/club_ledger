@@ -31,3 +31,23 @@ class PaymentSerializer(serializers.ModelSerializer):
             )
 
         return value
+
+class ChargeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Transaction
+
+        fields = [
+            "date",
+            "description",
+            "amount",
+            "notes",
+        ]
+
+    def validate_amount(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                "El importe debe ser mayor que cero."
+            )
+
+        return value
