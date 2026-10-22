@@ -12,6 +12,9 @@ from django.urls import reverse_lazy
 from django.db.models.functions import Coalesce
 from django.db.models import Case, DecimalField, F, Sum, Value, When
 from apps.transactions.models import Transaction
+from apps.collection.models import CollectionReminder
+from .services import register_new_account
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 
@@ -154,7 +157,18 @@ class AccountDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView)
     context_object_name = "account"
     template_name = "accounts/accounts_detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
+        context["collection_reminders"] = (
+            CollectionReminder.objects
+            .filter(follow_up__account=self.object)
+            .select_related("follow_up")
+            .order_by("-sent_at")
+        )
+        context["payment_methods"] = Transaction.PaymentMethod.choices
+
+        return context
 
 class AccountCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     model = Account
@@ -178,9 +192,20 @@ class AccountCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView)
         return kwargs 
 
     def form_valid(self, form):
-        account = form.save(commit=False)
-        account.customer = self.customer
-        account.save()
+        try:
+            register_new_account(
+                customer=self.customer,
+                season=form.cleaned_data['season'],
+                name=form.cleaned_data['name'],
+                notes = form.cleaned_data.get("notes") or "",
+
+            )
+        except ValidationError as e:
+            for message in e.messages:
+                form.add_error(None, message)
+
+            return self.form_invalid(form)
+
 
         messages.success(
             self.request,

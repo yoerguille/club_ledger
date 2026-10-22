@@ -26,9 +26,13 @@ urlpatterns = [
     path("", include("apps.dashboard.urls", namespace='dashboard')),
     path("transactions/", include("apps.transactions.urls", namespace='transactions')),
     path("statements/", include("apps.statements.urls", namespace='statements')),
+    path("collection/", include("apps.collection.urls", namespace='collection')),
 
     path("login/", auth_views.LoginView.as_view(template_name="registration/login.html"), name='login'),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     
     path("__reload__/", include("django_browser_reload.urls")),
+
+    path("api/", include("apps.transactions.api_urls")),
+    path("api/", include("apps.accounts.api_urls")),
 ]

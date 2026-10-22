@@ -1,6 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.contrib import messages
+from ..collection.models import CollectionFollowUp
+from config import settings
+from django.utils import timezone
+from datetime import timedelta
 
 from apps.accounts.models import Account
 
@@ -27,6 +31,30 @@ class StatementEmailView(LoginRequiredMixin, View):
             pk=account_pk,
         )
 
+        if account.active_collection_follow_up:
+
+            messages.error(
+                request,
+                "Esta cuenta ya tiene un seguimiento de cobro activo. "
+                "Cancélalo antes de iniciar uno nuevo."
+            )
+            return redirect(
+                "accounts:account_detail",
+                pk=account.pk,
+            )
+
+        if account.balance <= 0:
+            
+            messages.error(
+                request,
+                "Esta cuenta no tiene saldo pendiente. "
+                "No se puede enviar un estado de cuenta."
+            )
+            return redirect(
+                "accounts:account_detail",
+                pk=account.pk,
+            )
+
         customer = account.customer
 
         if not customer.email:
@@ -43,8 +71,17 @@ class StatementEmailView(LoginRequiredMixin, View):
 
         base_url = request.build_absolute_uri("/")
 
+        sent_at = timezone.now()
+
         StatementEmailSender(account).send(
             base_url=base_url,
+        )
+
+        CollectionFollowUp.objects.create(
+            account=account,
+            amount=account.balance,
+            sent_at=sent_at,
+            due_date=sent_at.date() + timedelta(days=settings.COLLECTION_PAYMENT_TERM_DAYS)
         )
 
         messages.success(

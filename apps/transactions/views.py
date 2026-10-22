@@ -8,6 +8,9 @@ from apps.accounts.models import Account
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.http import HttpResponseNotAllowed
+from apps.collection.models import CollectionFollowUp
+from apps.transactions.services import register_payment, register_charge
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 
@@ -17,20 +20,49 @@ class ChargeCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     form_class = ChargeForm
     template_name = 'transactions/transaction_form.html'
 
+
     def dispatch(self, request, *args, **kwargs):
         self.account = get_object_or_404(Account, pk=kwargs["account_pk"])
+
+        if self.account.is_closed:
+            messages.error(
+                self.request,
+                "No se puede registrar un cargo en una cuenta cerrada."
+            )
+            return redirect("accounts:account_detail", pk=self.account.pk)
+
+        has_active_followup = self.account.collection_followups.filter(
+            status=CollectionFollowUp.Status.ACTIVE,
+        ).exists()
+
+        if has_active_followup:
+            messages.error(
+                self.request,
+                "No se puede registrar un nuevo cargo mientras la cuenta tenga un seguimiento de cobro activo."
+            )
+            return redirect("accounts:account_detail", pk=self.account.pk)
+
         return super().dispatch(request, *args, **kwargs)
     
     def get_success_url(self):
         return reverse("accounts:account_detail", kwargs={"pk": self.account.pk})
     
     def form_valid(self, form):
-        transaction = form.save(commit=False)
+        try:
 
-        transaction.account = self.account
-        transaction.movement_type = Transaction.MovementType.CHARGE
+            register_charge(
+                account=self.account,
+                date=form.cleaned_data["date"],
+                description=form.cleaned_data["description"],
+                amount=form.cleaned_data["amount"],
+                notes=form.cleaned_data.get("notes") or "",
+            )
 
-        transaction.save()
+        except ValidationError as e:
+            for message in e.messages:
+                form.add_error(None, message)
+
+            return self.form_invalid(form)
 
         messages.success(
             self.request,
@@ -65,12 +97,14 @@ class PaymentCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView)
         return reverse("accounts:account_detail", kwargs={"pk": self.account.pk})
     
     def form_valid(self, form):
-        transaction = form.save(commit=False)
-
-        transaction.account = self.account
-        transaction.movement_type = Transaction.MovementType.PAYMENT
-
-        transaction.save()
+        register_payment(
+            account=self.account,
+            date=form.cleaned_data["date"],
+            description=form.cleaned_data["description"],
+            amount=form.cleaned_data["amount"],
+            payment_method=form.cleaned_data["payment_method"],
+            notes=form.cleaned_data.get("notes") or "",
+        )
 
         messages.success(
             self.request,

@@ -50,10 +50,12 @@ INSTALLED_APPS = [
     'apps.dashboard',
     'apps.core',
     'apps.statements',
+    'apps.collection',
 
     'tailwind',
     'theme',
     'django_browser_reload',
+    'rest_framework',
 ]
 
 TAILWIND_APP_NAME = "theme"
@@ -162,3 +164,9 @@ DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/login/"
+
+COLLECTION_PAYMENT_TERM_DAYS = 30
+
+N8N_COLLECTION_REMINDER_WEBHOOK_URL = os.getenv(
+    "N8N_COLLECTION_REMINDER_WEBHOOK_URL"
+)
