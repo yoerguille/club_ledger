@@ -13,6 +13,8 @@ from django.db.models.functions import Coalesce
 from django.db.models import Case, DecimalField, F, Sum, Value, When
 from apps.transactions.models import Transaction
 from apps.collection.models import CollectionReminder
+from .services import register_new_account
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 
@@ -190,9 +192,20 @@ class AccountCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView)
         return kwargs 
 
     def form_valid(self, form):
-        account = form.save(commit=False)
-        account.customer = self.customer
-        account.save()
+        try:
+            register_new_account(
+                customer=self.customer,
+                season=form.cleaned_data['season'],
+                name=form.cleaned_data['name'],
+                notes = form.cleaned_data.get("notes") or "",
+
+            )
+        except ValidationError as e:
+            for message in e.messages:
+                form.add_error(None, message)
+
+            return self.form_invalid(form)
+
 
         messages.success(
             self.request,

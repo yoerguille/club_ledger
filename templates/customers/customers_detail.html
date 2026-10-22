@@ -1,42 +1,65 @@
+
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
-{{ customer.name }}
+    {{ customer.name }}
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/new-account-create.js' %}" defer></script>
+
 {% endblock %}
 
 {% block content %}
 
+<!-- ============================================= -->
+<!-- INFORMACIÓN DEL CLIENTE -->
+<!-- ============================================= -->
 
-    <h2 class="text-2xl font-bold">
+<section>
 
+    <h2 class="text-2xl font-bold tracking-tight
+               text-gray-900 dark:text-white">
         {{ customer.name }}
-
     </h2>
 
-    <div class="mt-6 grid grid-cols-2 gap-6">
+    <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
 
+        <!-- Persona de contacto -->
         <div>
+            <p class="text-xs font-medium uppercase tracking-wide
+                      text-gray-500 dark:text-secondary">
+                Persona de contacto
+            </p>
 
-            <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-200">Persona de contacto:</p>
-
-            <p class="text-base dark:text-gray-300">{{ customer.contact_person|default:"—" }}</p>
-
+            <p class="mt-1 text-base text-gray-900 dark:text-gray-200">
+                {{ customer.contact_person|default:"—" }}
+            </p>
         </div>
 
+        <!-- Email -->
         <div>
+            <p class="text-xs font-medium uppercase tracking-wide
+                      text-gray-500 dark:text-secondary">
+                Email
+            </p>
 
-            <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-200">Email:</p>
-
-            <p class="text-base dark:text-gray-300">{{ customer.email|default:"—" }}</p>
-
+            <p class="mt-1 text-base text-gray-900 dark:text-gray-200">
+                {{ customer.email|default:"—" }}
+            </p>
         </div>
 
+        <!-- Teléfono -->
         <div>
+            <p class="text-xs font-medium uppercase tracking-wide
+                      text-gray-500 dark:text-secondary">
+                Teléfono
+            </p>
 
-            <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-200">Teléfono:</p>
-
-            <p class="text-base dark:text-gray-300">{{ customer.phone|default:"—" }}</p>
-
+            <p class="mt-1 text-base text-gray-900 dark:text-gray-200">
+                {{ customer.phone|default:"—" }}
+            </p>
         </div>
 
     </div>
@@ -45,377 +68,473 @@
 
         <div class="mt-8">
 
-            <h3 class="font-semibold mb-2">
-
+            <h3 class="mb-2 font-semibold
+                       text-gray-900 dark:text-white">
                 Notas
-
             </h3>
 
-            <p>
-
+            <p class="whitespace-pre-line text-sm
+                      text-gray-600 dark:text-gray-300">
                 {{ customer.notes }}
-
             </p>
 
         </div>
 
     {% endif %}
 
+</section>
 
-    <section class="mt-8">
 
-        <div class="mb-4 flex items-center justify-between">
+<!-- ============================================= -->
+<!-- CUENTAS DEL CLIENTE -->
+<!-- ============================================= -->
 
-            <div class="flex items-center justify-between gap-3">
-                            
-                <!-- Acción principal -->
-                <a
-                    href="{% url 'accounts:account_create' customer.pk %}"
-                    class="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+<section class="mt-8">
+
+    <!-- ACCIONES -->
+    <div class="mb-6 flex items-center justify-between">
+
+        <div class="flex items-center gap-3">
+
+            <!-- Acción principal -->
+            <button
+                type="button"
+                data-modal-target="new-account-create-modal"
+                data-modal-toggle="new-account-create-modal"
+                class="flex w-full rounded-lg px-3 py-2
+                    text-left text-gray-700 hover:bg-gray-100
+                    dark:bg-btn-primary dark:hover:bg-btn-hover-primary dark:text-white"
+            >
+                + Crear nueva cuenta
+            </button>
+
+
+            <!-- Otras acciones -->
+            <div class="relative">
+
+                <button
+                    id="customer-actions-button"
+                    data-dropdown-toggle="customer-actions-menu"
+                    type="button"
+                    aria-label="Acciones del cliente"
+                    class="inline-flex h-10 w-10 items-center
+                           justify-center rounded-lg border
+                           border-gray-200 bg-white
+                           text-gray-600 transition-colors
+                           hover:bg-gray-50 hover:text-gray-900
+                           focus:outline-none
+                           focus:ring-2 focus:ring-btn-primary/20
+                           dark:border-white/10
+                           dark:bg-dark-secondary
+                           dark:text-gray-300
+                           dark:hover:bg-dark-tertiary
+                           dark:hover:text-white"
                 >
-                    + Crear nueva cuenta
-                </a>
 
-
-                <!-- Otras acciones -->
-                <div class="relative">
-
-                    <button
-                        id="customer-actions-button"
-                        data-dropdown-toggle="customer-actions-menu"
-                        type="button"
-                        aria-label="Acciones del cliente"
-                        class="inline-flex h-10 w-10 items-center justify-center
-                        rounded-lg border border-gray-200
-                        bg-white text-gray-600
-                        transition
-                        hover:bg-gray-50 hover:text-gray-900
-                        focus:outline-none focus:ring-2 focus:ring-gray-900/10
-                        dark:border-gray-700
-                        dark:bg-gray-800
-                        dark:text-gray-300
-                        dark:hover:bg-gray-700
-                        dark:hover:text-white"
+                    <svg
+                        class="h-5 w-5"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
                     >
-                        <svg
-                            class="h-5 w-5"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-width="3"
-                                d="M6 12h.01m6 0h.01m5.99 0h.01"
-                            />
-                        </svg>   
-                    
-                    </button>
+                        <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-width="3"
+                            d="M6 12h.01m6 0h.01m5.99 0h.01"
+                        />
+                    </svg>
 
-                    <div
-                        id="customer-actions-menu"
-                        class="z-10 hidden w-48 rounded-lg border
-                            border-gray-200 bg-white shadow-lg
-                            dark:border-gray-700 dark:bg-gray-900"
+                </button>
+
+
+                <!-- Dropdown -->
+                <div
+                    id="customer-actions-menu"
+                    class="z-10 hidden w-48 rounded-lg border
+                           border-gray-200 bg-white shadow-lg
+                           dark:border-white/10
+                           dark:bg-dark-secondary"
+                >
+
+                    <ul
+                        class="p-2 text-sm font-medium"
+                        aria-labelledby="customer-actions-button"
                     >
 
-                        <ul class="p-2 text-sm font-medium"
-                            aria-labelledby="customer-actions-button"    
-                        >
+                        <li>
+                            <a
+                                href="{% url 'customers:customer_update' customer.pk %}"
+                                class="flex w-full rounded-lg px-3 py-2
+                                       text-gray-700 transition-colors
+                                       hover:bg-gray-100
+                                       dark:text-gray-200
+                                       dark:hover:bg-dark-tertiary"
+                            >
+                                Editar cliente
+                            </a>
+                        </li>
+
+
+                        {% if customer.is_active %}
+
+                            <li class="my-1 border-t border-gray-200
+                                       dark:border-white/10"></li>
 
                             <li>
-                                <a
-                                    href="{% url 'customers:customer_update' customer.pk %}"
-                                    class="flex w-full rounded-lg px-3 py-2
-                                        text-gray-700 hover:bg-gray-100
-                                        dark:text-gray-300 dark:hover:bg-gray-800"
+
+                                <form
+                                    method="post"
+                                    action="{% url 'customers:customer_deactivate' customer.pk %}"
+                                    onsubmit="return confirm('¿Seguro que quieres desactivar este cliente?');"
                                 >
-                                    Editar cliente
-                                </a>
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="flex w-full rounded-lg
+                                               px-3 py-2 text-left
+                                               text-red-600
+                                               transition-colors
+                                               hover:bg-red-50
+                                               dark:text-red-400
+                                               dark:hover:bg-red-900/20"
+                                    >
+                                        Desactivar cliente
+                                    </button>
+
+                                </form>
+
                             </li>
 
-                            {% if customer.is_active %}
-                                <li class="my-1 border-t border-gray-200 dark:border-gray-700"></li>
+                        {% endif %}
 
-                                <li>
-                                    <form
-                                        method="post"
-                                        action="{% url 'customers:customer_deactivate' customer.pk %}"
-                                        onsubmit="return confirm('¿Seguro que quieres desactivar este cliente?');"
-                                    >
-                                        {% csrf_token %}
-
-                                        <button
-                                            type="submit"
-                                            class="flex w-full rounded-lg px-3 py-2
-                                                text-left text-red-600
-                                                hover:bg-red-50
-                                                dark:text-red-400
-                                                dark:hover:bg-red-950"
-                                        >
-                                            Desactivar cliente
-                                        </button>
-                                    </form>
-                                </li>
-                            {% endif %}
-
-                        </ul>
-                    </div>
+                    </ul>
 
                 </div>
-                
 
             </div>
 
         </div>
 
-        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-
-            <div>
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                    Cuentas
-                </h2>
-
-                <p class="mt-1 text-sm text-gray-500  dark:text-gray-200">
-                    {{ accounts|length }}
-                    {% if accounts|length == 1 %}
-                        cuenta
-                    {% else %}
-                        cuentas
-                    {% endif %}
-                    · Temporada {{ selected_season.name }}
-                </p>
-            </div>
+    </div>
 
 
-            <div class="flex items-end gap-3">
+    <!-- ========================================= -->
+    <!-- CABECERA Y FILTRO DE TEMPORADA -->
+    <!-- ========================================= -->
 
-                {% if selected_season.is_active %}
+    <div class="mb-8 flex flex-col gap-4
+                sm:flex-row sm:items-end sm:justify-between">
 
-                    <span
-                        class="mb-1 inline-flex items-center rounded-full
-                            bg-green-50 px-2.5 py-1 text-xs font-medium
-                            text-green-700 dark:bg-green-700 dark:text-gray-100"
-                    >
-                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-green-500"></span>
-                        Temporada actual
-                    </span>
+        <div>
 
+            <h2 class="text-xl font-semibold
+                       text-gray-900 dark:text-white">
+                Cuentas
+            </h2>
+
+            <p class="mt-1 text-sm text-gray-500
+                      dark:text-secondary">
+
+                {{ accounts|length }}
+
+                {% if accounts|length == 1 %}
+                    cuenta
                 {% else %}
-
-                    <span
-                        class="mb-1 inline-flex items-center rounded-full
-                            bg-gray-100 px-2.5 py-1 text-xs font-medium
-                            text-gray-600 dark:bg-gray-300 dark:text-gray-800""
-                    >
-                        Histórica
-                    </span>
-
+                    cuentas
                 {% endif %}
 
+                · Temporada {{ selected_season.name }}
 
-                <form method="get">
-
-                    <label
-                        for="season"
-                        class="mb-1.5 block text-xs font-medium
-                            uppercase tracking-wide text-gray-500  dark:text-gray-300"
-                    >
-                        Temporada
-                    </label>
-
-                    <select
-                        id="season"
-                        name="season"
-                        onchange="this.form.submit()"
-                        class="min-w-48 rounded-lg border border-gray-300
-                            bg-white px-3 py-2.5 text-sm font-medium
-                            text-gray-700 shadow-sm transition
-                            hover:border-gray-400
-                            focus:border-indigo-500 focus:outline-none
-                            focus:ring-2 focus:ring-indigo-500
-                            dark:border-gray-700
-                            dark:bg-gray-700
-                            dark:text-gray-300"
-                    >
-
-                        {% for season in seasons %}
-
-                            <option
-                                value="{{ season.pk }}"
-                                {% if season.pk == selected_season.pk %}
-                                    selected
-                                {% endif %}
-                            >
-                                {{ season.name }}
-                                {% if season.is_active %}
-                                    · Activa
-                                {% endif %}
-                            </option>
-
-                        {% endfor %}
-
-                    </select>
-
-                </form>
-
-            </div>
+            </p>
 
         </div>
 
-        {% if accounts %}
 
-            <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div class="flex flex-wrap items-end gap-3">
 
-                {% for account in accounts %}
+            <!-- Estado de temporada -->
+            {% if selected_season.is_active %}
 
-                    <article
-                        class="rounded-xl border border-gray-200 bg-white p-5
-                            shadow-sm transition
-                            hover:border-gray-300 hover:shadow-md
-                            dark:bg-gray-900 dark:border-gray-800 dark:hover:border-gray-900"
+                <span
+                    class="mb-1 inline-flex items-center
+                           rounded-full bg-emerald-50
+                           px-2.5 py-1 text-xs font-medium
+                           text-emerald-700
+                           dark:bg-emerald-500/10
+                           dark:text-emerald-400"
+                >
+                    <span
+                        class="mr-1.5 h-1.5 w-1.5
+                               rounded-full bg-emerald-500"
+                    ></span>
+
+                    Temporada actual
+                </span>
+
+            {% else %}
+
+                <span
+                    class="mb-1 inline-flex items-center
+                           rounded-full bg-gray-100
+                           px-2.5 py-1 text-xs font-medium
+                           text-gray-600
+                           dark:bg-dark-secondary
+                           dark:text-secondary"
+                >
+                    Histórica
+                </span>
+
+            {% endif %}
+
+
+            <!-- Selector de temporada -->
+            <form method="get">
+
+                <label
+                    for="season"
+                    class="mb-1.5 block text-xs font-medium
+                           uppercase tracking-wide
+                           text-gray-500 dark:text-secondary"
+                >
+                    Temporada
+                </label>
+
+                <select
+                    id="season"
+                    name="season"
+                    onchange="this.form.submit()"
+                    class="min-w-48 rounded-lg border
+                           border-gray-300 bg-white
+                           px-3 py-2.5 text-sm font-medium
+                           text-gray-700 shadow-sm
+                           transition-colors
+                           hover:border-gray-400
+                           focus:border-btn-primary
+                           focus:outline-none
+                           focus:ring-2 focus:ring-btn-primary/20
+                           dark:border-white/10
+                           dark:bg-dark-secondary
+                           dark:text-white
+                           dark:scheme-dark"
+                >
+
+                    {% for season in seasons %}
+
+                        <option
+                            value="{{ season.pk }}"
+                            {% if season.pk == selected_season.pk %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ season.name }}
+
+                            {% if season.is_active %}
+                                · Activa
+                            {% endif %}
+
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- TARJETAS DE CUENTAS -->
+    <!-- ========================================= -->
+
+    {% if accounts %}
+
+        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+
+            {% for account in accounts %}
+
+                <article
+                    class="rounded-xl border border-gray-200
+                           bg-white p-5 shadow-sm
+                           transition-all
+                           hover:border-gray-300
+                           hover:shadow-md
+                           dark:border-white/10
+                           dark:bg-dark-primary
+                           dark:hover:border-btn-primary/40"
+                >
+
+                    <!-- Temporada y nombre -->
+                    <div class="flex items-start justify-between gap-3">
+
+                        <div>
+
+                            <p class="text-xs font-medium uppercase
+                                      tracking-wide text-gray-500
+                                      dark:text-secondary">
+                                Temporada - {{ account.season.name }}
+                            </p>
+
+                            <h3 class="mt-1 text-lg font-semibold
+                                       text-gray-900 dark:text-white">
+                                {{ account.name }}
+                            </h3>
+
+                        </div>
+
+
+                        <span
+                            class="shrink-0 rounded-full
+                                   bg-gray-100 px-2.5 py-1
+                                   text-xs font-medium
+                                   text-gray-600
+                                   dark:bg-dark-secondary
+                                   dark:text-secondary"
+                        >
+                            Cuenta
+                        </span>
+
+                    </div>
+
+
+                    <!-- Saldo -->
+                    <div class="mt-6">
+
+                        <p class="text-sm text-gray-500
+                                  dark:text-secondary">
+                            Saldo pendiente
+                        </p>
+
+                        <p class="mt-1 font-mono text-2xl
+                                  font-bold text-gray-900
+                                  dark:text-white">
+                            {{ account.balance }} €
+                        </p>
+
+                    </div>
+
+
+                    <!-- Información -->
+                    <div
+                        class="mt-5 grid grid-cols-2 gap-4
+                               border-t border-gray-200 pt-4
+                               dark:border-white/10"
                     >
 
-                        <!-- Temporada -->
+                        <!-- Cargos -->
+                        <div>
 
-                        <div class="flex items-start justify-between">
-
-                            <div>
-
-                                <p class="text-s font-medium uppercase tracking-wide text-gray-500 dark:text-gray-200">
-                                    Temporada - {{account.season.name}}
-                                </p>
-
-                                <h3 class="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-300">
-                                    {{account.name}}
-                                </h3>
-
-                            </div>
-
-                            <span
-                                class="rounded-full bg-gray-100 px-2.5 py-1
-                                    text-xs font-medium text-gray-600 dark:bg-gray-300
-                                                dark:text-gray-800"
-                            >
-                                Cuenta
-                            </span>
-
-                        </div>
-
-
-                        <!-- Saldo -->
-
-                        <div class="mt-6">
-
-                            <p class="text-sm text-gray-500 dark:text-gray-200">
-                                Saldo pendiente
+                            <p class="text-xs text-gray-500
+                                      dark:text-secondary">
+                                Cargos
                             </p>
 
-                            <p class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">
-                                {{ account.balance }} €
+                            <p class="mt-1 font-mono text-sm
+                                      font-medium text-gray-900
+                                      dark:text-gray-200">
+                                {{ account.total_charges }} €
                             </p>
 
                         </div>
 
 
-                        <!-- Información -->
+                        <!-- Pagos -->
+                        <div>
 
-                        <div
-                            class="mt-5 grid grid-cols-2 gap-4
-                                border-t border-gray-700 pt-4"
+                            <p class="text-xs text-gray-500
+                                      dark:text-secondary">
+                                Pagos
+                            </p>
+
+                            <p class="mt-1 font-mono text-sm
+                                      font-medium text-emerald-600
+                                      dark:text-emerald-400">
+                                {{ account.total_payments }} €
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Acción -->
+                    <div class="mt-5">
+
+                        <a
+                            href="{% url 'accounts:account_detail' account.pk %}"
+                            class="inline-flex w-full items-center
+                                   justify-center rounded-lg border
+                                   border-gray-300 px-4 py-2
+                                   text-sm font-medium text-gray-700
+                                   transition-colors
+                                   hover:border-btn-primary
+                                   hover:text-btn-primary
+                                   dark:border-white/10
+                                   dark:bg-dark-secondary
+                                   dark:text-gray-200
+                                   dark:hover:border-btn-primary
+                                   dark:hover:bg-dark-tertiary
+                                   dark:hover:text-white"
                         >
+                            Ver cuenta
+                            <span class="ml-2">→</span>
+                        </a>
 
-                            <div>
+                    </div>
 
-                                <p class="text-xs text-gray-500 dark:text-gray-200">
-                                    Cargos
-                                </p>
+                </article>
 
-                                <p class="mt-1 font-medium text-gray-900 dark:text-gray-200">
-                                    {{ account.total_charges }} €
-                                </p>
+            {% endfor %}
 
-                            </div>
-
-
-                            <div>
-
-                                <p class="text-xs text-gray-500 dark:text-gray-200">
-                                    Pagos
-                                </p>
-
-                                <p class="mt-1 font-medium text-gray-900 dark:text-gray-200">
-                                    {{ account.total_payments }} €
-                                </p>
-
-                            </div>
-
-                        </div>
+        </div>
 
 
-                        <!-- Acción -->
+    {% else %}
 
-                        <div class="mt-5">
+        <!-- ===================================== -->
+        <!-- ESTADO VACÍO -->
+        <!-- ===================================== -->
 
-                            <a
-                                href="{% url 'accounts:account_detail' account.pk %}"
-                                class="inline-flex w-full items-center justify-center
-                                    rounded-lg border border-gray-300
-                                    px-4 py-2
-                                    text-sm font-medium text-gray-700
-                                    hover:bg-gray-50
-                                    hover:dark:bg-gray-800
-                                    dark:text-gray-200
-                                    dark:border-gray-700"
-                            >
-                                Ver cuenta
-                                <span class="ml-2">→</span>
-                            </a>
+        <div
+            class="rounded-xl border border-dashed
+                   border-gray-300 bg-gray-50
+                   p-8 text-center
+                   dark:border-white/10
+                   dark:bg-dark-primary"
+        >
 
-                        </div>
+            <p class="font-medium text-gray-900
+                      dark:text-white">
+                Este cliente todavía no tiene cuentas.
+            </p>
 
-                    </article>
+            <p class="mt-1 text-sm text-gray-500
+                      dark:text-secondary">
+                Crea una cuenta para comenzar a registrar movimientos.
+            </p>
 
-                {% endfor %}
+            <a
+                href="{% url 'accounts:account_create' customer.pk %}"
+                class="mt-4 inline-flex text-sm font-medium
+                       text-btn-primary
+                       transition-colors
+                       hover:text-btn-hover-primary"
+            >
+                Crear una cuenta
+            </a>
 
-            </div>
+        </div>
 
-        {% else %}
+    {% endif %}
 
-            <div class="rounded-xl border border-dashed border-gray-300
-                        bg-gray-50 p-8 text-center">
-
-                <p class="font-medium text-gray-900">
-                    Este cliente todavía no tiene cuentas.
-                </p>
-
-                <p class="mt-1 text-sm text-gray-500">
-                    Crea una cuenta para comenzar a registrar movimientos.
-                </p>
-
-                <a
-                    href="{% url 'accounts:account_create' customer.pk %}"
-                    class="mt-4 inline-flex text-sm font-medium
-                        text-blue-600 hover:text-blue-800"
-                >
-                    Crear una cuenta
-                </a>
-
-            </div>
-
-        {% endif %}
-
-        
-
-    </section>
-
-    
-    
-
-    
+</section>
 
 
+{% include "accounts/modals/new_account_create_modal.html" %}
 
 {% endblock %}
