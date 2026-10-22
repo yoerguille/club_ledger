@@ -1,0 +1,95 @@
+
+<!-- Modal: Cerrar cuenta -->
+<div
+    id="account-close-modal"
+    tabindex="-1"
+    aria-hidden="true"
+    class="fixed inset-0 z-50 hidden
+           h-full w-full items-center justify-center
+           overflow-y-auto bg-black/60 p-4"
+>
+    <div class="relative w-full max-w-md">
+
+        <div class="rounded-xl border border-gray-200
+                    bg-white p-6 shadow-2xl
+                    dark:border-white/10
+                    dark:bg-dark-secondary">
+
+            <!-- Encabezado -->
+            <div class="mb-4 flex items-center gap-3">
+
+                <div class="flex h-10 w-10 shrink-0
+                            items-center justify-center
+                            rounded-full bg-emerald-500/10
+                            text-emerald-500">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M20 6 9 17l-5-5"/>
+                    </svg>
+                </div>
+
+                <h2 class="text-lg font-semibold
+                           text-gray-900 dark:text-white">
+                    Cerrar cuenta
+                </h2>
+            </div>
+
+            <!-- Descripción -->
+            <p class="mb-6 text-sm leading-relaxed
+                      text-gray-600 dark:text-gray-300">
+                Esta cuenta está completamente saldada.
+                Al cerrarla, seguirá disponible para
+                consulta, pero no se podrán registrar
+                nuevos cargos ni pagos.
+            </p>
+
+            <!-- Acciones -->
+            <div class="flex items-center justify-end gap-3">
+
+                <button
+                    type="button"
+                    data-modal-hide="account-close-modal"
+                    class="rounded-lg border border-gray-300
+                           px-4 py-2 text-sm font-medium
+                           text-gray-700 transition-colors
+                           hover:bg-gray-100
+                           dark:border-white/10
+                           dark:text-gray-300
+                           dark:hover:bg-dark-tertiary"
+                >
+                    Cancelar
+                </button>
+
+                <form
+                    method="post"
+                    action="{% url 'accounts:account_close' account.pk %}"
+                >
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="rounded-lg bg-emerald-600
+                               px-4 py-2 text-sm font-medium
+                               text-white transition-colors
+                               hover:bg-emerald-700
+                               focus:outline-none
+                               focus:ring-2
+                               focus:ring-emerald-500/40"
+                    >
+                        Confirmar cierre
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

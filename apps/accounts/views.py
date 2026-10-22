@@ -13,47 +13,32 @@ from django.db.models.functions import Coalesce
 from django.db.models import Case, DecimalField, F, Sum, Value, When
 from apps.transactions.models import Transaction
 from apps.collection.models import CollectionReminder
-from .services import register_new_account
+from .services import register_new_account, AccountCloseService
 from django.core.exceptions import ValidationError
+from django.views.decorators.http import require_POST
 
 # Create your views here.
 
+@require_POST
 def closed_account(request, pk):
     account = get_object_or_404(Account, pk=pk)
-    
-    if account.is_closed:
-        messages.warning(
+
+    try:
+        AccountCloseService.close(account)
+
+    except ValidationError as e:
+
+        messages.error(request,"; ".join(e.messages))
+
+    else:
+        messages.success(
             request,
-            "La cuenta ya está cerrada."
+            "La cuenta ha sido cerrada correctamente."
         )
-        return redirect(
-        "accounts:account_detail",
-        pk=account.pk
-        )
-
-    if account.balance != 0:
-        messages.error(
-            request,
-            "No se puede cerrar una cuenta con saldo pendiente."
-        )
-
-        return redirect(
-        "accounts:account_detail",
-        pk=account.pk
-        )
-
-    account.is_closed = True
-    account.save(update_fields=["is_closed"])
-
-
-    messages.success(
-        request,
-        "La cuenta ha sido cerrada correctamente."
-    )
 
     return redirect(
-    "accounts:account_detail",
-    pk=account.pk
+        "accounts:account_detail",
+        pk=account.pk
     )
 
 class AccountListView(ListView):
