@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
-## [Unreleased]
+## [2026-10-23]
+
+### Added
+- Automated tests for account closure business rules.
+- HTTP test to ensure account closure rejects GET requests.
+
+## [2026-10-22]
 
 ### Added
 - Account closure confirmation modal using Flowbite.
@@ -15,3 +21,4 @@ The format is based on Keep a Changelog.
 - Reorganized account detail actions for better usability.
 - Refactored account closure view to delegate business logic to the service.
 - Restricted account closure to POST requests.
+
