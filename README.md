@@ -69,8 +69,16 @@ problem.
 
 ### Prerequisites
 
-Before running Club Ledger, make sure you have:
+### Prerequisites
 
+Choose one of the following development setups:
+
+**Docker (recommended)**
+- Docker
+- Docker Compose
+- Git
+
+**Local development**
 - Python 3.12+
 - PostgreSQL
 - Node.js and npm
@@ -82,6 +90,85 @@ Before running Club Ledger, make sure you have:
 git clone https://github.com/yoerguille/club_ledger.git
 cd club_ledger
 ```
+
+### Docker Setup
+
+Club Ledger provides a Docker Compose development environment with two services:
+
+- **web:** Django application with Python 3.12, Tailwind CSS, Flowbite, and WeasyPrint.
+- **db:** PostgreSQL 17 with persistent database storage.
+
+**1. Configure environment variables**
+
+Create your local environment file:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and configure the required variables, including `SECRET_KEY`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD`.
+
+If a value contains `$`, use single quotes to prevent Docker Compose variable interpolation.
+
+Never commit `.env` to version control.
+
+**2. Build and start the containers**
+
+```bash
+docker compose up -d --build
+```
+
+**3. Apply database migrations**
+
+```bash
+docker compose exec web python manage.py migrate
+```
+
+**4. Create an administrator account**
+
+```bash
+docker compose exec web python manage.py createsuperuser
+```
+
+**5. Access the application**
+
+Open http://localhost:8000/ in your browser.
+
+**Run automated tests**
+
+```bash
+docker compose exec web python manage.py test
+```
+
+**View container logs**
+
+```bash
+docker compose logs -f web
+```
+
+**Stop the environment**
+
+```bash
+docker compose down
+```
+
+PostgreSQL data is stored in a named Docker volume and persists when containers are stopped or recreated.
+
+**Important:** Running `docker compose down -v` removes the Compose-managed volumes, including the PostgreSQL database volume. Use this command only when you intentionally want to delete the Docker database.
+
+**Development notes**
+
+- The Docker environment is intended for local development, not production deployment.
+- Django runs using its built-in development server.
+- Tailwind CSS is compiled during the Docker image build.
+- After modifying application code or frontend assets, rebuild the image with `docker compose up -d --build`.
+- The Docker PostgreSQL database is separate from any locally installed PostgreSQL instance.
+- The n8n automation service is not included in this Docker Compose configuration and requires separate setup.
+
+### Local Development Setup
+
+The following instructions describe how to run Club Ledger
+without Docker.
 
 ### Create a virtual environment
 
@@ -164,8 +251,8 @@ on backend architecture, maintainability, and automation.
 
 Planned improvements include:
 
-- [ ] Automated tests for business logic and API endpoints.
-- [ ] Docker-based development environment.
+- [x] Initial automated tests for account closure business rules.
+- [x] Docker-based development environment.
 - [ ] Improved REST API documentation.
 - [ ] Enhanced payment follow-up workflows.
 - [ ] Production deployment.
