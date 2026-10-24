@@ -12,6 +12,10 @@ from django.shortcuts import get_object_or_404
 from django.contrib import messages 
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from apps.customers.services import register_customer
+from django.core.exceptions import ValidationError
+from django.shortcuts import get_object_or_404 , redirect
+from django.http import JsonResponse
 
 from django.db.models import Case, DecimalField, F, Sum, Value, When
 from django.db.models.functions import Coalesce
@@ -133,13 +137,42 @@ class CustomerDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView
         return context
 
 
-class CustomerCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class CustomerCreateView(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
     model = Customer
     permission_required="customers.add_customer"
     form_class = CustomerForm
     template_name = 'customers/customer_form.html'
 
-    success_url = reverse_lazy("customers:customer_list")
+    def get_success_url(self):
+            return reverse("customers:customer_list")
+
+    def form_valid(self, form):
+        try:
+            register_customer(
+                name=form.cleaned_data['name'],
+                cif = form.cleaned_data['cif'],
+                email=form.cleaned_data['email'],
+                phone=form.cleaned_data['phone'],
+                adress=form.cleaned_data.get("adress"),
+                contact_person=form.cleaned_data['contact_person'],
+            )
+        except ValidationError as e:
+            for message in e.messages:
+                form.add_error(None, message)
+            return self.form_invalid(form)
+        
+        messages.success(
+            self.request,
+            "Nuevo cliente creado correctamente."
+        )
+        return JsonResponse({
+            "success": True,
+            "message": "Nuevo cliente creado correctamente.",
+            "redirect_url": self.get_success_url()
+        }, status=201)
+
+    
+
 
 class CustomerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     model = Customer
