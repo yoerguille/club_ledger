@@ -171,6 +171,12 @@ class CustomerCreateView(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
             "redirect_url": self.get_success_url()
         }, status=201)
 
+    def form_invalid(self, form):
+        return JsonResponse({
+            "success": False,
+            "errors": form.errors.get_json_data()
+        }, status=400)
+
     
 
 

@@ -1,0 +1,281 @@
+
+<!-- ================================================= -->
+<!-- MODAL DE REGISTRAR CLIENTE -->
+<!-- ================================================= -->
+
+
+
+<div
+    id="customer-create-modal"
+    tabindex="-1"
+    aria-hidden="true"
+    class="fixed inset-0 z-50 hidden h-full w-full
+           items-center justify-center overflow-y-auto
+           overflow-x-hidden bg-gray-900/50 p-4"
+>
+    <div class="relative w-full max-w-xl">
+
+        <div class="relative rounded-xl bg-white shadow-xl
+                    dark:bg-dark-primary">
+
+            <!-- Cabecera -->
+            <div class="flex items-center justify-between
+                        border-b border-gray-200 p-5
+                        dark:border-white/10">
+
+                <div>
+                    <h3 class="text-lg font-semibold
+                               text-gray-900 dark:text-white">
+                        Registrar cliente
+                    </h3>
+
+                    <p class="mt-1 text-sm text-gray-500
+                              dark:text-secondary">
+                        Rellena los datos del formulario.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    data-modal-hide="customer-create-modal"
+                    aria-label="Cerrar"
+                    class="rounded-lg p-2 text-gray-400
+                           transition-colors
+                           hover:bg-gray-100 hover:text-gray-900
+                           dark:text-secondary
+                           dark:hover:bg-dark-secondary
+                           dark:hover:text-white"
+                >
+                    ✕
+                </button>
+            </div>
+
+            <!-- Formulario -->
+            <form
+                id="customer-create-form"
+                method="POST"
+                action="{% url 'customers:customer_create' %}"
+            >
+                {% csrf_token %}
+
+                <div class="space-y-4 p-6">
+
+                    <!-- Nombre -->
+                    <div>
+                        <label
+                            for="customer-name"
+                            class="mb-2 block text-sm font-medium
+                                   text-gray-700 dark:text-gray-200"
+                        >
+                            Nombre
+                        </label>
+
+                        <input
+                            type="text"
+                            id="customer-name"
+                            name="name"
+                            required
+                            class="block w-full rounded-lg border
+                                   border-gray-300 bg-gray-50 p-2.5
+                                   text-sm text-gray-900
+                                   focus:border-btn-primary
+                                   focus:ring-btn-primary
+                                   dark:border-white/10
+                                   dark:bg-dark-secondary
+                                   dark:text-white
+                                   dark:scheme-dark"
+                        >
+                        <p id="name-error" class="hidden text-sm text-red-500"></p>
+                    </div>
+
+                    <!-- CIF -->
+                    <div>
+                        <label
+                            for="customer-cif"
+                            class="mb-2 block text-sm font-medium
+                                   text-gray-700 dark:text-gray-200"
+                        >
+                            CIF/NIF
+                        </label>
+                        <input
+                            type="text" 
+                            id="customer-cif"
+                            name="cif"
+                            maxlength="10"
+                            class="block w-full rounded-lg border
+                                   border-gray-300 bg-gray-50 p-2.5
+                                   text-sm text-gray-900
+                                   focus:border-btn-primary
+                                   focus:ring-btn-primary
+                                   dark:border-white/10
+                                   dark:bg-dark-secondary
+                                   dark:text-white
+                                   dark:placeholder:text-secondary"
+                        >
+                        <p id="cif-error"
+                            class="text-sm text-red-500 mt-1 hidden">
+                        </p>
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label
+                            for="customer-email"
+                            class="mb-2 block text-sm font-medium
+                                   text-gray-700 dark:text-gray-200"
+                        >
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="customer-email"
+                            name="email"
+                            class="block w-full rounded-lg border
+                                   border-gray-300 bg-gray-50 p-2.5
+                                   text-sm text-gray-900
+                                   focus:border-btn-primary
+                                   focus:ring-btn-primary
+                                   dark:border-white/10
+                                   dark:bg-dark-secondary
+                                   dark:text-white
+                                   dark:placeholder:text-secondary"
+                        >
+                        <p id="email-error" class="hidden text-sm text-red-500"></p>
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div>
+                        <label
+                            for="customer-phone"
+                            class="mb-2 block text-sm font-medium
+                                   text-gray-700 dark:text-gray-200"
+                        >
+                            Teléfono
+                        </label>
+
+                        <input
+                            type="number"
+                            id="customer-phone"
+                            name="number"
+                            maxlength="9"
+                            class="block w-full rounded-lg border
+                                   border-gray-300 bg-gray-50 p-2.5
+                                   text-sm text-gray-900
+                                   focus:border-btn-primary
+                                   focus:ring-btn-primary
+                                   dark:border-white/10
+                                   dark:bg-dark-secondary
+                                   dark:text-white
+                                   dark:placeholder:text-secondary"
+                        >
+                    </div>
+
+                    <!-- Dirección -->
+                    <div>
+                        <label
+                            for="customer-adress"
+                            class="mb-2 block text-sm font-medium
+                                   text-gray-700 dark:text-gray-200"
+                        >
+                            Dirección
+                        </label>
+
+                        <textarea
+                            id="customer-adress"
+                            name="adress"
+                            rows="2"
+                            class="block w-full rounded-lg border
+                                   border-gray-300 bg-gray-50 p-2.5
+                                   text-sm text-gray-900
+                                   focus:border-btn-primary
+                                   focus:ring-btn-primary
+                                   dark:border-white/10
+                                   dark:bg-dark-secondary
+                                   dark:text-white
+                                   dark:placeholder:text-secondary"
+                        ></textarea>
+                    </div>
+
+                    <!-- Persona de contacto -->
+                    <div>
+                        <label
+                            for="customer-contact-person"
+                            class="mb-2 block text-sm font-medium
+                                   text-gray-700 dark:text-gray-200"
+                        >
+                            Persona de contacto
+                        </label>
+
+                        <input
+                            type="text"
+                            id="customer-contact-person"
+                            name="contact-person"
+                            class="block w-full rounded-lg border
+                                   border-gray-300 bg-gray-50 p-2.5
+                                   text-sm text-gray-900
+                                   focus:border-btn-primary
+                                   focus:ring-btn-primary
+                                   dark:border-white/10
+                                   dark:bg-dark-secondary
+                                   dark:text-white
+                                   dark:placeholder:text-secondary"
+                        >
+                    </div>
+
+                </div>
+
+                <!-- Errores de la API -->
+                <div
+                    id="customer-form-error"
+                    role="alert"
+                    class="mx-6 hidden whitespace-pre-line
+                           rounded-lg bg-red-50 p-3
+                           text-sm text-red-700
+                           dark:bg-red-900/20
+                           dark:text-red-400"
+                ></div>
+
+                <!-- Pie -->
+                <div
+                    class="flex justify-end gap-3
+                           border-t border-gray-200 p-5
+                           dark:border-white/10"
+                >
+
+                    <button
+                        type="button"
+                        data-modal-hide="customer-create-modal"
+                        class="rounded-lg bg-gray-200 px-4 py-2
+                               text-sm font-medium text-gray-800
+                               transition-colors hover:bg-gray-300
+                               dark:bg-dark-secondary
+                               dark:text-gray-200
+                               dark:hover:bg-dark-tertiary"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="submit"
+                        id="customer-submit-btn"
+                        class="rounded-lg bg-btn-primary px-4 py-2
+                               text-sm font-medium text-white
+                               transition-colors
+                               hover:bg-btn-hover-primary
+                               focus:outline-none
+                               focus:ring-2
+                               focus:ring-btn-primary/40
+                               disabled:cursor-not-allowed
+                               disabled:opacity-50"
+                    >
+                        Guardar cliente
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
