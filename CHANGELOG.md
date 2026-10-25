@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
+## [2026-10-25]
+
+### Added
+- Added a Flowbite modal to create customers directly from the customer list.
+- Implemented asynchronous customer creation using the Fetch API and Django ModelForms.
+- Added JSON responses for successful submissions and validation errors.
+- Added inline field validation and general form error messages.
+
+### Changed
+- Replaced the standalone customer creation workflow with a modal-based interface.
+- Improved client-side form handling by clearing previous errors and preventing duplicate submissions.
+- Added handling for unexpected server responses and connection errors.
+- Preserved customer creation through the existing service layer and permission checks.
+
 ## [2026-10-24]
 
 ### Added

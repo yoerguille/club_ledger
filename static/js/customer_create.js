@@ -6,13 +6,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
         event.preventDefault();
 
+        const errorElements = form.querySelectorAll('[id$="-error"], #customer-form-errors');
+
+        errorElements.forEach((element) => {
+            element.textContent = "";
+            element.classList.add("hidden");
+        });
+
         const formData = new FormData(form);
+        const submitButton = form.querySelector('button[type="submit"]');
+            if (submitButton.disabled) return;
+
+            submitButton.disabled = true;
 
         try {
             const response = await fetch(form.action, {
                 method: "POST",
                 body: formData,
             });
+
+            const contentType = response.headers.get("content-type");
+
+            if (!contentType?.includes("application/json")) {
+                throw new Error(`Respuesta inesperada del servidor: HTTP ${response.status}`);
+            }
 
             const data = await response.json();
 
@@ -36,7 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!response.ok) {
                 for (const [field, messages] of Object.entries(data.errors ?? {})) {
-                    const errorElement = document.getElementById(`${field}-error`);
+
+                    const errorElement = field === "__all__"
+                        ? document.getElementById("customer-form-errors")
+                        : document.getElementById(`${field}-error`);
 
                     if (errorElement) {
                         errorElement.textContent = messages
@@ -52,6 +72,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } catch (error) {
             console.error("Error de conexión:", error);
+            alert("No se ha podido completar la operación. Inténtalo de nuevo.");
+        }finally {
+            submitButton.disabled = false;
         }
 
     });

@@ -148,7 +148,7 @@ class CustomerCreateView(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
 
     def form_valid(self, form):
         try:
-            register_customer(
+            self.object = register_customer(
                 name=form.cleaned_data['name'],
                 cif = form.cleaned_data['cif'],
                 email=form.cleaned_data['email'],
@@ -168,7 +168,6 @@ class CustomerCreateView(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
         return JsonResponse({
             "success": True,
             "message": "Nuevo cliente creado correctamente.",
-            "redirect_url": self.get_success_url()
         }, status=201)
 
     def form_invalid(self, form):
