@@ -129,9 +129,17 @@ class CustomerDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView
 
         context["active_season"] = active_season
         context["selected_season"] = selected_season
-        context["seasons"] = Season.objects.filter(
+        # Temporadas en las que el cliente ya tiene cuentas
+        context["account_seasons"] = Season.objects.filter(
             accounts__customer=self.object
         ).distinct().order_by("-name")
+
+        # Temporadas activas para crear nuevas cuentas
+        context["available_seasons"] = Season.objects.filter(
+            is_active=True
+        ).order_by("-name")
+
+
         context["accounts"] = accounts
 
         return context

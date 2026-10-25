@@ -18,6 +18,11 @@ The format is based on Keep a Changelog.
 - Added handling for unexpected server responses and connection errors.
 - Preserved customer creation through the existing service layer and permission checks.
 
+### Fixed
+- Fixed an issue where the season selector was empty when creating accounts for newly registered customers.
+- Updated the account creation modal to display all active seasons, regardless of existing customer accounts.
+- Separated season filtering for customer account history from season selection for new accounts.
+
 ## [2026-10-24]
 
 ### Added

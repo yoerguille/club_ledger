@@ -321,22 +321,14 @@
                            dark:scheme-dark"
                 >
 
-                    {% for season in seasons %}
-
-                        <option
-                            value="{{ season.pk }}"
-                            {% if season.pk == selected_season.pk %}
-                                selected
-                            {% endif %}
-                        >
+                    {% for season in available_seasons %}
+                        <option value="{{ season.pk }}">
                             {{ season.name }}
-
-                            {% if season.is_active %}
-                                · Activa
-                            {% endif %}
-
                         </option>
-
+                    {% empty %}
+                        <option value="" disabled>
+                            No hay temporadas disponibles
+                        </option>
                     {% endfor %}
 
                 </select>
