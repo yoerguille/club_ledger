@@ -8,6 +8,7 @@
 
 {% block extra_js %}
     <script src="{% static 'js/new-account-create.js' %}" defer></script>
+    <script src="{% static 'js/customer_update.js' %}" defer></script>
 
 {% endblock %}
 
@@ -164,8 +165,10 @@
                     >
 
                         <li>
-                            <a
-                                href="{% url 'customers:customer_update' customer.pk %}"
+                            <button
+                                type="button"
+                                data-modal-target="customer-edit-modal"
+                                data-modal-toggle="customer-edit-modal"
                                 class="flex w-full rounded-lg px-3 py-2
                                        text-gray-700 transition-colors
                                        hover:bg-gray-100
@@ -173,7 +176,7 @@
                                        dark:hover:bg-dark-tertiary"
                             >
                                 Editar cliente
-                            </a>
+                            </button>
                         </li>
 
 
@@ -596,5 +599,6 @@
 
 
 {% include "accounts/modals/new_account_create_modal.html" %}
+{% include "customers/modals/update_customer_modal.html" %}
 
 {% endblock %}

@@ -127,6 +127,7 @@ class CustomerDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView
             "season",
         )
 
+        context["customer_form"] = CustomerForm(instance=self.object)
         context["active_season"] = active_season
         context["selected_season"] = selected_season
         # Temporadas en las que el cliente ya tiene cuentas
@@ -184,8 +185,6 @@ class CustomerCreateView(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
             "errors": form.errors.get_json_data()
         }, status=400)
 
-    
-
 
 class CustomerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     model = Customer
@@ -193,11 +192,19 @@ class CustomerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView
     form_class = CustomerForm
     template_name = 'customers/customer_form.html'
 
-    def get_success_url(self):
-        return reverse_lazy(
-            "customers:customer_detail",
-            kwargs = {"pk": self.object.pk},
-        )
+    def form_valid(self, form):
+        self.object = form.save()
+
+        return JsonResponse({
+            "success": True,
+            "message": "Cliente actualizado correctamente.",
+        }, status=200)
+
+    def form_invalid(self, form):
+        return JsonResponse({
+            "success": False,
+            "errors": form.errors.get_json_data(),
+        }, status=400)
 
 class CustomerDesactivatedView(View):
 

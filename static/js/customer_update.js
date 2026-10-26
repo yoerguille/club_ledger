@@ -1,0 +1,67 @@
+const editForm = document.getElementById("customer-edit-form");
+
+editForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const submitButton = editForm.querySelector('[type="submit"]');
+    submitButton.disabled = true;
+
+    // Limpiar errores anteriores
+    editForm.querySelectorAll('[id$="-error"]').forEach((element) => {
+        element.textContent = "";
+        element.classList.add("hidden");
+    });
+
+    const generalErrors = document.getElementById("customer-edit-form-errors");
+    generalErrors.textContent = "";
+    generalErrors.classList.add("hidden");
+
+    try {
+        const response = await fetch(editForm.action, {
+            method: "POST",
+            body: new FormData(editForm),
+            headers: {
+                "Accept": "application/json",
+            },
+        });
+
+        const contentType = response.headers.get("content-type") || "";
+
+        if (!contentType.includes("application/json")) {
+            throw new Error("Respuesta inesperada del servidor.");
+        }
+
+        const data = await response.json();
+
+        if (response.ok) {
+            window.location.reload();
+            return;
+        }
+
+        if (response.status === 400 && data.errors) {
+            for (const [field, errors] of Object.entries(data.errors)) {
+                const errorElement = document.getElementById(
+                    field === "__all__"
+                        ? "customer-edit-form-errors"
+                        : `edit-${field}-error`
+                );
+
+                if (errorElement) {
+                    errorElement.textContent = errors
+                        .map((error) => error.message)
+                        .join(" ");
+
+                    errorElement.classList.remove("hidden");
+                }
+            }
+        } else {
+            throw new Error("No se pudo actualizar el cliente.");
+        }
+
+    } catch (error) {
+        generalErrors.textContent = error.message;
+        generalErrors.classList.remove("hidden");
+    } finally {
+        submitButton.disabled = false;
+    }
+});
