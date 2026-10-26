@@ -27,6 +27,7 @@ urlpatterns = [
     path("transactions/", include("apps.transactions.urls", namespace='transactions')),
     path("statements/", include("apps.statements.urls", namespace='statements')),
     path("collection/", include("apps.collection.urls", namespace='collection')),
+    path("seasons/", include("apps.seasons.urls", namespace='seasons')),
 
     path("login/", auth_views.LoginView.as_view(template_name="registration/login.html"), name='login'),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),

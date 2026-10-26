@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
+## [2026-10-26]
+
+### Added
+- Added season creation through a modal form.
+- Added automatic activation of newly created seasons.
+- Added a confirmation step before replacing the currently active season.
+- Added a summary of outstanding account balances before changing seasons.
+
+### Changed
+- Updated season management to ensure only one season can be active at a time.
+- Automatically deactivate the previous active season after confirming a season change.
+
+### Fixed
+- Prevented active seasons from being replaced without explicit user confirmation.
+
 ## [2026-10-25]
 
 ### Added

@@ -1,5 +1,6 @@
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from apps.seasons.forms import SeasonForm
 
 from .services import get_dashboard_stats
 from apps.collection.services import get_overdue_follow_ups
@@ -15,6 +16,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context.update(get_dashboard_stats())
 
         context["overdue_follow_ups"] = get_overdue_follow_ups()
+
+        context["season_form"] = SeasonForm()
         
         return context
     
