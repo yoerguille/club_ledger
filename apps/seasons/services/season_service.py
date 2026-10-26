@@ -76,6 +76,10 @@ class SeasonService:
                         "La temporada activa ha cambiado. "
                         "Debes confirmar nuevamente la operación."
                     )
+            if end_date <= start_date:
+                raise ValidationError({
+                    "end_date": "La fecha de finalización debe ser posterior a la fecha de inicio."
+                })
 
             # 3. Validar, desactivar la anterior y crear la nueva
             season = Season(

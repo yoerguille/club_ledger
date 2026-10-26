@@ -11,6 +11,7 @@ The format is based on Keep a Changelog.
 - Added automatic activation of newly created seasons.
 - Added a confirmation step before replacing the currently active season.
 - Added a summary of outstanding account balances before changing seasons.
+- Added automated tests for season creation, activation, confirmation, duplicate names, date validation, and outstanding balance calculations.
 
 ### Changed
 - Updated season management to ensure only one season can be active at a time.
@@ -18,6 +19,7 @@ The format is based on Keep a Changelog.
 
 ### Fixed
 - Prevented active seasons from being replaced without explicit user confirmation.
+- Fixed season date validation in `SeasonService` to reject invalid date ranges independently of form validation.
 
 ## [2026-10-25]
 
