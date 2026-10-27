@@ -10,6 +10,7 @@ from apps.seasons.services.season_service import (
 from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.http import JsonResponse
+from apps.seasons.services.season_stats import get_season_stats
 
 # Create your views here.
 class SeasonListView(LoginRequiredMixin, ListView):
@@ -20,6 +21,14 @@ class SeasonListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["season_form"] = SeasonForm()
+        seasons = list(context["seasons"])
+
+        for season in seasons:
+            season.card_stats = get_season_stats(season)
+
+        context["seasons"] = seasons
+
+
         return context
 
 

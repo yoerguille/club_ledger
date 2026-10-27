@@ -73,6 +73,7 @@ class AccountListView(ListView):
         search = self.request.GET.get("q", "").strip()
         sort = self.request.GET.get("sort", "name_asc")
 
+
         if search:
             queryset = queryset.filter(
                 name__icontains=search
