@@ -7,7 +7,11 @@ The format is based on Keep a Changelog.
 ## [2026-10-27]
 
 ### Added
-- Added Season to aside for manage seasons and consult stats.
+- Added SeasonListView to manage and review registered seasons.
+- Added season management to the application sidebar navigation.
+- Added season cards displaying financial statistics, including total charges, payments, outstanding balances, and accounts with pending debt.
+- Added navigation from each season card to the account list filtered by season.
+- Added an automated test for get_season_stats(), validating account and transaction counts, charges, payments, net balances, and outstanding debts.
 
 ### Changed
 - Refactored modal templates to use a shared `base_modal.html` component, reducing duplicated HTML and standardizing their appearance.

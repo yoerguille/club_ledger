@@ -15,6 +15,7 @@ from apps.seasons.services.season_stats import (
 from decimal import Decimal
 from datetime import date
 from django.urls import reverse
+from apps.seasons.services.season_stats import get_season_stats
 
 # Create your tests here.
 class SeasonPendingBalancesTests(TestCase):
@@ -40,6 +41,46 @@ class SeasonPendingBalancesTests(TestCase):
             )
 
             self.accounts.append(account)
+
+    def test_get_season_stats(self):
+        # Arrange
+        account_a, account_b, account_c = self.accounts
+
+        movements = [
+            (account_a, Transaction.MovementType.CHARGE, "300.00"),
+            (account_a, Transaction.MovementType.PAYMENT, "100.00"),
+            (account_b, Transaction.MovementType.CHARGE, "100.00"),
+            (account_b, Transaction.MovementType.PAYMENT, "150.00"),
+            (account_c, Transaction.MovementType.CHARGE, "250.00"),
+        ]
+
+        for account, movement_type, amount in movements:
+            Transaction.objects.create(
+                account=account,
+                movement_type=movement_type,
+                date=date(2026, 10, 1),
+                amount=Decimal(amount),
+                description="Movimiento de prueba",
+                payment_method=(
+                    Transaction.PaymentMethod.TRANSFER
+                    if movement_type == Transaction.MovementType.PAYMENT
+                    else None
+                ),
+            )
+
+        # Act
+        stats = get_season_stats(self.season)
+
+        # Assert
+        self.assertEqual(stats["account_count"], 3)
+        self.assertEqual(stats["transaction_count"], 5)
+
+        self.assertEqual(stats["total_charges"], Decimal("650.00"))
+        self.assertEqual(stats["total_payments"], Decimal("250.00"))
+        self.assertEqual(stats["total_balance"], Decimal("400.00"))
+
+        self.assertEqual(stats["pending_accounts_count"], 2)
+        self.assertEqual(stats["total_pending"], Decimal("450.00"))
 
     def test_pending_balances_only_include_positive_accounts(self):
 
