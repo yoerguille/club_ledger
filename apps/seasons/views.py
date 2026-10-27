@@ -12,6 +12,18 @@ from django.contrib import messages
 from django.http import JsonResponse
 
 # Create your views here.
+class SeasonListView(LoginRequiredMixin, ListView):
+    model = Season
+    template_name = "seasons/season_list.html"
+    context_object_name = "seasons"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["season_form"] = SeasonForm()
+        return context
+
+
+
 class SeasonCreateView(LoginRequiredMixin, CreateView):
     model = Season
     context_object_name = "season"
