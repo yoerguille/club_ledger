@@ -16,6 +16,7 @@ from apps.collection.models import CollectionReminder
 from .services import register_new_account, AccountCloseService
 from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST
+from apps.transactions.forms import ChargeForm, PaymentForm
 
 # Create your views here.
 
@@ -144,13 +145,14 @@ class AccountDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         context["collection_reminders"] = (
             CollectionReminder.objects
             .filter(follow_up__account=self.object)
             .select_related("follow_up")
             .order_by("-sent_at")
         )
+        context['charge_form'] = ChargeForm()
+        context['payment_form'] = PaymentForm()
         context["payment_methods"] = Transaction.PaymentMethod.choices
 
         return context

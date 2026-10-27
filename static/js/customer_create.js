@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     const form = document.getElementById("customer-create-form");
+        if (!form) return;
 
     form.addEventListener("submit", async (event) => {
 
@@ -52,6 +53,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             if (!response.ok) {
+                if (!data.errors) {
+                    throw new Error("No se pudo crear el cliente.");
+                }
                 for (const [field, messages] of Object.entries(data.errors ?? {})) {
 
                     const errorElement = field === "__all__"

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Customer
 from apps.seasons.models import Season
+from apps.accounts.forms import AccountForm
 from apps.accounts.models import Account
 from apps.transactions.models import Transaction
 from .forms import CustomerForm
@@ -91,9 +92,8 @@ class CustomerListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        context["customer_form"] = CustomerForm()
         context["customers_count"] = self.get_queryset().count()
-
         return context
 
 class CustomerDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView):
@@ -127,6 +127,7 @@ class CustomerDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView
             "season",
         )
 
+        context["account_form"] = AccountForm()
         context["customer_form"] = CustomerForm(instance=self.object)
         context["active_season"] = active_season
         context["selected_season"] = selected_season

@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
+## [2026-10-27]
+
+### Changed
+- Refactored modal templates to use a shared `base_modal.html` component, reducing duplicated HTML and standardizing their appearance.
+- Updated customer creation and editing modals to share a consistent structure and styling.
+- Reused Django `CustomerForm` and the shared form field component in the customer creation modal.
+- Updated the season creation modal to use the shared layout while preserving its confirmation workflow and validation messages.
+
 ## [2026-10-26]
 
 ### Added

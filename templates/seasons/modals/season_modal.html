@@ -1,149 +1,136 @@
-<div
-    id="season-create-modal"
-    tabindex="-1"
-    aria-hidden="true"
-    class="fixed inset-0 z-50 hidden h-full w-full
-           items-center justify-center overflow-y-auto
-           overflow-x-hidden bg-gray-900/50 p-4"
+
+{% extends "components/modals/base_modal.html" %}
+
+{% block modal_id %}season-create-modal{% endblock %}
+
+{% block modal_close_id %}season-create-modal{% endblock %}
+
+{% block modal_title %}Crear temporada{% endblock %}
+
+{% block modal_description %}
+    Configura una nueva temporada de trabajo.
+{% endblock %}
+
+{% block modal_content %}
+
+<form
+    id="season-create-form"
+    method="post"
+    action="{% url 'seasons:season_create' %}"
 >
-    <div class="relative w-full max-w-xl">
-        <div class="relative rounded-xl bg-white shadow-xl
-                    dark:bg-dark-primary">
+    {% csrf_token %}
 
-            <!-- Cabecera -->
-            <div class="flex items-center justify-between
-                        border-b border-gray-200 p-5
-                        dark:border-white/10">
+    <!-- Cuerpo -->
+    <div class="space-y-4 p-6">
 
-                <div>
-                    <h3 class="text-lg font-semibold
-                               text-gray-900 dark:text-white">
-                        Crear temporada
-                    </h3>
+        {% for field in season_form %}
+            <div>
+                {% include "components/forms/field.html" with field=field %}
 
-                    <p class="mt-1 text-sm text-gray-500
-                              dark:text-secondary">
-                        Configura una nueva temporada de trabajo.
-                    </p>
-                </div>
+                <p
+                    id="season-{{ field.name }}-error"
+                    class="mt-1 hidden text-sm text-red-500"
+                ></p>
+            </div>
+        {% endfor %}
+
+        <!-- Errores generales -->
+        <div
+            id="season-create-errors"
+            role="alert"
+            class="hidden rounded-lg bg-red-50 p-3
+                   text-sm text-red-700
+                   dark:bg-red-900/20 dark:text-red-400"
+        ></div>
+
+        <!-- Confirmación de cambio de temporada -->
+        <div
+            id="season-change-confirmation"
+            class="hidden rounded-lg border border-amber-300
+                   bg-amber-50 p-4
+                   dark:border-amber-700
+                   dark:bg-amber-900/20"
+        >
+            <h4
+                class="mb-2 font-semibold text-amber-900
+                       dark:text-amber-300"
+            >
+                Confirmar cambio de temporada
+            </h4>
+
+            <p
+                id="season-confirmation-message"
+                class="text-sm text-amber-900
+                       dark:text-amber-200"
+            ></p>
+
+            <div class="mt-4 flex justify-end gap-3">
 
                 <button
                     type="button"
-                    data-modal-hide="season-create-modal"
-                    aria-label="Cerrar"
-                    class="rounded-lg p-2 text-gray-400
-                           hover:bg-gray-100 hover:text-gray-900
-                           dark:text-secondary
-                           dark:hover:bg-dark-secondary
-                           dark:hover:text-white"
+                    id="season-cancel-change"
+                    class="rounded-lg bg-gray-200 px-4 py-2
+                           text-sm text-gray-800
+                           dark:bg-dark-secondary
+                           dark:text-gray-200"
                 >
-                    ✕
+                    Cancelar cambio
                 </button>
+
+                <button
+                    type="button"
+                    id="season-confirm-change"
+                    class="rounded-lg bg-btn-primary px-4 py-2
+                           text-sm font-medium text-white
+                           hover:bg-btn-hover-primary
+                           disabled:cursor-not-allowed
+                           disabled:opacity-50"
+                >
+                    Confirmar y crear
+                </button>
+
             </div>
-
-            <!-- Formulario -->
-            <form
-                id="season-create-form"
-                method="post"
-                action="{% url 'seasons:season_create' %}"
-            >
-                {% csrf_token %}
-
-                <div class="space-y-4 p-6">
-
-                    {% for field in season_form %}
-                        <div>
-                            {% include "components/forms/field.html" with field=field %}
-
-                            <p
-                                id="season-{{ field.name }}-error"
-                                class="mt-1 hidden text-sm text-red-500"
-                            ></p>
-                        </div>
-                    {% endfor %}
-
-                    <div
-                        id="season-create-errors"
-                        role="alert"
-                        class="hidden rounded-lg bg-red-50 p-3
-                               text-sm text-red-700
-                               dark:bg-red-900/20 dark:text-red-400"
-                    ></div>
-
-                    <!-- Confirmación de cambio de temporada -->
-                    <div
-                        id="season-change-confirmation"
-                        class="hidden rounded-lg border border-amber-300
-                               bg-amber-50 p-4
-                               dark:border-amber-700
-                               dark:bg-amber-900/20"
-                    >
-                        <h4 class="mb-2 font-semibold text-amber-900
-                                   dark:text-amber-300">
-                            Confirmar cambio de temporada
-                        </h4>
-
-                        <p
-                            id="season-confirmation-message"
-                            class="text-sm text-amber-900
-                                   dark:text-amber-200"
-                        ></p>
-
-                        <div class="mt-4 flex justify-end gap-3">
-                            <button
-                                type="button"
-                                id="season-cancel-change"
-                                class="rounded-lg bg-gray-200 px-4 py-2
-                                       text-sm text-gray-800
-                                       dark:bg-dark-secondary
-                                       dark:text-gray-200"
-                            >
-                                Cancelar cambio
-                            </button>
-
-                            <button
-                                type="button"
-                                id="season-confirm-change"
-                                class="rounded-lg bg-btn-primary px-4 py-2
-                                       text-sm font-medium text-white
-                                       hover:bg-btn-hover-primary"
-                            >
-                                Confirmar y crear
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pie -->
-                <div class="flex justify-end gap-3
-                            border-t border-gray-200 p-5
-                            dark:border-white/10">
-
-                    <button
-                        type="button"
-                        data-modal-hide="season-create-modal"
-                        class="rounded-lg bg-gray-200 px-4 py-2
-                               text-sm font-medium text-gray-800
-                               dark:bg-dark-secondary
-                               dark:text-gray-200
-                               dark:hover:bg-dark-tertiary"
-                    >
-                        Cancelar
-                    </button>
-
-                    <button
-                        type="submit"
-                        id="season-create-submit"
-                        class="rounded-lg bg-btn-primary px-4 py-2
-                               text-sm font-medium text-white
-                               hover:bg-btn-hover-primary
-                               disabled:cursor-not-allowed
-                               disabled:opacity-50"
-                    >
-                        Crear temporada
-                    </button>
-                </div>
-            </form>
         </div>
+
     </div>
-</div>
+
+    <!-- Pie -->
+    <div
+        class="flex justify-end gap-3
+               border-t border-gray-200 p-5
+               dark:border-white/10"
+    >
+
+        <button
+            type="button"
+            data-modal-hide="season-create-modal"
+            class="rounded-lg bg-gray-200 px-4 py-2
+                   text-sm font-medium text-gray-800
+                   transition-colors hover:bg-gray-300
+                   dark:bg-dark-secondary
+                   dark:text-gray-200
+                   dark:hover:bg-dark-tertiary"
+        >
+            Cancelar
+        </button>
+
+        <button
+            type="submit"
+            id="season-create-submit"
+            class="rounded-lg bg-btn-primary px-4 py-2
+                   text-sm font-medium text-white
+                   transition-colors
+                   hover:bg-btn-hover-primary
+                   focus:outline-none
+                   focus:ring-2 focus:ring-btn-primary/40
+                   disabled:cursor-not-allowed
+                   disabled:opacity-50"
+        >
+            Crear temporada
+        </button>
+
+    </div>
+
+</form>
+
+{% endblock %}

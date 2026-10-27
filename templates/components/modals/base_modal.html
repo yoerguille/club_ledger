@@ -1,0 +1,50 @@
+<div
+    id="{% block modal_id %}{% endblock %}"
+    tabindex="-1"
+    aria-hidden="true"
+    class="fixed inset-0 z-50 hidden h-full w-full
+           items-center justify-center overflow-y-auto
+           overflow-x-hidden bg-gray-900/50 p-4"
+>
+    <div class="relative w-full max-w-xl">
+        <div class="relative rounded-xl bg-white shadow-xl
+                    dark:bg-dark-primary">
+
+            <!-- Cabecera -->
+            <div class="flex items-center justify-between
+                        border-b border-gray-200 p-5
+                        dark:border-white/10">
+
+                <div>
+                    <h3 class="text-lg font-semibold
+                               text-gray-900 dark:text-white">
+                        {% block modal_title %}{% endblock %}
+                    </h3>
+
+                    <p class="mt-1 text-sm text-gray-500
+                              dark:text-secondary">
+                        {% block modal_description %}{% endblock %}
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    data-modal-hide="{% block modal_close_id %}{% endblock %}"
+                    aria-label="Cerrar"
+                    class="rounded-lg p-2 text-gray-400
+                           transition-colors hover:bg-gray-100
+                           hover:text-gray-900
+                           dark:text-secondary
+                           dark:hover:bg-dark-secondary
+                           dark:hover:text-white"
+                >
+                    ✕
+                </button>
+            </div>
+
+            <!-- Contenido -->
+            {% block modal_content %}{% endblock %}
+
+        </div>
+    </div>
+</div>

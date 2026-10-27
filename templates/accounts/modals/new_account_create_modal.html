@@ -1,202 +1,93 @@
 
-<!-- ================================================= -->
-<!-- MODAL DE NUEVA CUENTA -->
-<!-- ================================================= -->
+{% extends "components/modals/base_modal.html" %}
+
+{% block modal_id %}new-account-create-modal{% endblock %}
+
+{% block modal_close_id %}new-account-create-modal{% endblock %}
+
+{% block modal_title %}Crear nueva cuenta{% endblock %}
+
+{% block modal_description %}
+    Rellena los datos del formulario.
+{% endblock %}
+
+{% block modal_content %}
 
 
-<div
-    id="new-account-create-modal"
-    tabindex="-1"
-    aria-hidden="true"
-    class="fixed inset-0 z-50 hidden h-full w-full
-           items-center justify-center overflow-y-auto
-           overflow-x-hidden bg-gray-900/50 p-4"
->
-    <div class="relative w-full max-w-xl">
 
-        <div class="relative rounded-xl bg-white shadow-xl
-                    dark:bg-dark-primary">
-
-            <!-- Cabecera -->
-            <div class="flex items-center justify-between
-                        border-b border-gray-200 p-5
-                        dark:border-white/10">
-
+    <!-- Formulario -->
+    <form
+        id="new-account-form"
+        data-api-url="{% url 'api_account_create' customer.pk %}"
+    >
+        {% csrf_token %}
+        <div class="space-y-4 p-6">
+            {% for field in account_form %}
                 <div>
-                    <h3 class="text-lg font-semibold
-                               text-gray-900 dark:text-white">
-                        Crear Nueva Cuenta
-                    </h3>
+                    {% include "components/forms/field.html" with field=field %}
 
-                    <p class="mt-1 text-sm text-gray-500
-                              dark:text-secondary">
-                        {{ customer.name }}
-                    </p>
+                    <p
+                        id="{{ field.name }}-error"
+                        class="mt-1 hidden text-sm text-red-500"
+                    ></p>
                 </div>
+            {% endfor %}
 
-                <button
-                    type="button"
-                    data-modal-hide="new-account-create-modal"
-                    aria-label="Cerrar"
-                    class="rounded-lg p-2 text-gray-400
-                           transition-colors
-                           hover:bg-gray-100 hover:text-gray-900
-                           dark:text-secondary
-                           dark:hover:bg-dark-secondary
-                           dark:hover:text-white"
-                >
-                    ✕
-                </button>
-            </div>
+                 <!-- Errores generales -->
+            <div
+                id="customer-form-errors"
+                role="alert"
+                class="hidden rounded-lg bg-red-50 p-3 text-sm text-red-700
+                        dark:bg-red-900/20 dark:text-red-400"
+            ></div>
 
-            <!-- Formulario -->
-            <form
-                id="new-account-form"
-                data-api-url="{% url 'api_account_create' customer.pk %}"
-            >
-                {% csrf_token %}
-                <div class="space-y-4 p-6">
-
-                    <!-- Nombre -->
-
-                    <div>
-                        <label
-                            for="name"
-                            class="mb-2 block text-sm font-medium
-                                   text-gray-700 dark:text-gray-200"
-                        >
-                            Nombre de la cuenta
-                        </label>
-
-                        <textarea
-                            id="name"
-                            name="name"
-                            rows="1"
-                            class="block w-full rounded-lg border
-                                   border-gray-300 bg-gray-50 p-2.5
-                                   text-sm text-gray-900
-                                   focus:border-btn-primary
-                                   focus:ring-btn-primary
-                                   dark:border-white/10
-                                   dark:bg-dark-secondary
-                                   dark:text-white
-                                   dark:placeholder:text-secondary"
-                        ></textarea>
-                    </div>
-
-                    <!-- Temporada -->
-                    <div>
-                        <label
-                            for="season"
-                            class="mb-2 block text-sm font-medium
-                                   text-gray-700 dark:text-gray-200"
-                        >
-                            Temporada
-                        </label>
-
-                        <select
-                            id="season"
-                            name="season"
-                            required
-                            class="block w-full rounded-lg border
-                                   border-gray-300 bg-gray-50 p-2.5
-                                   text-sm text-gray-900
-                                   focus:border-btn-primary
-                                   focus:ring-btn-primary
-                                   dark:border-white/10
-                                   dark:bg-dark-secondary
-                                   dark:text-white
-                                   dark:scheme-dark"
-                        >
-                            <option value="">Seleccionar temporada</option>
-
-                            {% for season in available_seasons %}
-                                <option value="{{ season.pk }}">
-                                    {{ season.name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <!-- Notas -->
-                    <div>
-                        <label
-                            for="notes"
-                            class="mb-2 block text-sm font-medium
-                                   text-gray-700 dark:text-gray-200"
-                        >
-                            Notas (opcional)
-                        </label>
-
-                        <textarea
-                            id="notes"
-                            name="notes"
-                            rows="3"
-                            class="block w-full rounded-lg border
-                                   border-gray-300 bg-gray-50 p-2.5
-                                   text-sm text-gray-900
-                                   focus:border-btn-primary
-                                   focus:ring-btn-primary
-                                   dark:border-white/10
-                                   dark:bg-dark-secondary
-                                   dark:text-white
-                                   dark:placeholder:text-secondary"
-                        ></textarea>
-                    </div>
-
-                </div>
-
-                <!-- Errores de la API -->
-                <div
-                    id="new-account-form-error"
-                    role="alert"
-                    class="mx-6 hidden whitespace-pre-line
-                           rounded-lg bg-red-50 p-3
-                           text-sm text-red-700
-                           dark:bg-red-900/20
-                           dark:text-red-400"
-                ></div>
-
-                <!-- Pie -->
-                <div
-                    class="flex justify-end gap-3
-                           border-t border-gray-200 p-5
-                           dark:border-white/10"
-                >
-
-                    <button
-                        type="button"
-                        data-modal-hide="new-account-create-modal"
-                        class="rounded-lg bg-gray-200 px-4 py-2
-                               text-sm font-medium text-gray-800
-                               transition-colors hover:bg-gray-300
-                               dark:bg-dark-secondary
-                               dark:text-gray-200
-                               dark:hover:bg-dark-tertiary"
-                    >
-                        Cancelar
-                    </button>
-
-                    <button
-                        type="submit"
-                        id="new-account-submit-btn"
-                        class="rounded-lg bg-btn-primary px-4 py-2
-                               text-sm font-medium text-white
-                               transition-colors
-                               hover:bg-btn-hover-primary
-                               focus:outline-none
-                               focus:ring-2
-                               focus:ring-btn-primary/40
-                               disabled:cursor-not-allowed
-                               disabled:opacity-50"
-                    >
-                        Crear Cuenta
-                    </button>
-
-                </div>
-
-            </form>
+              <!-- Errores de la API -->
+            <div
+                id="new-account-form-error"
+                role="alert"
+                class="mx-6 hidden whitespace-pre-line
+                        rounded-lg bg-red-50 p-3
+                        text-sm text-red-700
+                        dark:bg-red-900/20
+                        dark:text-red-400"
+            ></div>
 
         </div>
-    </div>
-</div>
+        <!-- Pie -->
+        <div
+            class="flex justify-end gap-3
+                    border-t border-gray-200 p-5
+                    dark:border-white/10"
+        >
+
+            <button
+                type="button"
+                data-modal-hide="new-account-create-modal"
+                class="rounded-lg bg-gray-200 px-4 py-2
+                        text-sm font-medium text-gray-800
+                        transition-colors hover:bg-gray-300
+                        dark:bg-dark-secondary
+                        dark:text-gray-200
+                        dark:hover:bg-dark-tertiary"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="submit"
+                id="new-account-submit-btn"
+                class="rounded-lg bg-btn-primary px-4 py-2
+                        text-sm font-medium text-white
+                        transition-colors
+                        hover:bg-btn-hover-primary
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-btn-primary/40
+                        disabled:cursor-not-allowed
+                        disabled:opacity-50"
+            >
+                Crear Cuenta
+            </button>
+        </div>
+    </form>
+{% endblock %}
