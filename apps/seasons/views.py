@@ -13,6 +13,26 @@ from django.http import JsonResponse
 from apps.seasons.services.season_stats import get_season_stats
 
 # Create your views here.
+class SeasonUpdateView(LoginRequiredMixin, UpdateView):
+    model = Season
+    form_class = SeasonForm
+    template_name = "seasons/forms/season_form.html"
+
+    def form_valid(self, form):
+        self.object = form.save()
+
+        return JsonResponse({
+            "success": True,
+            "message": "Temporada actualizada correctamente.",
+        }, status=200)
+
+    def form_invalid(self, form):
+        return JsonResponse({
+            "success": False,
+            "errors": form.errors.get_json_data(),
+        }, status=400)
+
+
 class SeasonListView(LoginRequiredMixin, ListView):
     model = Season
     template_name = "seasons/season_list.html"
@@ -20,23 +40,23 @@ class SeasonListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["season_form"] = SeasonForm()
+
         seasons = list(context["seasons"])
 
         for season in seasons:
             season.card_stats = get_season_stats(season)
 
+            # Formulario precargado con los datos de esta temporada
+            season.edit_form = SeasonForm(instance=season)
+
         context["seasons"] = seasons
 
-
         return context
-
-
 
 class SeasonCreateView(LoginRequiredMixin, CreateView):
     model = Season
     context_object_name = "season"
-    template_name = "seasons/season_form.html"
+    template_name = "seasons/forms/season_form.html"
     form_class=SeasonForm
 
     def form_valid(self, form):

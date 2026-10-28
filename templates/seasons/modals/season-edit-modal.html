@@ -1,0 +1,82 @@
+{% extends "components/modals/base_modal.html" %}
+
+{% block modal_id %}season-edit-modal-{{ season.pk }}{% endblock %}
+
+{% block modal_close_id %}season-edit-modal-{{ season.pk }}{% endblock %}
+
+{% block modal_title %}Editar Temporada{% endblock %}
+
+{% block modal_description %}
+    Modifica los datos de la Temporada.
+{% endblock %}
+
+{% block modal_content %}
+
+    <form
+        id="season-edit-form-{{ season.pk }}"
+        class="season-edit-form"
+        method="post"
+        action="{% url 'seasons:season_update' season.pk %}"
+    >
+        {% csrf_token %}
+
+        <!-- Cuerpo -->
+        <div class="space-y-4 p-6">
+
+            {% for field in season.edit_form %}
+                <div>
+                    {% include "components/forms/field.html" with field=field %}
+
+                    <p
+                        data-field-error="{{ field.name }}"
+                        class="mt-1 hidden text-sm text-red-500"
+                    ></p>
+                </div>
+            {% endfor %}
+
+            <!-- Errores generales -->
+            <div
+                data-form-errors
+                role="alert"
+                class="hidden rounded-lg bg-red-50 p-3 text-sm text-red-700
+                    dark:bg-red-900/20 dark:text-red-400"
+            ></div>
+
+        </div>
+
+        <!-- Pie -->
+        <div class="flex justify-end gap-3
+                    border-t border-gray-200 p-5
+                    dark:border-white/10">
+
+            <button
+                type="button"
+                data-modal-hide="season-edit-modal-{{ season.pk }}"
+                class="rounded-lg bg-gray-200 px-4 py-2
+                       text-sm font-medium text-gray-800
+                       transition-colors hover:bg-gray-300
+                       dark:bg-dark-secondary
+                       dark:text-gray-200
+                       dark:hover:bg-dark-tertiary"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="submit"
+                class="rounded-lg bg-btn-primary px-4 py-2
+                       text-sm font-medium text-white
+                       transition-colors
+                       hover:bg-btn-hover-primary
+                       focus:outline-none
+                       focus:ring-2 focus:ring-btn-primary/40
+                       disabled:cursor-not-allowed
+                       disabled:opacity-50"
+            >
+                Guardar cambios
+            </button>
+
+        </div>
+    </form>
+
+{% endblock %}
