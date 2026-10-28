@@ -13,10 +13,11 @@ from django.http import JsonResponse
 from apps.seasons.services.season_stats import get_season_stats
 
 # Create your views here.
-class SeasonUpdateView(LoginRequiredMixin, UpdateView):
+class SeasonUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Season
     form_class = SeasonForm
     template_name = "seasons/forms/season_form.html"
+    permission_required="seasons.change_season"
 
     def form_valid(self, form):
         self.object = form.save()
@@ -39,10 +40,11 @@ class SeasonUpdateView(LoginRequiredMixin, UpdateView):
         }, status=400)
 
 
-class SeasonListView(LoginRequiredMixin, ListView):
+class SeasonListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Season
     template_name = "seasons/season_list.html"
     context_object_name = "seasons"
+    permission_required="seasons.view_season"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,11 +61,12 @@ class SeasonListView(LoginRequiredMixin, ListView):
 
         return context
 
-class SeasonCreateView(LoginRequiredMixin, CreateView):
+class SeasonCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Season
     context_object_name = "season"
     template_name = "seasons/forms/season_form.html"
     form_class=SeasonForm
+    permission_required="seasons.add_season"
 
     def form_valid(self, form):
         confirm_change = (

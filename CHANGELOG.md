@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
+## [2026-10-28]
+
+### Added
+- Added AJAX season editing modal to update seasons withour reload page.
+- Added an automated test for SeasonUpdateView, validating permissions, invalid dates and update succesfully.
+
+
 ## [2026-10-27]
 
 ### Added

@@ -16,8 +16,135 @@ from decimal import Decimal
 from datetime import date
 from django.urls import reverse
 from apps.seasons.services.season_stats import get_season_stats
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
+from django.urls import reverse
 
 # Create your tests here.
+class SeasonUpdateViewTests(TestCase):
+
+    def setUp(self):
+        # Crear usuario con permiso para editar temporadas
+        User = get_user_model()
+
+        self.user = User.objects.create_user(
+            username="testuser",
+            password="testpassword123",
+        )
+
+        permission = Permission.objects.get(
+            codename="change_season",
+            content_type__app_label="seasons",
+        )
+
+        self.user.user_permissions.add(permission)
+
+        self.client.force_login(self.user)
+
+        # Crear temporada
+        self.season = Season.objects.create(
+            name="2025/2026",
+            start_date=date(2025, 9, 1),
+            end_date=date(2026, 6, 30),
+            is_active=True,
+        )
+
+        self.url = reverse(
+            "seasons:season_update",
+            kwargs={"pk": self.season.pk},
+        )
+
+    def test_update_season_successfully(self):
+        # Arrange
+        data = {
+            "name": "Temporada 2025/2026",
+            "start_date": "2025-09-15",
+            "end_date": "2026-07-15",
+        }
+
+        # Act
+        response = self.client.post(self.url, data)
+
+        # Assert: respuesta HTTP
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()["success"])
+
+        # Assert: cambios guardados en PostgreSQL
+        self.season.refresh_from_db()
+
+        self.assertEqual(
+            self.season.name,
+            "Temporada 2025/2026",
+        )
+
+        self.assertEqual(
+            self.season.start_date,
+            date(2025, 9, 15),
+        )
+
+        self.assertEqual(
+            self.season.end_date,
+            date(2026, 7, 15),
+        )
+
+        # La edición no debe modificar el estado activo
+        self.assertTrue(self.season.is_active)
+
+    def test_update_season_with_invalid_dates(self):
+        # Arrange
+        data = {
+            "name": "2025/2026",
+            "start_date": "2026-07-01",
+            "end_date": "2026-06-30",
+        }
+
+        # Act
+        response = self.client.post(self.url, data)
+
+        # Assert: Django rechaza la petición
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(response.json()["success"])
+        self.assertIn("end_date", response.json()["errors"])
+
+        # Assert: la temporada no se ha modificado
+        self.season.refresh_from_db()
+
+        self.assertEqual(
+            self.season.start_date,
+            date(2025, 9, 1),
+        )
+        self.assertEqual(
+            self.season.end_date,
+            date(2026, 6, 30),
+        )
+
+    def test_update_season_without_permission(self):
+        # Arrange: eliminar el permiso del usuario
+        self.user.user_permissions.clear()
+
+        # Limpiar caché de permisos de Django
+        self.user = type(self.user).objects.get(pk=self.user.pk)
+        self.client.force_login(self.user)
+
+        data = {
+            "name": "Temporada modificada",
+            "start_date": "2025-09-15",
+            "end_date": "2026-07-15",
+        }
+
+        # Act
+        response = self.client.post(self.url, data)
+
+        # Assert: acceso denegado
+        self.assertEqual(response.status_code, 403)
+
+        # Assert: los datos originales permanecen intactos
+        self.season.refresh_from_db()
+
+        self.assertEqual(self.season.name, "2025/2026")
+        self.assertEqual(self.season.start_date, date(2025, 9, 1))
+        self.assertEqual(self.season.end_date, date(2026, 6, 30))
+
 class SeasonPendingBalancesTests(TestCase):
 
     def setUp(self):
