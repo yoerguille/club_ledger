@@ -37,12 +37,40 @@ document.querySelectorAll(".season-edit-form").forEach((editForm) => {
 
             const data = await response.json();
 
-            if (response.ok) {
-                window.location.reload();
+            if (response.ok && data.success) {
+
+                const season = data.season;
+
+                // Buscar la tarjeta correspondiente
+                const card = document.querySelector(
+                    `[data-season-card="${season.id}"]`
+                );
+
+                if (card) {
+                    card.querySelector("[data-season-name]").textContent =
+                        season.name;
+
+                    card.querySelector("[data-season-dates]").textContent =
+                        `${season.start_date} – ${season.end_date}`;
+                }
+
+                // Cerrar el modal correspondiente
+                const modalId = `season-edit-modal-${season.id}`;
+
+                const modal = window.FlowbiteInstances?.getInstance(
+                    "Modal",
+                    modalId
+                );
+
+                if (modal) {
+                    modal.hide();
+                }
+
                 return;
             }
 
             if (response.status === 400 && data.errors) {
+
                 for (const [field, errors] of Object.entries(data.errors)) {
 
                     const errorElement = field === "__all__"
@@ -55,17 +83,19 @@ document.querySelectorAll(".season-edit-form").forEach((editForm) => {
 
                     if (errorElement) {
                         errorElement.textContent = errors
-                            .map((error) => error.message)
+                            .map(error => error.message)
                             .join(" ");
 
                         errorElement.classList.remove("hidden");
                     }
                 }
+
             } else {
                 throw new Error("No se pudo actualizar la temporada.");
             }
 
         } catch (error) {
+
             generalErrors.textContent =
                 error.message || "Error de conexión.";
 

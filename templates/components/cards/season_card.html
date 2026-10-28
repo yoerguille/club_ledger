@@ -1,4 +1,4 @@
-<div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm
+<div data-season-card="{{ season.pk }}" class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm
             transition-colors hover:border-gray-300
             dark:border-white/10 dark:bg-dark-primary
             dark:hover:border-white/20">
@@ -23,13 +23,14 @@
             </div>
 
             <div class="min-w-0">
-                <h3 class="truncate text-base font-semibold
+                <h3 data-season-name class="truncate text-base font-semibold
                            text-gray-900 dark:text-white">
                     {{ season.name }}
                 </h3>
 
-                <p class="mt-1 text-xs text-gray-500
-                          dark:text-secondary">
+                <p  data-season-dates
+                        class="mt-1 text-xs text-gray-500
+                        dark:text-secondary">
                     {{ season.start_date|date:"d M Y" }}
                     –
                     {{ season.end_date|date:"d M Y" }}

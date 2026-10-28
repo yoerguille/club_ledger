@@ -24,6 +24,12 @@ class SeasonUpdateView(LoginRequiredMixin, UpdateView):
         return JsonResponse({
             "success": True,
             "message": "Temporada actualizada correctamente.",
+            "season": {
+                "id": self.object.pk,
+                "name": self.object.name,
+                "start_date": self.object.start_date.strftime("%d/%m/%Y"),
+                "end_date": self.object.end_date.strftime("%d/%m/%Y"),
+            },
         }, status=200)
 
     def form_invalid(self, form):

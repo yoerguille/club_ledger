@@ -58,9 +58,6 @@ class AccountListView(ListView):
                 self._selected_season = Season.objects.filter(is_active=True).first()
 
         return self._selected_season
-    
-            
-
 
     def get_queryset(self):
 
