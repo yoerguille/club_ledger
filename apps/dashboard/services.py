@@ -1,5 +1,6 @@
-from django.db.models import Case, DecimalField, F, Sum, Value, When
+from django.db.models import Case, DecimalField, F, Sum, Value, When, Q
 from django.db.models.functions import Coalesce
+from django.db.models.functions import TruncMonth
 
 from apps.accounts.models import Account
 from apps.customers.models import Customer
@@ -8,6 +9,7 @@ from apps.transactions.models import Transaction
 
 
 from decimal import Decimal
+from datetime import date
 
 from apps.customers.models import Customer
 from apps.seasons.models import Season
@@ -52,3 +54,76 @@ def get_dashboard_stats():
         "total_charges": stats["total_charges"],
         "total_balance": stats["total_balance"],
     }
+
+def get_monthly_transactions(season):
+    """
+    Devuelve el total de cargos y pagos agrupados por mes
+    para una temporada determinada.
+    """
+
+    if season is None:
+        return []
+
+    monthly_data = list(
+        Transaction.objects.filter(
+            account__season=season
+        )
+        .annotate(month=TruncMonth("date"))
+        .values("month")
+        .annotate(
+            charges=Sum(
+                "amount",
+                filter=Q(
+                    movement_type=Transaction.MovementType.CHARGE
+                ),
+                default=0,
+            ),
+            payments=Sum(
+                "amount",
+                filter=Q(
+                    movement_type=Transaction.MovementType.PAYMENT
+                ),
+                default=0,
+            ),
+        )
+        .order_by("month")
+    )
+    return fill_missing_months(monthly_data)
+
+def fill_missing_months(monthly_data):
+    """
+    Completa los meses sin movimientos entre
+    el primer y el último mes registrado.
+    """
+
+    if not monthly_data:
+        return []
+
+    months = {
+        item["month"]: item
+        for item in monthly_data
+    }
+
+    current = monthly_data[0]["month"]
+    last = monthly_data[-1]["month"]
+
+    result = []
+
+    while current <= last:
+        result.append(
+            months.get(
+                current,
+                {
+                    "month": current,
+                    "charges": Decimal("0.00"),
+                    "payments": Decimal("0.00"),
+                },
+            )
+        )
+
+        if current.month == 12:
+            current = date(current.year + 1, 1, 1)
+        else:
+            current = date(current.year, current.month + 1, 1)
+
+    return result

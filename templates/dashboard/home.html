@@ -30,6 +30,18 @@
         {% include "components/cards/stat_card_money.html" with title="Saldo pendiente" value=total_balance subtitle="Temporada activa" %}
 
     </div>
+
+    {% for transactions in monthly_transactions  %}
+    <p class="text-white">
+        {{transactions}}
+    </p>
+      
+    {% endfor %}
+
+    <div class="mt-5 mb-3">
+        {% include "components/canvas/monthly_transactions_chart.html" %}
+    </div>
+
     {% if overdue_follow_ups %}
         <section class="mt-20">
             <div class="mb-4">
@@ -111,5 +123,16 @@
             </div>
         </section>
     {% endif %}
+
+    {{ monthly_chart_data|json_script:"monthly-chart-data" }}
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"
+        defer
+    ></script>
+
+    <script
+        src="{% static 'js/dashboard/monthly_transactions_chart.js' %}"
+        defer
+    ></script>
 
 {% endblock %}

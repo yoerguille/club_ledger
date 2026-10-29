@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
+## [2026-10-29]
+
+### Added
+- Added an interactive monthly charges and payments chart to the dashboard using Chart.js.
+- Added automated tests for monthly transaction aggregation and months without activity.
+
+### Changed
+- Improved monthly financial statistics to include zero-value months between recorded transactions.
+- Enhanced the dashboard with a responsive chart supporting light and dark themes.
+
 ## [2026-10-28]
 
 ### Added

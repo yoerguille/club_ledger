@@ -4,6 +4,7 @@ from apps.seasons.forms import SeasonForm
 
 from .services import get_dashboard_stats
 from apps.collection.services import get_overdue_follow_ups
+from apps.dashboard.services import get_monthly_transactions
 
 # Create your views here.
 
@@ -18,6 +19,19 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context["overdue_follow_ups"] = get_overdue_follow_ups()
 
         context["season_form"] = SeasonForm()
+
+        monthly_transactions = get_monthly_transactions(
+            context["active_season"]
+        )
+        
+        context["monthly_chart_data"] = [
+            {
+                "month": item["month"].strftime("%Y-%m"),
+                "charges": float(item["charges"]),
+                "payments": float(item["payments"]),
+            }
+            for item in monthly_transactions
+        ]
         
         return context
     
