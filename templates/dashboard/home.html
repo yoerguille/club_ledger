@@ -31,15 +31,12 @@
 
     </div>
 
-    {% for transactions in monthly_transactions  %}
-    <p class="text-white">
-        {{transactions}}
-    </p>
-      
-    {% endfor %}
-
     <div class="mt-5 mb-3">
         {% include "components/canvas/monthly_transactions_chart.html" %}
+    </div>
+
+    <div class="mt-5 mb-3">
+        {% include "components/canvas/accounts_distribution_chart.html" %}
     </div>
 
     {% if overdue_follow_ups %}
@@ -125,6 +122,7 @@
     {% endif %}
 
     {{ monthly_chart_data|json_script:"monthly-chart-data" }}
+    {{ accounts_distribution|json_script:"account-distribution-data" }}
     <script
         src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"
         defer
@@ -132,6 +130,11 @@
 
     <script
         src="{% static 'js/dashboard/monthly_transactions_chart.js' %}"
+        defer
+    ></script>
+
+    <script
+        src="{% static 'js/dashboard/accounts_distribution_chart.js' %}"
         defer
     ></script>
 

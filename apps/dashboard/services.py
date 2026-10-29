@@ -1,4 +1,4 @@
-from django.db.models import Case, DecimalField, F, Sum, Value, When, Q
+from django.db.models import Case, DecimalField, F, Sum, Value, When, Q, Count
 from django.db.models.functions import Coalesce
 from django.db.models.functions import TruncMonth
 
@@ -89,6 +89,69 @@ def get_monthly_transactions(season):
         .order_by("month")
     )
     return fill_missing_months(monthly_data)
+
+def get_account_balance_distribution(season):
+    '''
+    Devuelve una clasificación de las cuentas de la temporada
+    según su balance. (Saldo pendiente, saldo 0, saldo negativo o is_closed)
+    '''
+
+    if not season:
+        return {
+            "pending": 0,
+            "balance_0": 0,
+            "closed": 0,
+            "negative_balance": 0,
+        }
+
+    accounts = Account.objects.filter(
+        season = season
+    ).annotate(
+        calculated_balance=Coalesce(
+            Sum(
+                Case(
+                    When(
+                        transactions__movement_type=Transaction.MovementType.CHARGE,
+                        then=F("transactions__amount"),
+                    ),
+                    When(
+                        transactions__movement_type=Transaction.MovementType.PAYMENT,
+                        then=-F("transactions__amount"),
+                    ),
+                    output_field=DecimalField(
+                        max_digits=12,
+                        decimal_places=2,
+                    ),
+                )
+            ),
+            Value(
+                0,
+                output_field=DecimalField(
+                    max_digits=12,
+                    decimal_places=2,
+                ),
+            ),
+        )
+    )
+
+    return accounts.aggregate(
+        pending=Count(
+            "pk",
+            filter=Q(calculated_balance__gt=0, is_closed=False),
+        ),
+        balance_0=Count(
+            "pk",
+            filter=Q(calculated_balance=0, is_closed=False),
+        ),
+        closed=Count(
+            "pk",
+            filter=Q(is_closed=True),
+        ),
+        negative_balance=Count(
+            "pk",
+            filter=Q(calculated_balance__lt=0, is_closed=False),
+        ),
+    )
 
 def fill_missing_months(monthly_data):
     """

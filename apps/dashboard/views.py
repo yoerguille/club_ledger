@@ -4,7 +4,7 @@ from apps.seasons.forms import SeasonForm
 
 from .services import get_dashboard_stats
 from apps.collection.services import get_overdue_follow_ups
-from apps.dashboard.services import get_monthly_transactions
+from apps.dashboard.services import get_monthly_transactions, get_account_balance_distribution
 
 # Create your views here.
 
@@ -23,6 +23,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         monthly_transactions = get_monthly_transactions(
             context["active_season"]
         )
+
+        accounts_distribution = get_account_balance_distribution(
+            context["active_season"]
+        )
         
         context["monthly_chart_data"] = [
             {
@@ -32,6 +36,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             }
             for item in monthly_transactions
         ]
+        context["accounts_distribution"] = accounts_distribution
         
         return context
     
