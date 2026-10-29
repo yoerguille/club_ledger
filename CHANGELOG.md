@@ -7,19 +7,20 @@ The format is based on Keep a Changelog.
 ## [2026-10-29]
 
 ### Added
-- Added an interactive monthly charges and payments chart to the dashboard using Chart.js.
-- Added automated tests for monthly transaction aggregation and months without activity.
+- Added an interactive monthly transactions chart to the dashboard using Chart.js, displaying charges and payments grouped by month.
+- Added a doughnut chart showing the distribution of season accounts by financial status: outstanding balances, zero balances, negative balances, and closed accounts.
+- Added automated tests for monthly transaction aggregation and handling months without transactions.
 
 ### Changed
-- Improved monthly financial statistics to include zero-value months between recorded transactions.
-- Enhanced the dashboard with a responsive chart supporting light and dark themes.
+- Enhanced the dashboard with responsive financial charts supporting light and dark themes.
+- Improved monthly transaction statistics to include months without activity between recorded transactions.
+- Added account balance classification using Django ORM aggregation to calculate account counts by financial status efficiently.
 
 ## [2026-10-28]
 
 ### Added
 - Added AJAX season editing modal to update seasons withour reload page.
 - Added an automated test for SeasonUpdateView, validating permissions, invalid dates and update succesfully.
-
 
 ## [2026-10-27]
 
