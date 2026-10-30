@@ -39,7 +39,7 @@ def get_dashboard_stats():
             "total_transactions": 0,
             "total_payments": Decimal("0.00"),
             "total_charges": Decimal("0.00"),
-            "total_balance": Decimal("0.00"),
+            "total_pending": Decimal("0.00"),
         }
 
     # Reutilizar los cálculos económicos
@@ -53,6 +53,7 @@ def get_dashboard_stats():
         "total_payments": stats["total_payments"],
         "total_charges": stats["total_charges"],
         "total_balance": stats["total_balance"],
+        "total_pending": stats["total_pending"],
     }
 
 def get_monthly_transactions(season):
