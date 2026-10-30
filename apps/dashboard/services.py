@@ -191,3 +191,41 @@ def fill_missing_months(monthly_data):
             current = date(current.year, current.month + 1, 1)
 
     return result
+
+def get_pendings_accounts(season):
+    accounts = Account.objects.filter(
+        season=season
+    ).annotate(
+        calculated_balance=Coalesce(
+            Sum(
+                Case(
+                    When(
+                        transactions__movement_type=Transaction.MovementType.CHARGE,
+                        then=F("transactions__amount"),
+                    ),
+                    When(
+                        transactions__movement_type=Transaction.MovementType.PAYMENT,
+                        then=-F("transactions__amount"),
+                    ),
+                    output_field=DecimalField(
+                        max_digits=12,
+                        decimal_places=2,
+                    ),
+                )
+            ),
+            Value(
+                0,
+                output_field=DecimalField(
+                    max_digits=12,
+                    decimal_places=2,
+                ),
+            ),
+        )
+    )
+
+    pending_accounts = accounts.filter(calculated_balance__gt=0, is_closed=0)
+
+    if pending_accounts.count() == 0:
+        return None
+
+    return pending_accounts.order_by("created_at")[:5]

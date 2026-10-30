@@ -8,6 +8,13 @@ The format is based on Keep a Changelog.
 
 ### Addded
 - Added automated tests for accounts balance distribution.
+- Added a dashboard table displaying the oldest open accounts with outstanding balances.
+- Added direct links to account details, including customer, account, season, outstanding balance, and account age.
+- Added a positive empty state with a success icon when no outstanding accounts are found.
+
+### Changed
+- Improved the dashboard layout to provide quick access to accounts requiring collection attention.
+- Limited the oldest pending accounts list to five records, ordered by account creation date.
 
 ## [2026-10-29]
 
