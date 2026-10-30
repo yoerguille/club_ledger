@@ -12,9 +12,9 @@
 {% block content %}
 
 
-    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    <section class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 
-        {% include "components/cards/stat_card.html" with title="Clientes" value=total_customers subtitle="Clientes activos" %}    
+        {% include "components/cards/stat_card.html" with title="Clientes" value=total_customers subtitle="Clientes activos" %}
 
         {% include "components/cards/stat_card.html" with title="Cuentas" value=total_accounts subtitle="Temporada activa" %}
 
@@ -22,25 +22,28 @@
 
         {% include "components/cards/stat_card_money.html" with title="Pagos" value=total_payments subtitle="Temporada activa" %}
 
+        <div class="sm:col-span-2 lg:col-span-4">
+            {% include "components/cards/stat_card_money.html" with title="Saldo neto" value=total_balance subtitle="Temporada activa" %}
+        </div>
 
-    </div>
+    </section>
 
-    <div class="mt-6">
+    <section class="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-5">
 
-        {% include "components/cards/stat_card_money.html" with title="Saldo pendiente" value=total_balance subtitle="Temporada activa" %}
+        <!-- Evolución mensual: 60 % -->
+        <div class="min-w-0 xl:col-span-3">
+            {% include "components/canvas/monthly_transactions_chart.html" %}
+        </div>
 
-    </div>
+        <!-- Distribución de cuentas: 40 % -->
+        <div class="min-w-0 xl:col-span-2">
+            {% include "components/canvas/accounts_distribution_chart.html" %}
+        </div>
 
-    <div class="mt-5 mb-3">
-        {% include "components/canvas/monthly_transactions_chart.html" %}
-    </div>
-
-    <div class="mt-5 mb-3">
-        {% include "components/canvas/accounts_distribution_chart.html" %}
-    </div>
+    </section>
 
     {% if overdue_follow_ups %}
-        <section class="mt-20">
+        <section class="mt-8">
             <div class="mb-4">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                     Seguimientos que requieren atención
