@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
+## [2026-10-30]
+
+### Addded
+- Added automated tests for accounts balance distribution.
+
 ## [2026-10-29]
 
 ### Added

@@ -13,7 +13,7 @@ from datetime import date
 
 from apps.customers.models import Customer
 from apps.seasons.models import Season
-from apps.seasons.services.season_stats import get_season_stats
+from apps.seasons.services.season_stats import get_season_stats, get_season_pending_balances
 
 
 def get_dashboard_stats():
@@ -105,7 +105,7 @@ def get_account_balance_distribution(season):
         }
 
     accounts = Account.objects.filter(
-        season = season
+        season=season
     ).annotate(
         calculated_balance=Coalesce(
             Sum(
