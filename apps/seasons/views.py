@@ -58,6 +58,7 @@ class SeasonListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             season.edit_form = SeasonForm(instance=season)
 
         context["seasons"] = seasons
+        context["season_form"] = SeasonForm()
 
         return context
 
