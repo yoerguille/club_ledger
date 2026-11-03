@@ -1,5 +1,5 @@
 from django.test import TestCase
-from apps.dashboard.services import get_monthly_transactions, get_account_balance_distribution
+from apps.dashboard.services import get_monthly_transactions, get_account_balance_distribution, get_pendings_accounts
 from apps.transactions.models import Transaction
 from apps.customers.models import Customer
 from apps.seasons.models import Season
@@ -7,9 +7,130 @@ from apps.accounts.models import Account
 from apps.accounts.services import AccountCloseService
 from datetime import date
 from decimal import Decimal
+from datetime import timedelta
+from django.utils import timezone
 
 
 # Create your tests here.
+
+class PendingfiveAccountsTests(TestCase):
+    def setUp(self):
+        self.season = Season.objects.create(
+            name="2026/2027",
+            start_date=date(2026, 9, 1),
+            end_date=date(2027, 6, 30),
+            is_active=True,
+        )
+
+        self.customer = Customer.objects.create(
+            name="Club de prueba",
+        )
+
+        self.account = Account.objects.create(
+            customer=self.customer,
+            season=self.season,
+            name="Cuenta general",
+        )
+
+        self.account2 = Account.objects.create(
+            customer=self.customer,
+            season=self.season,
+            name="Cuenta general",
+        )
+
+        self.account3 = Account.objects.create(
+            customer=self.customer,
+            season=self.season,
+            name="Cuenta general",
+        )
+
+        self.account4 = Account.objects.create(
+            customer=self.customer,
+            season=self.season,
+            name="Cuenta general",
+        )
+
+    def create_transaction_for_differents_accounts(self, movement_type, amount, movement_date, account):
+        return Transaction.objects.create(
+            account=account,
+            movement_type=movement_type,
+            date=movement_date,
+            amount=Decimal(amount),
+            description="Movimiento de prueba",
+            payment_method=(
+                Transaction.PaymentMethod.TRANSFER
+                if movement_type == Transaction.MovementType.PAYMENT
+                else None
+            ),
+        )
+
+    def test_positive_balance_and_closed_accounts(self):
+        self.create_transaction_for_differents_accounts(
+            Transaction.MovementType.CHARGE,
+            "300.00",
+            date(2026, 9, 5),
+            self.account,
+        )
+        self.create_transaction_for_differents_accounts(
+            Transaction.MovementType.PAYMENT,
+            "300.00",
+            date(2026, 9, 15),
+            self.account2,
+        )
+
+        AccountCloseService.close(self.account4)
+
+        result = get_pendings_accounts(self.season)
+
+        self.assertEqual(len(result), 1)
+
+    def test_return_max_five_accounts_order_by_seniority(self):
+        for i in range(6):
+            account = Account.objects.create(
+                customer=self.customer,
+                season=self.season,
+                name=f"Cuenta {i+1}",
+            )
+            self.create_transaction_for_differents_accounts(
+                Transaction.MovementType.CHARGE,
+                "300.00",
+                date(2026, 9, 5),
+                account,
+            )
+
+        result = get_pendings_accounts(self.season)
+
+        self.assertEqual(len(result), 5)
+        self.assertEqual(result[0].name, "Cuenta 1")
+
+    def test_calculate_age_days_for_pending_accounts(self):
+
+        account = Account.objects.create(
+            customer=self.customer,
+            season=self.season,
+            name="Cuenta antigua",
+        )
+
+        self.create_transaction_for_differents_accounts(
+            Transaction.MovementType.CHARGE,
+            "300.00",
+            date(2026, 9, 5),
+            account,
+        )
+
+        creation_date = timezone.now() - timedelta(days=30)
+
+        Account.objects.filter(pk=account.pk).update(
+            created_at=creation_date
+        )
+
+        account.refresh_from_db()
+
+        result = get_pendings_accounts(self.season)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0].age_days, (date.today() - date(2026, 10, 4)).days)
+
+
 
 class AccountsDistributionTests(TestCase):
     def setUp(self):

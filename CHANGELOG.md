@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
+## [2026-11-03]
+
+### Addded
+- Added automated tests for five pendings accounts orderby seniority service.
+- Added styles to navbar and aside.
+
 ## [2026-10-30]
 
 ### Addded

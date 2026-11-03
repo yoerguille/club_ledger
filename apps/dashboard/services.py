@@ -15,6 +15,8 @@ from apps.customers.models import Customer
 from apps.seasons.models import Season
 from apps.seasons.services.season_stats import get_season_stats, get_season_pending_balances
 
+from django.utils import timezone
+
 
 def get_dashboard_stats():
     """
@@ -228,4 +230,12 @@ def get_pendings_accounts(season):
     if pending_accounts.count() == 0:
         return None
 
-    return pending_accounts.order_by("created_at")[:5]
+    pending_accounts = list(pending_accounts.order_by("created_at")[:5])
+
+    today = timezone.localdate()
+    for account in pending_accounts:
+        account.age_days = (
+            today - timezone.localdate(account.created_at)
+        ).days
+
+    return pending_accounts
