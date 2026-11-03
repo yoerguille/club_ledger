@@ -7,7 +7,6 @@ class AccountForm(forms.ModelForm):
         model = Account
 
         fields = [
-            'season',
             'name',
             'notes',
         ]

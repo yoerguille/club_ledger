@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 
+from apps.seasons.models import Season
 from apps.customers.models import Customer
 from apps.accounts.serializers import AccountSerializer
 from apps.accounts.services import register_new_account
@@ -24,8 +25,15 @@ class AccountCreateAPIView(APIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        # 2. Recuperar el customer
+        # 2. Recuperar el customer y la season activa
         customer = get_object_or_404(Customer, pk=customer_pk)
+        season = Season.objects.filter(is_active=True).first()
+
+        if not season:
+            return Response(
+                {"detail": "No hay ninguna temporada activa. Por favor, cree una temporada antes de crear una cuenta."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         # 3. Validar los datos
         serializer = AccountSerializer(data=request.data)
@@ -34,6 +42,7 @@ class AccountCreateAPIView(APIView):
         # 4. Registrar la nueva cuenta
         account = register_new_account(
             customer=customer,
+            season=season,
             **serializer.validated_data,
         )
 

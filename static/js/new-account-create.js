@@ -3,7 +3,6 @@
         console.log("Script de nueva cuenta cargado");
 
         const form = document.getElementById("new-account-form");
-        console.log("Formulario encontrado:", form);
 
         if (!form) return;
 

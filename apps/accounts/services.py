@@ -12,6 +12,11 @@ def register_new_account(
     name,
     notes="",
 ):
+    if not season.is_active:
+        raise ValidationError(
+            "No se puede crear una cuenta para una temporada que no está activa."
+        )
+
     account = Account.objects.create(
         customer=customer,
         season=season,

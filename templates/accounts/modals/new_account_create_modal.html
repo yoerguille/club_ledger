@@ -22,6 +22,52 @@
     >
         {% csrf_token %}
         <div class="space-y-4 p-6">
+            <!-- Temporada asignada automáticamente -->
+            <div class="flex items-center gap-3 rounded-lg
+                        border border-gray-200 bg-gray-50 p-4
+                        dark:border-zinc-700 dark:bg-dark-secondary">
+
+                <div class="flex h-10 w-10 shrink-0 items-center
+                            justify-center rounded-lg
+                            bg-blue-100 text-btn-primary
+                            dark:bg-btn-primary/15">
+
+                    <svg class="h-5 w-5"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        viewBox="0 0 24 24">
+                        <rect x="3" y="5" width="18" height="16" rx="2"/>
+                        <path stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16 3v4M8 3v4M3 10h18"/>
+                    </svg>
+
+                </div>
+
+                <div class="min-w-0 flex-1">
+                    <p class="text-xs text-gray-500 dark:text-secondary">
+                        Temporada asignada automáticamente
+                    </p>
+
+                    <p class="mt-0.5 font-semibold text-gray-900 dark:text-white">
+                        {% if active_season %}
+                            {{ active_season.name }}
+                        {% else %}
+                            Sin temporada activa
+                        {% endif %}
+                    </p>
+                </div>
+
+                {% if active_season %}
+                    <span class="rounded-full bg-green-100 px-2.5 py-1
+                                text-xs font-medium text-green-700
+                                dark:bg-green-900/30 dark:text-green-400">
+                        Activa
+                    </span>
+                {% endif %}
+            </div>
+
             {% for field in account_form %}
                 <div>
                     {% include "components/forms/field.html" with field=field %}

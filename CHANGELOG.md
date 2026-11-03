@@ -6,9 +6,15 @@ The format is based on Keep a Changelog.
 
 ## [2026-11-03]
 
+### Changed
+- Restricted account creation to the currently active season.
+- Removed the season selection field from the account creation form, assigning the active season automatically.
+- Updated account creation validation in both the service layer and API serializer to prevent creating accounts in inactive seasons.
+
 ### Addded
 - Added automated tests for five pendings accounts orderby seniority service.
 - Added styles to navbar and aside.
+- Added automated tests to verify active-season restrictions in the account creation service and API serializer.
 
 ## [2026-10-30]
 

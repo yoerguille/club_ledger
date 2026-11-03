@@ -2,6 +2,7 @@ from django.test import TestCase
 from apps.customers.models import Customer
 from apps.seasons.models import Season
 from apps.accounts.models import Account
+from apps.accounts.services import register_new_account
 from apps.accounts.services import AccountCloseService
 from apps.transactions.models import Transaction
 from django.core.exceptions import ValidationError
@@ -86,3 +87,39 @@ class AccountCloseServiceTests(TestCase):
         self.assertEqual(response.status_code, 405)
         self.account.refresh_from_db()
         self.assertFalse(self.account.is_closed)
+
+class AccountCreateServiceTests(TestCase):
+    def setUp(self):
+        self.customer = Customer.objects.create(
+            name="Club Deportivo Test"
+        )
+
+        self.season = Season.objects.create(
+            name="2026/2027",
+            start_date=date(2026, 9, 1),
+            end_date=date(2027, 6, 30),
+            is_active=True,
+        )
+
+    def test_register_new_account_success(self):
+        account = register_new_account(
+            customer=self.customer,
+            season=self.season,
+            name="Cuenta de Prueba",
+            notes="Notas de prueba"
+        )
+
+
+        self.assertIsInstance(account, Account)
+
+    def test_register_new_account_fails_for_inactive_season(self):
+        self.season.is_active = False
+        self.season.save()
+
+        with self.assertRaises(ValidationError):
+            register_new_account(
+                customer=self.customer,
+                season=self.season,
+                name="Cuenta de Prueba",
+                notes="Notas de prueba"
+            )

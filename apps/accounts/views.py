@@ -177,10 +177,21 @@ class AccountCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView)
         return kwargs 
 
     def form_valid(self, form):
+        season = Season.objects.filter(
+            is_active=True
+        ).first()
+
+        if season is None:
+            form.add_error(
+                None,
+                "No hay ninguna temporada activa. Por favor, cree una temporada antes de crear una cuenta."
+            )
+            return self.form_invalid(form)
+
         try:
             register_new_account(
                 customer=self.customer,
-                season=form.cleaned_data['season'],
+                season=form.season,
                 name=form.cleaned_data['name'],
                 notes = form.cleaned_data.get("notes") or "",
 
@@ -209,7 +220,9 @@ class AccountCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView)
         context = super().get_context_data(**kwargs)
         context["customer"] = self.customer
         context["title"] = "Nueva cuenta"
-
+        context["active_season"] = Season.objects.filter(
+            is_active=True
+        ).first()
         return context
 
 class AccountUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
