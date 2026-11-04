@@ -140,6 +140,7 @@ class CustomerDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView
         context["available_seasons"] = Season.objects.filter(
             is_active=True
         ).order_by("-name")
+        context['all_seasons'] = Season.objects.all().order_by("-created_at")
 
 
         context["accounts"] = accounts
