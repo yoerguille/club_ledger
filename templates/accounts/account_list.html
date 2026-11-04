@@ -195,6 +195,62 @@
 
             </div>
 
+            
+            <!-- FILTRO POR SITUACIÓN -->
+            <div class="md:col-span-4">
+
+                <label
+                    for="status"
+                    class="mb-1.5 block text-xs font-medium
+                        text-gray-600 dark:text-secondary"
+                >
+                    Situación de la cuenta
+                </label>
+
+                <select
+                    id="status"
+                    name="status"
+                    class="w-full rounded-lg border border-gray-300
+                        bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900
+                        focus:border-btn-primary focus:outline-none
+                        focus:ring-2 focus:ring-btn-primary/20
+                        dark:border-white/10 dark:bg-dark-secondary
+                        dark:text-white dark:scheme-dark"
+                >
+                    <option value="all">Todas las situaciones</option>
+
+                    <option
+                        value="pending"
+                        {% if request.GET.status == "pending" %}selected{% endif %}
+                    >
+                        Pendientes de cobro
+                    </option>
+
+                    <option
+                        value="zero"
+                        {% if request.GET.status == "zero" %}selected{% endif %}
+                    >
+                        Sin saldo pendiente
+                    </option>
+
+                    <option
+                        value="negative"
+                        {% if request.GET.status == "negative" %}selected{% endif %}
+                    >
+                        Saldo a favor del cliente
+                    </option>
+
+                    <option
+                        value="closed"
+                        {% if request.GET.status == "closed" %}selected{% endif %}
+                    >
+                        Cerradas
+                    </option>
+                </select>
+
+            </div>
+
+
 
             <!-- ACCIONES DE FILTRADO -->
             <div class="flex flex-wrap items-center gap-3

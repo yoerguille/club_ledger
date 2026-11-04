@@ -69,6 +69,7 @@ class AccountListView(ListView):
 
         search = self.request.GET.get("q", "").strip()
         sort = self.request.GET.get("sort", "name_asc")
+        status = self.request.GET.get("status", "all")
 
 
         if search:
@@ -102,8 +103,33 @@ class AccountListView(ListView):
             )
         )
 
+        
+        # FILTRADO POR SITUACIÓN
+        if status == "pending":
+            queryset = queryset.filter(
+                account_balance__gt=0,
+                is_closed=False,
+            )
+
+        elif status == "zero":
+            queryset = queryset.filter(
+                account_balance=0,
+                is_closed=False,
+            )
+
+        elif status == "negative":
+            queryset = queryset.filter(
+                account_balance__lt=0,
+                is_closed=False,
+            )
+
+        elif status == "closed":
+            queryset = queryset.filter(is_closed=True)
+
+
+        # ORDENACIÓN
         if sort == "name_desc":
-            queryset =  queryset.order_by("-name")
+            queryset = queryset.order_by("-name")
 
         elif sort == "balance_asc":
             queryset = queryset.order_by("account_balance")
