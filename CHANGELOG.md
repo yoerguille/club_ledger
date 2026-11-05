@@ -10,6 +10,12 @@ The format is based on Keep a Changelog.
 ### Added
 - Added multi-select account status filtering with checkboxes for pending balances, zero balances, negative balances, and closed accounts.
 - Added support for combining multiple account statuses using Django ORM Q expressions.
+- Added pagination to the account list, displaying up to 20 accounts per page.
+- Added pagination controls with page numbers and previous/next navigation.
+
+### Changed
+- Preserved active search, sorting, season selection, and multiple status filters when navigating between pages.
+- Updated the account list results counter to display the total number of matching accounts instead of the current page count.
 
 ## [2026-11-04]
 
@@ -17,6 +23,7 @@ The format is based on Keep a Changelog.
 - Redesigned the account list with a more consultation-focused layout and improved navigation to account and customer details.
 - Improved account filtering to allow combining status selection, text search, and sorting.
 - Separated season navigation from account filters, providing dedicated access to the active season and historical seasons.
+
 
 ## [2026-11-03]
 
