@@ -17,6 +17,7 @@ from .services import register_new_account, AccountCloseService
 from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST
 from apps.transactions.forms import ChargeForm, PaymentForm
+from django.db.models import Q
 
 # Create your views here.
 
@@ -69,7 +70,7 @@ class AccountListView(ListView):
 
         search = self.request.GET.get("q", "").strip()
         sort = self.request.GET.get("sort", "name_asc")
-        status = self.request.GET.get("status", "all")
+        statuses = self.request.GET.getlist("status")
 
 
         if search:
@@ -103,28 +104,23 @@ class AccountListView(ListView):
             )
         )
 
+        status_filter = Q()
         
         # FILTRADO POR SITUACIÓN
-        if status == "pending":
-            queryset = queryset.filter(
-                account_balance__gt=0,
-                is_closed=False,
-            )
+        if "pending" in statuses:
+            status_filter |= Q(account_balance__gt=0, is_closed=False)
 
-        elif status == "zero":
-            queryset = queryset.filter(
-                account_balance=0,
-                is_closed=False,
-            )
+        if "negative" in statuses:
+            status_filter |= Q(account_balance__lt=0, is_closed=False)
 
-        elif status == "negative":
-            queryset = queryset.filter(
-                account_balance__lt=0,
-                is_closed=False,
-            )
+        if "zero" in statuses:
+            status_filter |= Q(account_balance=0, is_closed=False)
 
-        elif status == "closed":
-            queryset = queryset.filter(is_closed=True)
+        if "closed" in statuses:
+            status_filter |= Q(is_closed=True)
+
+        if statuses:
+            queryset = queryset.filter(status_filter)
 
 
         # ORDENACIÓN
@@ -155,6 +151,7 @@ class AccountListView(ListView):
             context["active_season"] = active_season
             context["selected_season"] = selected_season
             context["seasons"] = Season.objects.all().order_by("start_date")
+            context["selected_statuses"] = self.request.GET.getlist("status")
 
             return context
 

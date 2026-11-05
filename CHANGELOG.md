@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
+
+## [2026-11-05]
+
+### Added
+- Added multi-select account status filtering with checkboxes for pending balances, zero balances, negative balances, and closed accounts.
+- Added support for combining multiple account statuses using Django ORM Q expressions.
+
+## [2026-11-04]
+
+### Changed
+- Redesigned the account list with a more consultation-focused layout and improved navigation to account and customer details.
+- Improved account filtering to allow combining status selection, text search, and sorting.
+- Separated season navigation from account filters, providing dedicated access to the active season and historical seasons.
+
 ## [2026-11-03]
 
 ### Changed
