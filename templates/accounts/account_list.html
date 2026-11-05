@@ -40,6 +40,7 @@
                     text-gray-500 dark:text-secondary"
             >
                 Temporada
+                {% if season in seasons is season.is_active %}· Activa{% endif %}
             </label>
 
             <select
@@ -62,7 +63,7 @@
                         {% endif %}
                     >
                         {{ season.name }}
-                        {% if season.is_active %}· Activa{% endif %}
+                        
                     </option>
                 {% endfor %}
             </select>

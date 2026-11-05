@@ -75,7 +75,8 @@ class AccountListView(ListView):
 
         if search:
             queryset = queryset.filter(
-                name__icontains=search
+                Q(name__icontains=search) |
+                Q(customer__name__icontains=search)
             )
 
         queryset = queryset.annotate(
