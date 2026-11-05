@@ -1,39 +1,33 @@
+
 document.addEventListener("DOMContentLoaded", () => {
 
-    const paymentForm = document.getElementById("payment-create-form");
-    const paymentAccountName = document.getElementById("payment-account-name");
+    function setupTransactionModal(type) {
+        const form = document.getElementById(`${type}-create-form`);
+        const accountName = document.getElementById(`${type}-account-name`);
 
-    if (!paymentForm || !paymentAccountName) return;
+        if (!form || !accountName) return;
 
-    document.querySelectorAll("[data-payment-url]").forEach(button => {
+        document.querySelectorAll(`[data-${type}-url]`).forEach(button => {
+            button.addEventListener("click", () => {
 
-        button.addEventListener("click", () => {
+                // Configurar la cuenta seleccionada
+                form.dataset.apiUrl = button.dataset[`${type}Url`];
+                accountName.textContent = button.dataset.accountName;
 
-            // URL de la cuenta seleccionada
-            paymentForm.dataset.apiUrl = button.dataset.paymentUrl;
+                // Limpiar el formulario
+                form.reset();
 
-            // Nombre visible en el modal
-            paymentAccountName.textContent = button.dataset.accountName;
+                // Limpiar errores anteriores
+                form.querySelectorAll('[id$="-error"]').forEach(error => {
+                    error.textContent = "";
+                    error.classList.add("hidden");
+                });
 
-            // Limpiar valores de una apertura anterior
-            paymentForm.reset();
-
-            // Limpiar posibles errores generales
-            const generalError = document.getElementById("payment-form-error");
-
-            if (generalError) {
-                generalError.textContent = "";
-                generalError.classList.add("hidden");
-            }
-
-            // Limpiar errores individuales de los campos
-            paymentForm.querySelectorAll('[id$="-error"]').forEach(error => {
-                error.textContent = "";
-                error.classList.add("hidden");
             });
-
         });
+    }
 
-    });
+    setupTransactionModal("payment");
+    setupTransactionModal("charge");
 
 });

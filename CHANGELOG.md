@@ -12,10 +12,14 @@ The format is based on Keep a Changelog.
 - Added support for combining multiple account statuses using Django ORM Q expressions.
 - Added pagination to the account list, displaying up to 20 accounts per page.
 - Added pagination controls with page numbers and previous/next navigation.
+- Added quick actions to register charges and payments directly from the account list.
+- Added dynamic account selection for transaction modals, automatically configuring the corresponding API endpoint.
 
 ### Changed
 - Preserved active search, sorting, season selection, and multiple status filters when navigating between pages.
 - Updated the account list results counter to display the total number of matching accounts instead of the current page count.
+- Reused the existing charge and payment modals across account detail and account list views.
+- Refactored modal initialization to share account selection and form reset logic, avoiding duplicated JavaScript and modal instances.
 
 ## [2026-11-04]
 

@@ -159,6 +159,7 @@ class AccountListView(ListView):
             context["seasons"] = Season.objects.all().order_by("start_date")
             context["selected_statuses"] = self.request.GET.getlist("status")
             context['payment_form'] = PaymentForm()
+            context['charge_form'] = ChargeForm()
             return context
 
 

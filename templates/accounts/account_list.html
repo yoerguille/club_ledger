@@ -668,8 +668,12 @@
                                                     dark:border-zinc-700"></div>
 
                                         <!-- Registrar cargo -->
-                                        <a
-                                            href="{% url 'transactions:charge_create' account.pk %}"
+                                        <button
+                                            type="button"
+                                            data-modal-target="charge-create-modal"
+                                            data-modal-toggle="charge-create-modal"
+                                            data-charge-url="{% url 'api_charge_create' account.pk %}"
+                                            data-account-name="{{ account.name }}"
                                             class="flex items-center gap-3 px-4 py-2.5
                                                 text-sm text-gray-700
                                                 transition-colors hover:bg-gray-100
@@ -690,7 +694,7 @@
                                             </svg>
 
                                             Registrar cargo
-                                        </a>
+                                        </button>
 
                                         <!-- Registrar pago -->
                                         <button
@@ -893,4 +897,6 @@
 
 </div>
 {% include "accounts/modals/payment_create_modal.html" %}
+{% include "accounts/modals/charge_create_modal.html" %}
+
 {% endblock %}
