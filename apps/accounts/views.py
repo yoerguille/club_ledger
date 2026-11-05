@@ -47,6 +47,7 @@ class AccountListView(ListView):
     model=Account
     template_name ="accounts/accounts_list.html"
     context_object_name ="accounts"
+    paginate_by = 20
 
     def get_season(self):
         if not hasattr(self, "_selected_season"):
@@ -148,7 +149,11 @@ class AccountListView(ListView):
             ).first()
     
             selected_season = self.get_season()
-    
+
+            query_params = self.request.GET.copy()
+            query_params.pop("page", None)
+
+            context["pagination_query"] = query_params.urlencode()
             context["active_season"] = active_season
             context["selected_season"] = selected_season
             context["seasons"] = Season.objects.all().order_by("start_date")
