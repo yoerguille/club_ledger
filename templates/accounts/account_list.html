@@ -350,41 +350,32 @@
 
 
             <!-- ACCIONES DE FILTRADO -->
-            <div class="flex flex-wrap items-center gap-3
-                        border-t border-gray-100 pt-4
-                        dark:border-white/10 md:col-span-12">
+            {% if request.GET.q or request.GET.search or request.GET.sort or request.GET.statuses %}
+                <div class="flex flex-wrap items-center gap-3
+                            border-t border-gray-100 pt-4
+                            dark:border-white/10 md:col-span-12">
 
-                <button
-                    type="submit"
-                    class="inline-flex items-center justify-center
-                           rounded-lg bg-btn-primary px-4 py-2
-                           text-sm font-medium text-white
-                           transition-colors hover:bg-btn-hover-primary
-                           focus-visible:outline-2
-                           focus-visible:outline-offset-2
-                           focus-visible:outline-btn-primary"
-                >
-                    Aplicar filtros
-                </button>
+                    
+                    
+                        <a
+                            href="{% url 'accounts:account_list' %}"
+                            class="rounded-lg px-3 py-2 text-sm font-medium
+                                text-gray-600 hover:bg-gray-100
+                                dark:text-gray-300 dark:hover:bg-dark-tertiary"
+                        >
+                            Restablecer
+                        </a>
 
-                <a
-                    href="{% url 'accounts:account_list' %}"
-                    class="rounded-lg px-3 py-2 text-sm font-medium
-                           text-gray-600 hover:bg-gray-100
-                           dark:text-gray-300 dark:hover:bg-dark-tertiary"
-                >
-                    Restablecer
-                </a>
+                    
 
-                {% if request.GET.q or request.GET.sort or request.GET.season %}
+                        <span class="text-xs text-gray-500 dark:text-secondary">
+                            Consulta personalizada
+                        </span>
 
-                    <span class="text-xs text-gray-500 dark:text-secondary">
-                        Consulta personalizada
-                    </span>
+                    
 
-                {% endif %}
-
-            </div>
+                </div>
+            {% endif %}
 
         </form>
 
