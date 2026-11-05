@@ -325,7 +325,9 @@
                 >
 
                     {% for season in all_seasons %}
-                        <option value="{{ season.pk }}">
+                        <option value="{{ season.pk }}"
+                        {% if season.pk == selected_season.pk %} selected {% endif %}
+                        >
                             {{ season.name }}
                         </option>
                     {% empty %}

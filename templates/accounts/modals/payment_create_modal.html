@@ -12,16 +12,39 @@
 
 {% block modal_content %}
 
-    {% if not account.is_closed %}
 
         <!-- Formulario -->
         <form
             id="payment-create-form"
-            data-api-url="{% url 'api_payment_create' account.pk %}"
+            data-api-url="{% if account %}{% url 'api_payment_create' account.pk %}{% endif %}"
         >
             {% csrf_token %}
             <!-- Cuerpo -->
             <div class="space-y-4 p-6">
+                <!-- Cuenta seleccionada -->
+                <div
+                    id="payment-account-info"
+                    class="rounded-lg border border-gray-200
+                        bg-gray-50 p-3
+                        dark:border-white/10 dark:bg-dark-secondary"
+                >
+                    <p class="text-xs text-gray-500 dark:text-secondary">
+                        Registrar pago en
+                    </p>
+
+                    <p
+                        id="payment-account-name"
+                        class="mt-1 text-sm font-semibold
+                            text-gray-900 dark:text-white"
+                    >
+                        {% if account %}
+                            {{ account.name }}
+                        {% else %}
+                            Selecciona una cuenta
+                        {% endif %}
+                    </p>
+                </div>
+
                 {% for field in payment_form %}
                     <div>
                         {% include "components/forms/field.html" with field=field %}
@@ -84,6 +107,4 @@
             </div>
 
         </form>
-
-    {% endif %}
 {% endblock %}

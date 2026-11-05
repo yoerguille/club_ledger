@@ -1,8 +1,15 @@
 
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Cuentas{% endblock %}
 {% block page_title %}Cuentas{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/account_list_modals.js' %}" defer></script>
+    <script src="{% static 'js/payment-create.js' %}" defer></script>
+    <script src="{% static 'js/charge-create.js' %}" defer></script>
+{% endblock %}
 
 {% block content %}
 
@@ -568,38 +575,158 @@
 
 
 
-                            <!-- ENLACE AL DETALLE -->
+                            <!-- ACCIONES DE LA CUENTA -->
                             <td class="px-5 py-4 text-right">
 
-                                <a
-                                    href="{% url 'accounts:account_detail' account.pk %}"
-                                    aria-label="Ver detalle de {{ account.name }}"
-                                    class="inline-flex items-center
-                                           whitespace-nowrap rounded-lg
-                                           border border-gray-200
-                                           px-3 py-1.5 text-xs font-medium
-                                           text-gray-700 transition-colors
-                                           hover:border-btn-primary
-                                           hover:text-btn-primary
-                                           focus-visible:outline-2
-                                           focus-visible:outline-offset-2
-                                           focus-visible:outline-btn-primary
-                                           dark:border-white/10
-                                           dark:text-gray-300
-                                           dark:hover:border-btn-primary
-                                           dark:hover:bg-dark-secondary
-                                           dark:hover:text-blue-400"
+                                <!-- Botón de tres puntos -->
+                                <button
+                                    id="account-actions-button-{{ account.pk }}"
+                                    data-dropdown-toggle="account-actions-{{ account.pk }}"
+                                    data-dropdown-placement="bottom-end"
+                                    type="button"
+                                    aria-label="Acciones de {{ account.name }}"
+                                    aria-haspopup="true"
+                                    class="inline-flex h-9 w-9 items-center justify-center
+                                        rounded-lg border border-gray-200
+                                        bg-white text-gray-500
+                                        transition-colors
+                                        hover:border-gray-300 hover:bg-gray-50
+                                        hover:text-gray-900
+                                        focus:outline-none focus:ring-2
+                                        focus:ring-btn-primary/30
+                                        dark:border-white/10
+                                        dark:bg-dark-secondary
+                                        dark:text-gray-400
+                                        dark:hover:bg-dark-tertiary
+                                        dark:hover:text-white"
+                                >
+                                    <svg
+                                        class="h-5 w-5"
+                                        fill="currentColor"
+                                        viewBox="0 0 24 24"
+                                        aria-hidden="true"
+                                    >
+                                        <circle cx="5" cy="12" r="1.8"/>
+                                        <circle cx="12" cy="12" r="1.8"/>
+                                        <circle cx="19" cy="12" r="1.8"/>
+                                    </svg>
+                                </button>
+
+                                <!-- Menú desplegable -->
+                                <div
+                                    id="account-actions-{{ account.pk }}"
+                                    class="z-50 hidden w-52 overflow-hidden
+                                        rounded-xl border border-gray-200
+                                        bg-white py-1 shadow-lg
+                                        dark:border-zinc-700
+                                        dark:bg-dark-secondary"
                                 >
 
-                                    Ver cuenta
+                                    <!-- Ver detalle -->
+                                    <a
+                                        href="{% url 'accounts:account_detail' account.pk %}"
+                                        class="flex items-center gap-3 px-4 py-2.5
+                                            text-sm text-gray-700
+                                            transition-colors hover:bg-gray-100
+                                            dark:text-gray-200
+                                            dark:hover:bg-dark-tertiary"
+                                    >
+                                        <span class="w-5 text-center" aria-hidden="true">
+                                            ↗
+                                        </span>
+                                        Ver detalle
+                                    </a>
 
-                                    <span class="ml-1" aria-hidden="true">
-                                        ↗
-                                    </span>
+                                    {% if not account.is_closed %}
 
-                                </a>
+                                        <!-- Editar cuenta -->
+                                        <a
+                                            href="{% url 'accounts:account_update' account.pk %}"
+                                            class="flex items-center gap-3 px-4 py-2.5
+                                                text-sm text-gray-700
+                                                transition-colors hover:bg-gray-100
+                                                dark:text-gray-200
+                                                dark:hover:bg-dark-tertiary"
+                                        >
+                                            <svg
+                                                class="h-4 w-4 shrink-0"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="1.8"
+                                                viewBox="0 0 24 24"
+                                                aria-hidden="true"
+                                            >
+                                                <path stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L9 17l-4 1 1-4Z"/>
+                                            </svg>
+
+                                            Editar cuenta
+                                        </a>
+
+                                        <div class="my-1 border-t border-gray-100
+                                                    dark:border-zinc-700"></div>
+
+                                        <!-- Registrar cargo -->
+                                        <a
+                                            href="{% url 'transactions:charge_create' account.pk %}"
+                                            class="flex items-center gap-3 px-4 py-2.5
+                                                text-sm text-gray-700
+                                                transition-colors hover:bg-gray-100
+                                                dark:text-gray-200
+                                                dark:hover:bg-dark-tertiary"
+                                        >
+                                            <svg
+                                                class="h-4 w-4 shrink-0"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="1.8"
+                                                viewBox="0 0 24 24"
+                                                aria-hidden="true"
+                                            >
+                                                <circle cx="12" cy="12" r="9"/>
+                                                <path stroke-linecap="round"
+                                                    d="M12 8v8M8 12h8"/>
+                                            </svg>
+
+                                            Registrar cargo
+                                        </a>
+
+                                        <!-- Registrar pago -->
+                                        <button
+                                            type="button"
+                                            data-modal-target="payment-create-modal"
+                                            data-modal-toggle="payment-create-modal"
+                                            data-payment-url="{% url 'api_payment_create' account.pk %}"
+                                            data-account-name="{{ account.name }}"
+                                            class="flex items-center gap-3 px-4 py-2.5
+                                                text-sm text-gray-700
+                                                transition-colors hover:bg-gray-100
+                                                dark:text-gray-200
+                                                dark:hover:bg-dark-tertiary"
+                                        >
+                                            <svg
+                                                class="h-4 w-4 shrink-0"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="1.8"
+                                                viewBox="0 0 24 24"
+                                                aria-hidden="true"
+                                            >
+                                                <rect x="3" y="5" width="18" height="14" rx="2"/>
+                                                <path stroke-linecap="round"
+                                                    d="M3 10h18M7 15h3"/>
+                                            </svg>
+
+                                            Registrar pago
+                                        </button>
+
+                                    {% endif %}
+
+                                </div>
 
                             </td>
+
 
                         </tr>
 
@@ -765,5 +892,5 @@
     </section>
 
 </div>
-
+{% include "accounts/modals/payment_create_modal.html" %}
 {% endblock %}
