@@ -18,6 +18,7 @@ from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST
 from apps.transactions.forms import ChargeForm, PaymentForm
 from django.db.models import Q
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -255,14 +256,27 @@ class AccountCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView)
         ).first()
         return context
 
-class AccountUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class AccountUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Account
-    permission_required = "accounts.change_account"
     form_class = AccountForm
     template_name = "accounts/account_form.html"
+    permission_required="accounts.change_account"
 
-    def get_success_url(self):
-        return reverse_lazy(
-            "accounts:account_detail",
-            kwargs = {"pk": self.object.pk},
-        )
+    def form_valid(self, form):
+        self.object = form.save()
+
+        return JsonResponse({
+            "success": True,
+            "message": "Cuenta actualizada correctamente.",
+            "account": {
+                "id": self.object.pk,
+                "name": self.object.name,
+                "notes": self.object.notes,
+            },
+        }, status=200)
+
+    def form_invalid(self, form):
+        return JsonResponse({
+            "success": False,
+            "errors": form.errors.get_json_data(),
+        }, status=400)

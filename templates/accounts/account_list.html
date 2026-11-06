@@ -640,8 +640,12 @@
                                     {% if not account.is_closed %}
 
                                         <!-- Editar cuenta -->
-                                        <a
-                                            href="{% url 'accounts:account_update' account.pk %}"
+                                        <button
+                                            type="button"
+                                            data-modal-target="account-edit-modal"
+                                            data-modal-toggle="account-edit-modal"
+                                            data-edit-url="{% url 'accounts:account_update' account.pk %}"
+                                            data-account-name="{{ account.name }}"
                                             class="flex items-center gap-3 px-4 py-2.5
                                                 text-sm text-gray-700
                                                 transition-colors hover:bg-gray-100
@@ -662,7 +666,7 @@
                                             </svg>
 
                                             Editar cuenta
-                                        </a>
+                                        </button>
 
                                         <div class="my-1 border-t border-gray-100
                                                     dark:border-zinc-700"></div>
@@ -898,5 +902,6 @@
 </div>
 {% include "accounts/modals/payment_create_modal.html" %}
 {% include "accounts/modals/charge_create_modal.html" %}
+{% include "accounts/modals/update_account_modal.html" %}
 
 {% endblock %}
