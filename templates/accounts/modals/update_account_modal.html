@@ -2,6 +2,7 @@
 {% extends "components/modals/base_modal.html" %}
 
 {% block modal_id %}account-edit-modal{% endblock %}
+
 {% block modal_close_id %}account-edit-modal{% endblock %}
 
 {% block modal_title %}Editar cuenta{% endblock %}
@@ -12,110 +13,68 @@
 
 {% block modal_content %}
 
-    <form
-        id="account-edit-form"
-        class="account-edit-form"
-        data-api-url=""
-        method="post"
-    >
-        {% csrf_token %}
+<form
+    id="account-edit-form"
+    method="post"
+>
+    {% csrf_token %}
+    <!-- Cuerpo -->
+    <div class="space-y-4 p-6">
 
-        <div class="space-y-4 p-6">
-
-            <!-- Cuenta seleccionada -->
-            <div class="rounded-lg border border-gray-200
-                        bg-gray-50 p-3
-                        dark:border-white/10 dark:bg-dark-secondary">
-
-                <p class="text-xs text-gray-500 dark:text-secondary">
-                    Editando cuenta
-                </p>
-
-                <p
-                    id="account-edit-name"
-                    class="mt-1 text-sm font-semibold
-                           text-gray-900 dark:text-white"
-                >
-                    Selecciona una cuenta
-                </p>
-
-            </div>
-
-            <!-- Nombre -->
+        {% for field in account_update_form %}
             <div>
-                <label
-                    for="account-edit-input"
-                    class="mb-1.5 block text-sm font-medium
-                           text-gray-700 dark:text-gray-200"
-                >
-                    Nombre de la cuenta
-                </label>
-
-                <input
-                    id="account-edit-input"
-                    type="text"
-                    name="name"
-                    maxlength="255"
-                    required
-                    class="w-full rounded-lg border border-gray-300
-                           bg-gray-50 px-3 py-2.5 text-sm
-                           text-gray-900
-                           focus:border-btn-primary
-                           focus:outline-none
-                           focus:ring-2 focus:ring-btn-primary/20
-                           dark:border-white/10
-                           dark:bg-dark-secondary
-                           dark:text-white"
-                >
+                {% include "components/forms/field.html" with field=field %}
 
                 <p
-                    data-field-error="name"
+                    id="{{ field.name }}-error"
                     class="mt-1 hidden text-sm text-red-500"
                 ></p>
             </div>
+        {% endfor %}
+        <!-- Errores generales -->
+        <div
+            data-form-errors
+            role="alert"
+            class="hidden rounded-lg bg-red-50 p-3
+                   text-sm text-red-700
+                   dark:bg-red-900/20
+                   dark:text-red-400"
+        ></div>
 
-            <!-- Errores generales -->
-            <div
-                data-form-errors
-                role="alert"
-                class="hidden rounded-lg bg-red-50 p-3
-                       text-sm text-red-700
-                       dark:bg-red-900/20 dark:text-red-400"
-            ></div>
+    </div>
 
-        </div>
+    <!-- Pie -->
+    <div class="flex justify-end gap-3
+               border-t border-gray-200 p-5
+               dark:border-white/10">
 
-        <!-- Pie -->
-        <div class="flex justify-end gap-3
-                    border-t border-gray-200 p-5
-                    dark:border-white/10">
+        <button
+            type="button"
+            data-modal-hide="account-edit-modal"
+            class="rounded-lg bg-gray-200 px-4 py-2
+                   text-sm font-medium text-gray-800
+                   transition-colors hover:bg-gray-300
+                   dark:bg-dark-secondary
+                   dark:text-gray-200
+                   dark:hover:bg-dark-tertiary"
+        >
+            Cancelar
+        </button>
 
-            <button
-                type="button"
-                data-modal-hide="account-edit-modal"
-                class="rounded-lg bg-gray-200 px-4 py-2
-                       text-sm font-medium text-gray-800
-                       hover:bg-gray-300
-                       dark:bg-dark-secondary
-                       dark:text-gray-200
-                       dark:hover:bg-dark-tertiary"
-            >
-                Cancelar
-            </button>
+        <button type="submit"
+        class="rounded-lg bg-btn-primary px-4 py-2
+            text-sm font-medium text-white
+            transition-colors
+            hover:bg-btn-hover-primary
+            focus:outline-none
+            focus:ring-2 focus:ring-btn-primary/40
+            disabled:cursor-not-allowed
+            disabled:opacity-50"
+        >
+            Guardar cambios
+        </button>
 
-            <button
-                type="submit"
-                class="rounded-lg bg-btn-primary px-4 py-2
-                       text-sm font-medium text-white
-                       hover:bg-btn-hover-primary
-                       disabled:cursor-not-allowed
-                       disabled:opacity-50"
-            >
-                Guardar cambios
-            </button>
-
-        </div>
-
-    </form>
+    </div>
+</form>
 
 {% endblock %}

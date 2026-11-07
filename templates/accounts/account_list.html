@@ -483,6 +483,7 @@
                     <!-- Cuenta -->
                     <a
                         href="{% url 'accounts:account_detail' account.pk %}"
+                        data-account-name-display="{{ account.pk }}"
                         class="block w-fit font-semibold text-gray-900
                             hover:text-btn-primary
                             dark:text-white dark:hover:text-blue-400"
@@ -644,6 +645,7 @@
                                             type="button"
                                             data-modal-target="account-edit-modal"
                                             data-modal-toggle="account-edit-modal"
+
                                             data-edit-url="{% url 'accounts:account_update' account.pk %}"
                                             data-account-name="{{ account.name }}"
                                             class="flex items-center gap-3 px-4 py-2.5

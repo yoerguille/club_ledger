@@ -19,3 +19,20 @@ class AccountForm(forms.ModelForm):
 
             if isinstance(field.widget, forms.Textarea):
                 field.widget.attrs['rows']= 2
+
+class AccountUpdateForm(forms.ModelForm):
+    class Meta:
+            model = Account
+            fields = [
+                'name',
+                'notes',
+            ]
+
+    def __init__(self, *args, customer=None, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+            field.widget.attrs["class"] = INPUT_CLASSES
+
+            if isinstance(field.widget, forms.Textarea):
+                field.widget.attrs['rows']= 2

@@ -6,7 +6,7 @@ from django.views.generic import UpdateView, DetailView, CreateView, ListView
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.urls import reverse
-from .forms import AccountForm
+from .forms import AccountForm, AccountUpdateForm
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.db.models.functions import Coalesce
@@ -161,6 +161,7 @@ class AccountListView(ListView):
             context["selected_statuses"] = self.request.GET.getlist("status")
             context['payment_form'] = PaymentForm()
             context['charge_form'] = ChargeForm()
+            context['account_update_form'] = AccountUpdateForm()
             return context
 
 
@@ -258,11 +259,20 @@ class AccountCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView)
 
 class AccountUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Account
-    form_class = AccountForm
-    template_name = "accounts/account_form.html"
+    form_class = AccountUpdateForm
     permission_required="accounts.change_account"
 
     def form_valid(self, form):
+        if self.object.is_closed:
+            return JsonResponse({
+                "success": False,
+                "errors": {
+                    "__all__" : ["No se puede actualizar una cuenta cerrada."],
+            },
+                },
+                status=400,
+                )
+
         self.object = form.save()
 
         return JsonResponse({

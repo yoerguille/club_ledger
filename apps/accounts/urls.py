@@ -7,7 +7,7 @@ app_name = 'accounts'
 urlpatterns = [
     path("<int:pk>/", AccountDetailView.as_view(), name="account_detail"),
     path("customers/<int:customer_pk>/create/", AccountCreateView.as_view(), name="account_create"),
-    path("<int:pk>/edit", AccountUpdateView.as_view(), name="account_update"),
+    path("<int:pk>/update", AccountUpdateView.as_view(), name="account_update"),
     path("list/", AccountListView.as_view(), name="account_list"),
     path("<int:pk>/close/", closed_account, name="account_close",
 ),
