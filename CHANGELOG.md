@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
+## [2026-11-07]
+
+### Added
+- Added account name editing directly from the account list using a reusable Flowbite modal.
+- Added AJAX-based account updates using Django `UpdateView`, `ModelForm`, and JSON responses.
+- Added inline validation feedback for account editing forms.
+
+### Changed
+- Updated account list actions to dynamically populate the edit modal with the selected account's name and update endpoint.
+- Restricted account editing to the `name` field, preserving the associated customer, season, and other account data.
 
 ## [2026-11-05]
 
