@@ -10,6 +10,9 @@ The format is based on Keep a Changelog.
 - Added pagination to customer list.
 - Added pagination also to transactions on accounts detail view.
 
+### Changed
+- Changed seasons selector order in accounts list.
+
 ## [2026-11-07]
 
 ### Added
