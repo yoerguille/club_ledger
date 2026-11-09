@@ -579,7 +579,7 @@
                             <!-- ACCIONES DE LA CUENTA -->
                             <td class="px-5 py-4 text-right">
 
-                                <!-- Botón de tres puntos -->
+                                <!-- Three dots button -->
                                 <button
                                     id="account-actions-button-{{ account.pk }}"
                                     data-dropdown-toggle="account-actions-{{ account.pk }}"
@@ -637,6 +637,27 @@
                                         </span>
                                         Ver detalle
                                     </a>
+
+                                    <!-- Enviar email -->
+                                    <form
+                                        method="post"
+                                        action="{% url 'statements:statement_info_email' account.pk %}"
+                                        class="inline"
+                                    >
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="flex items-center gap-3 px-4 py-2.5
+                                            text-sm text-gray-700
+                                            transition-colors hover:bg-gray-100
+                                            dark:text-gray-200
+                                            dark:hover:bg-dark-tertiary"
+                                        >
+                                            ✉ Enviar por email
+                                        </button>
+
+                                    </form>
 
                                     {% if not account.is_closed %}
 

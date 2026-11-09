@@ -10,7 +10,7 @@ The format is based on Keep a Changelog.
 - Added pagination to customer list.
 - Added pagination also to transactions on accounts detail view.
 - Added posibility to send a reminder statement email without create any followyup, just as an info email.
-
+- Added send reminder statement email from accounts list as fast action.
 
 ### Changed
 - Changed seasons selector order in accounts list.
