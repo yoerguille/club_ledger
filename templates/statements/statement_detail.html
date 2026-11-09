@@ -34,6 +34,22 @@
             type="submit"
             class="document-btn document-btn-success"
         >
+            Enviar recordatorio de pago
+        </button>
+
+    </form>
+
+    <form
+        method="post"
+        action="{% url 'statements:statement_info_email' account.pk %}"
+        class="inline"
+    >
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="document-btn document-btn-email"
+        >
             ✉ Enviar por email
         </button>
 

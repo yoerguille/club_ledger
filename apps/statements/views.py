@@ -93,8 +93,44 @@ class StatementEmailView(LoginRequiredMixin, View):
             "accounts:account_detail",
             pk=account.pk,
         )
-            
 
+class StatementInfoEmailView(LoginRequiredMixin, TemplateView):
+
+    def post(self, request, account_pk):
+
+        account = get_object_or_404(
+            Account,
+            pk=account_pk,
+        )
+
+        customer  = account.customer
+
+        if not customer.email:
+            messages.error(
+                request,
+                "El cliente no tiene una dirección de email registrada."
+            )
+
+            return redirect(
+                "accounts:account_detail",
+                pk=account.pk,
+            )
+
+        base_url = request.build_absolute_uri("/")
+
+        StatementEmailSender(account).send(
+            base_url=base_url,
+        )
+
+        messages.success(
+            request,
+            f"Email enviado correctamente a {customer.email}.",
+        )
+
+        return redirect(
+            "accounts:account_detail",
+            pk=account.pk,
+        )
 
 class StatementPdfView(LoginRequiredMixin, View):
 

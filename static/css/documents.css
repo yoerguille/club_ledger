@@ -533,6 +533,14 @@
 
 }
 
+.document-btn-email {
+
+    background: #288DD7;
+
+    color: #ffffff;
+
+}
+
 .document-btn-success:hover {
 
     background: #15803d;
