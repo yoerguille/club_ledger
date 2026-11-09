@@ -19,6 +19,7 @@ from django.views.decorators.http import require_POST
 from apps.transactions.forms import ChargeForm, PaymentForm
 from django.db.models import Q
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -175,6 +176,14 @@ class AccountDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        transactions = self.object.transactions.all().order_by("-date", "-pk")
+
+        paginator = Paginator(transactions, 10)
+        page_number = self.request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        context["page_obj"] = page_obj
+        context["transactions"] = page_obj.object_list
         context["collection_reminders"] = (
             CollectionReminder.objects
             .filter(follow_up__account=self.object)

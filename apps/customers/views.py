@@ -26,6 +26,7 @@ class CustomerListView(LoginRequiredMixin, ListView):
     model = Customer
     template_name = "customers/customers_list.html"
     context_object_name = "customers"
+    paginate_by = 20
 
     def get_queryset(self):
         queryset= super().get_queryset()
@@ -92,6 +93,12 @@ class CustomerListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        query_params = self.request.GET.copy()
+        query_params.pop("page", None)
+
+        context["pagination_query"] = query_params.urlencode()
+
         context["customer_form"] = CustomerForm()
         context["customers_count"] = self.get_queryset().count()
         return context

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
+## [2026-11-09]
+
+### Added
+- Added pagination to customer list.
+- Added pagination also to transactions on accounts detail view.
+
 ## [2026-11-07]
 
 ### Added

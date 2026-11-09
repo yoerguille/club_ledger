@@ -250,19 +250,19 @@
 
         <div class="mb-3">
 
-            <p class="text-sm text-gray-500 dark:text-gray-200 ">
+            <p class="text-sm text-gray-500 dark:text-gray-200 dark:text-secondary">
 
                 {% if customers_count == 1 %}
                     1 cliente
                 {% else %}
-                    {{ customers_count }} clientes
+                    {{ customers_count }} clientes en el listado
                 {% endif %}
 
             </p>
 
         </div>
 
-        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-dark-primary">
 
             <div class="overflow-x-auto">
 
@@ -520,6 +520,101 @@
                 </table>
 
             </div>
+
+            <!-- PAGINACIÓN -->
+            {% if is_paginated %}
+
+                <div class="flex flex-col gap-4
+                            border-t border-gray-200 px-5 py-4
+                            dark:border-white/10
+                            sm:flex-row sm:items-center sm:justify-between">
+
+                    <!-- Información de resultados -->
+                    <p class="text-sm text-gray-500 dark:text-secondary">
+
+                        Mostrando
+
+                        <span class="font-medium text-gray-900 dark:text-white">
+                            {{ page_obj.start_index }}–{{ page_obj.end_index }}
+                        </span>
+
+                        de
+
+                        <span class="font-medium text-gray-900 dark:text-white">
+                            {{ page_obj.paginator.count }}
+                        </span>
+
+                        cuentas
+
+                    </p>
+
+                    <!-- Navegación -->
+                    <nav aria-label="Paginación de cuentas"
+                        class="flex items-center gap-1">
+
+                        <!-- Anterior -->
+                        {% if page_obj.has_previous %}
+                            <a
+                                href="?{{ pagination_query }}&page={{ page_obj.previous_page_number }}"
+                                class="rounded-lg border border-gray-200
+                                    px-3 py-2 text-sm text-gray-600
+                                    transition-colors hover:bg-gray-100
+                                    dark:border-white/10 dark:text-gray-300
+                                    dark:hover:bg-dark-tertiary"
+                            >
+                                Anterior
+                            </a>
+                        {% endif %}
+
+                        <!-- Números de página -->
+                        {% for number in page_obj.paginator.page_range %}
+
+                            {% if number == page_obj.number %}
+
+                                <span
+                                    aria-current="page"
+                                    class="rounded-lg bg-btn-primary
+                                        px-3 py-2 text-sm font-medium text-white"
+                                >
+                                    {{ number }}
+                                </span>
+
+                            {% else %}
+
+                                <a
+                                    href="?{{ pagination_query }}&page={{ number }}"
+                                    class="rounded-lg border border-gray-200
+                                        px-3 py-2 text-sm text-gray-600
+                                        transition-colors hover:bg-gray-100
+                                        dark:border-white/10 dark:text-gray-300
+                                        dark:hover:bg-dark-tertiary"
+                                >
+                                    {{ number }}
+                                </a>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                        <!-- Siguiente -->
+                        {% if page_obj.has_next %}
+                            <a
+                                href="?{{ pagination_query }}&page={{ page_obj.next_page_number }}"
+                                class="rounded-lg border border-gray-200
+                                    px-3 py-2 text-sm text-gray-600
+                                    transition-colors hover:bg-gray-100
+                                    dark:border-white/10 dark:text-gray-300
+                                    dark:hover:bg-dark-tertiary"
+                            >
+                                Siguiente
+                            </a>
+                        {% endif %}
+
+                    </nav>
+
+                </div>
+
+            {% endif %}
 
         </div>
 
