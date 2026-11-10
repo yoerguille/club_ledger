@@ -20,6 +20,7 @@ The format is based on Keep a Changelog.
 - Updated the navigation bar to support context-aware breadcrumbs and dynamic links to parent pages.
 - Improved account list typography, spacing, and visual hierarchy while preserving filtering, sorting, pagination, and account actions.
 - Updated the application's favicon and browser branding.
+- Added sticky aside to sidebar.
 
 ### Fixed
 - Corrected account list table column alignment and empty-state column spanning.
