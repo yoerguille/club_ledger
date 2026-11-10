@@ -58,246 +58,365 @@
 {% endblock %}
 
 
+
 {% block content %}
 
+<style>
+    /* Documento */
+    .statement {
+        color: #243247;
+        font-family: Arial, sans-serif;
+        font-size: 10pt;
+        line-height: 1.5;
+    }
 
-<!-- ===================================================== -->
-<!-- CABECERA -->
-<!-- ===================================================== -->
+    .statement * {
+        box-sizing: border-box;
+    }
 
-<header class="document-header">
+    /* Cabecera */
+    .statement-header {
+        width: 100%;
+        margin-bottom: 28px;
+        border-bottom: 2px solid #243247;
+        padding-bottom: 18px;
+    }
 
-    <h1 class="document-title">
-        Estado de cuenta
-    </h1>
+    .statement-header td {
+        vertical-align: top;
+    }
 
-    <p class="document-subtitle">
-        {{account.name}}
-    </p>
+    .statement-title {
+        margin: 0 0 5px;
+        font-size: 23pt;
+        font-weight: bold;
+        color: #17263c;
+    }
 
-</header>
+    .statement-subtitle {
+        margin: 0;
+        font-size: 11pt;
+        color: #65758b;
+    }
 
+    .statement-date {
+        text-align: right;
+        white-space: nowrap;
+    }
 
-<!-- ===================================================== -->
-<!-- INFORMACIÓN DEL DOCUMENTO -->
-<!-- ===================================================== -->
+    .statement-label {
+        margin: 0 0 4px;
+        color: #7a8798;
+        font-size: 8pt;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
 
-<section class="document-meta">
+    .statement-data {
+        margin: 0;
+        font-size: 10pt;
+        font-weight: bold;
+        color: #243247;
+    }
 
-    <div class="document-meta__item">
+    /* Datos */
+    .statement-meta {
+        width: 100%;
+        margin-bottom: 30px;
+    }
 
-        <h2 class="document-meta-title">
-            Cliente
-        </h2>
+    .statement-meta td {
+        width: 50%;
+        vertical-align: top;
+        padding-right: 16px;
+    }
 
-        <p class="document-meta-value">
-            {{ customer.name }}
-        </p>
+    /* Títulos de sección */
+    .statement-section-title {
+        margin: 0 0 12px;
+        font-size: 11pt;
+        font-weight: bold;
+        color: #17263c;
+    }
 
-    </div>
+    /* Resumen */
+    .statement-summary {
+        width: 100%;
+        margin-bottom: 30px;
+        border-collapse: collapse;
+        background: #f2f5f9;
+    }
 
+    .statement-summary td {
+        width: 33.33%;
+        padding: 16px;
+        border-right: 1px solid #dfe5ed;
+        vertical-align: top;
+    }
 
-    <div class="document-meta__item">
+    .statement-summary td:last-child {
+        border-right: none;
+        background: #e5edf7;
+    }
 
-        <h2 class="document-meta-title">
-            Cuenta
-        </h2>
+    .statement-summary-value {
+        margin: 6px 0 0;
+        font-size: 16pt;
+        font-weight: bold;
+        color: #243247;
+        white-space: nowrap;
+    }
 
-        <p class="document-meta-value">
-            {{ account.name }}
-        </p>
+    /* Movimientos */
+    .statement-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9pt;
+        table-layout: fixed;
+    }
 
-    </div>
+    .statement-table thead {
+        display: table-header-group;
+    }
 
-    <div class="document-meta__item">
+    .statement-table th {
+        padding: 11px 8px;
+        background: #243247;
+        color: #ffffff;
+        text-align: left;
+        font-size: 8pt;
+        font-weight: bold;
+    }
 
-        <h2 class="document-meta-title">
-            Temporada
-        </h2>
+    .statement-table td {
+        padding: 10px 8px;
+        border-bottom: 1px solid #e4e9ef;
+        vertical-align: top;
+        overflow-wrap: break-word;
+    }
 
-        <p class="document-meta-value">
-            {{ season.name }}
-        </p>
+    .statement-table tbody tr:nth-child(even) {
+        background: #f7f9fc;
+    }
 
-    </div>
+    .statement-table tr {
+        page-break-inside: avoid;
+    }
 
-</section>
+    .statement-table .amount {
+        text-align: right;
+        white-space: nowrap;
+    }
 
+    .statement-table .muted {
+        color: #8592a3;
+    }
 
-<section class="document-date">
+    /* Saldo final */
+    .statement-total {
+        width: 100%;
+        margin-top: 24px;
+        border-collapse: collapse;
+        border-top: 2px solid #243247;
+    }
 
-    <p class="document-meta-title">
-        Fecha de emisión
-    </p>
+    .statement-total td {
+        padding: 15px 0;
+        vertical-align: middle;
+    }
 
-    <p class="document-meta-value">
-        {% now "d/m/Y" %}
-    </p>
+    .statement-total-label {
+        font-size: 11pt;
+        font-weight: bold;
+        color: #243247;
+    }
 
-</section>
+    .statement-total-value {
+        text-align: right;
+        font-size: 20pt;
+        font-weight: bold;
+        color: #17263c;
+        white-space: nowrap;
+    }
 
+    /* Pie */
+    .statement-footer {
+        margin-top: 30px;
+        padding-top: 12px;
+        border-top: 1px solid #e4e9ef;
+        color: #8592a3;
+        font-size: 8pt;
+    }
+</style>
 
-<!-- ===================================================== -->
-<!-- RESUMEN -->
-<!-- ===================================================== -->
+<div class="statement">
 
-<section class="summary-grid">
-
-    <div class="summary-card">
-
-        <p class="summary-title">
-            Pedidos
-        </p>
-
-        <p class="summary-value">
-            {{ total_charges }} €
-        </p>
-
-    </div>
-
-
-    <div class="summary-card">
-
-        <p class="summary-title">
-            Pagos
-        </p>
-
-        <p class="summary-value">
-            {{ total_payments }} €
-        </p>
-
-    </div>
-
-
-    <div class="summary-card">
-
-        <p class="summary-title">
-            Saldo pendiente
-        </p>
-
-        <p class="summary-value">
-            {{ balance }} €
-        </p>
-
-    </div>
-
-</section>
-
-
-<!-- ===================================================== -->
-<!-- MOVIMIENTOS -->
-<!-- ===================================================== -->
-
-<table class="document-table">
-
-    <thead>
-
+    <!-- CABECERA -->
+    <table class="statement-header">
         <tr>
-
-            <th>
-                Fecha
-            </th>
-
-            <th>
-                Concepto
-            </th>
-
-            <th>
-                Cargo
-            </th>
-
-            <th>
-                Pago
-            </th>
-
-            <th>
-                Saldo
-            </th>
-
+            <td>
+                <h1 class="statement-title">
+                    Estado de cuenta
+                </h1>
+                <p class="statement-subtitle">
+                    {{ account.name }}
+                </p>
+            </td>
+            <td class="statement-date">
+                <p class="statement-label">
+                    Fecha de emisión
+                </p>
+                <p class="statement-data">
+                    {% now "d/m/Y" %}
+                </p>
+            </td>
         </tr>
+    </table>
 
-    </thead>
+    <!-- INFORMACIÓN -->
+    <table class="statement-meta">
+        <tr>
+            <td>
+                <p class="statement-label">
+                    Cliente
+                </p>
+                <p class="statement-data">
+                    {{ customer.name }}
+                </p>
+            </td>
+            <td>
+                <p class="statement-label">
+                    Temporada
+                </p>
+                <p class="statement-data">
+                    {{ season.name }}
+                </p>
+            </td>
+        </tr>
+    </table>
 
+    <!-- RESUMEN FINANCIERO -->
+    <h2 class="statement-section-title">
+        Resumen financiero
+    </h2>
 
-    <tbody>
+    <table class="statement-summary">
+        <tr>
+            <td>
+                <p class="statement-label">
+                    Total cargos
+                </p>
+                <p class="statement-summary-value">
+                    {{ total_charges|floatformat:2 }} €
+                </p>
+            </td>
+            <td>
+                <p class="statement-label">
+                    Total pagos
+                </p>
+                <p class="statement-summary-value">
+                    {{ total_payments|floatformat:2 }} €
+                </p>
+            </td>
+            <td>
+                <p class="statement-label">
+                    Saldo actual
+                </p>
+                <p class="statement-summary-value">
+                    {{ balance|floatformat:2 }} €
+                </p>
+            </td>
+        </tr>
+    </table>
 
-        {% for row in rows %}
+    <!-- MOVIMIENTOS -->
+    <h2 class="statement-section-title">
+        Detalle de movimientos
+    </h2>
 
+    <table class="statement-table">
+        <thead>
             <tr>
-
-                <td>
-                    {{ row.transaction.date|date:"d/m/Y" }}
-                </td>
-
-
-                <td>
-                    {{ row.transaction.description }}
-                </td>
-
-
-                <td>
-
-                    {% if row.transaction.is_charge %}
-                        {{ row.transaction.amount }} €
-                    {% endif %}
-
-                </td>
-
-
-                <td>
-
-                    {% if row.transaction.is_payment %}
-                        {{ row.transaction.amount }} €
-                    {% endif %}
-
-                </td>
-
-
-                <td>
-
-                    {{ row.running_balance }} €
-
-                </td>
-
+                <th style="width: 14%;">Fecha</th>
+                <th style="width: 38%;">Concepto</th>
+                <th style="width: 16%; text-align: right;">Cargo</th>
+                <th style="width: 16%; text-align: right;">Pago</th>
+                <th style="width: 16%; text-align: right;">Saldo</th>
             </tr>
+        </thead>
 
-        {% endfor %}
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    <td>
+                        {{ row.transaction.date|date:"d/m/Y" }}
+                    </td>
 
-    </tbody>
+                    <td>
+                        {{ row.transaction.description|default:"—" }}
+                    </td>
 
-</table>
+                    <td class="amount">
+                        {% if row.transaction.is_charge %}
+                            {{ row.transaction.amount|floatformat:2 }} €
+                        {% else %}
+                            <span class="muted">—</span>
+                        {% endif %}
+                    </td>
 
+                    <td class="amount">
+                        {% if row.transaction.is_payment %}
+                            {{ row.transaction.amount|floatformat:2 }} €
+                        {% else %}
+                            <span class="muted">—</span>
+                        {% endif %}
+                    </td>
 
-<!-- ===================================================== -->
-<!-- SALDO FINAL -->
-<!-- ===================================================== -->
+                    <td class="amount">
+                        {{ row.running_balance|floatformat:2 }} €
+                    </td>
+                </tr>
 
-<section class="balance-box">
+            {% empty %}
+                <tr>
+                    <td colspan="5"
+                        style="text-align: center; padding: 25px;">
+                        No hay movimientos registrados
+                        en esta cuenta.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-    <div class="balance-content">
+    <!-- SALDO FINAL -->
+    <table class="statement-total">
+        <tr>
+            <td>
+                <span class="statement-total-label">
+                    {% if balance > 0 %}
+                        Saldo pendiente de pago
+                    {% elif balance < 0 %}
+                        Saldo a favor del cliente
+                    {% else %}
+                        Cuenta saldada
+                    {% endif %}
+                </span>
+            </td>
+            <td class="statement-total-value">
+                {{ balance|floatformat:2 }} €
+            </td>
+        </tr>
+    </table>
 
-        <p class="balance-label">
-            Saldo pendiente
-        </p>
+    <!-- PIE -->
+    <footer class="statement-footer">
+        Documento informativo generado a partir de los
+        movimientos registrados en la cuenta a fecha
+        {% now "d/m/Y" %}.
+    </footer>
 
-        <p class="balance-value">
-            {{ balance }} €
-        </p>
-
-    </div>
-
-</section>
-
-
-<!-- ===================================================== -->
-<!-- PIE -->
-<!-- ===================================================== -->
-
-<footer class="document-footer">
-
-    Gracias por confiar en nosotros.
-
-</footer>
-
+</div>
 
 {% endblock %}

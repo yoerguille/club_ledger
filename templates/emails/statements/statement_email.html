@@ -1,305 +1,215 @@
+
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Estado de cuenta - Club Ledger</title>
+    <title>Estado de cuenta | Club Ledger</title>
 </head>
 
-<body
-    style="
-        margin: 0;
-        padding: 0;
-        background-color: #f3f4f6;
-        font-family: Arial, Helvetica, sans-serif;
-        color: #111827;
-    "
->
+<body style="margin:0;padding:0;background-color:#f5f6fa;font-family:Arial,Helvetica,sans-serif;color:#171923;">
 
-    <!-- Contenedor principal -->
-    <table
-        width="100%"
-        cellpadding="0"
-        cellspacing="0"
-        border="0"
-        style="
-            background-color: #f3f4f6;
-            padding: 40px 20px;
-        "
-    >
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+       style="background-color:#f5f6fa;">
+    <tr>
+        <td align="center" style="padding:32px 14px;">
 
-        <tr>
-            <td align="center">
+            <table role="presentation" width="100%" cellpadding="0"
+                   cellspacing="0" border="0"
+                   style="max-width:580px;background-color:#ffffff;">
 
-                <!-- Tarjeta del email -->
-                <table
-                    width="100%"
-                    cellpadding="0"
-                    cellspacing="0"
-                    border="0"
-                    style="
-                        max-width: 600px;
-                        background-color: #ffffff;
-                        border-radius: 10px;
-                        overflow: hidden;
-                    "
-                >
+                <!-- BRAND -->
+                <tr>
+                    <td style="padding:28px 36px;border-bottom:1px solid #eceef2;">
+                        <table role="presentation" width="100%" cellpadding="0"
+                               cellspacing="0" border="0">
+                            <tr>
+                                <td style="font-size:19px;font-weight:700;
+                                           color:#171923;letter-spacing:-0.5px;">
+                                    clubledger<span style="color:#7666d9;">.</span>
+                                </td>
+                                <td align="right"
+                                    style="font-size:10px;letter-spacing:1px;
+                                           color:#969dac;">
+                                    ACCOUNT STATEMENT
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
 
-                    <!-- ================================================= -->
-                    <!-- HEADER -->
-                    <!-- ================================================= -->
+                <!-- MAIN CONTENT -->
+                <tr>
+                    <td style="padding:42px 36px 36px;">
 
-                    <tr>
+                        <p style="margin:0 0 14px;color:#7666d9;
+                                  font-size:11px;font-weight:700;
+                                  letter-spacing:1.3px;">
+                            TU ESTADO DE CUENTA
+                        </p>
 
-                        <td
-                            style="
-                                background-color: #111827;
-                                padding: 28px 32px;
-                                text-align: center;
-                            "
-                        >
+                        <h1 style="margin:0 0 28px;font-size:30px;
+                                   line-height:1.25;font-weight:700;
+                                   letter-spacing:-0.8px;color:#171923;">
+                            Todo al día, en un solo documento.
+                        </h1>
 
-                            <p
-                                style="
-                                    margin: 0;
-                                    color: #ffffff;
-                                    font-size: 22px;
-                                    font-weight: bold;
-                                    letter-spacing: 0.5px;
-                                "
-                            >
-                                Club Ledger
-                            </p>
+                        <p style="margin:0 0 14px;font-size:15px;
+                                  line-height:1.7;color:#303747;">
+                            Hola, <strong>{{ customer.name }}</strong>.
+                        </p>
 
-                        </td>
+                        <p style="margin:0 0 32px;font-size:14px;
+                                  line-height:1.8;color:#626b7c;">
+                            Te compartimos el estado actualizado de tu cuenta.
+                            Encontrarás el detalle de los cargos,
+                            pagos y movimientos en el documento adjunto.
+                        </p>
 
-                    </tr>
+                        <!-- BALANCE CARD -->
+                        <table role="presentation" width="100%"
+                               cellpadding="0" cellspacing="0" border="0"
+                               style="background-color:#f6f7fa;
+                                      margin-bottom:28px;">
 
+                            <tr>
+                                <td style="padding:26px 26px 20px;">
 
-                    <!-- ================================================= -->
-                    <!-- CONTENIDO -->
-                    <!-- ================================================= -->
+                                    <table role="presentation" width="100%"
+                                           cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td style="font-size:11px;
+                                                       color:#747e90;
+                                                       letter-spacing:1px;
+                                                       font-weight:700;">
+                                                {% if balance > 0 %}
+                                                    SALDO PENDIENTE
+                                                {% elif balance < 0 %}
+                                                    SALDO A TU FAVOR
+                                                {% else %}
+                                                    CUENTA SALDADA
+                                                {% endif %}
+                                            </td>
+                                            <td align="right"
+                                                style="font-size:11px;
+                                                       color:#747e90;">
+                                                {{ season.name }}
+                                            </td>
+                                        </tr>
+                                    </table>
 
-                    <tr>
+                                    <p style="margin:14px 0 22px;
+                                              font-size:34px;
+                                              line-height:1.2;
+                                              font-weight:700;
+                                              letter-spacing:-1px;
+                                              color:#171923;">
+                                        {{ balance|floatformat:2 }} €
+                                    </p>
 
-                        <td
-                            style="
-                                padding: 40px 40px 32px 40px;
-                            "
-                        >
+                                    <table role="presentation" width="100%"
+                                           cellpadding="0" cellspacing="0"
+                                           style="border-top:1px solid #e1e5eb;">
+                                        <tr>
+                                            <td style="padding-top:16px;
+                                                       color:#7d8594;
+                                                       font-size:12px;">
+                                                Cuenta
+                                            </td>
+                                            <td align="right"
+                                                style="padding-top:16px;
+                                                       color:#303747;
+                                                       font-size:12px;
+                                                       font-weight:700;">
+                                                {{ account.name }}
+                                            </td>
+                                        </tr>
+                                    </table>
 
-                            <p
-                                style="
-                                    margin: 0 0 20px 0;
-                                    font-size: 16px;
-                                    line-height: 1.6;
-                                "
-                            >
-                                Hola
-                                <strong>{{ customer.name }}</strong>,
-                            </p>
+                                </td>
+                            </tr>
+                        </table>
 
+                        <!-- ATTACHMENT -->
+                        <table role="presentation" width="100%"
+                               cellpadding="0" cellspacing="0" border="0"
+                               style="border:1px solid #e6e9f0;
+                                      margin-bottom:30px;">
+                            <tr>
+                                <td width="54"
+                                    style="padding:17px 0 17px 18px;">
+                                    <table role="presentation"
+                                           cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td align="center"
+                                                style="background-color:#efedfc;
+                                                       color:#6758c5;
+                                                       width:42px;height:44px;
+                                                       font-size:12px;
+                                                       font-weight:700;">
+                                                PDF
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="padding:17px 12px;">
+                                    <p style="margin:0 0 5px;
+                                              font-size:13px;
+                                              font-weight:700;
+                                              color:#242b39;">
+                                        Estado de cuenta
+                                    </p>
+                                    <p style="margin:0;
+                                              font-size:12px;
+                                              color:#8b94a3;">
+                                        Documento adjunto · PDF
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
 
-                            <p
-                                style="
-                                    margin: 0 0 24px 0;
-                                    color: #4b5563;
-                                    font-size: 15px;
-                                    line-height: 1.7;
-                                "
-                            >
-                                Te adjuntamos el estado de cuenta 
-                                <strong>{{ account.name }}</strong> 
-                                correspondiente a la temporada
-                                {{ season.name }}.
-                            </p>
+                        <!-- CLOSING -->
+                        <p style="margin:0 0 24px;
+                                  font-size:14px;
+                                  line-height:1.8;
+                                  color:#626b7c;">
+                            Si tienes alguna duda sobre la información
+                            de tu cuenta, puedes ponerte en contacto
+                            con nosotros.
+                        </p>
 
+                        <p style="margin:0;
+                                  font-size:14px;
+                                  line-height:1.7;
+                                  color:#303747;">
+                            Un saludo,<br>
+                            <strong>Equipo de gestión</strong>
+                        </p>
 
-                            <!-- ========================================= -->
-                            <!-- RESUMEN -->
-                            <!-- ========================================= -->
+                    </td>
+                </tr>
 
-                            <table
-                                width="100%"
-                                cellpadding="0"
-                                cellspacing="0"
-                                border="0"
-                                style="
-                                    margin: 0 0 28px 0;
-                                    border: 1px solid #e5e7eb;
-                                    border-radius: 8px;
-                                "
-                            >
+                <!-- FOOTER -->
+                <tr>
+                    <td align="center"
+                        style="padding:24px 32px;
+                               border-top:1px solid #eceef2;
+                               background-color:#fafbfc;">
+                        <p style="margin:0 0 5px;
+                                  font-size:11px;color:#9ba3b0;">
+                            Enviado a través de Club Ledger
+                        </p>
+                        <p style="margin:0;font-size:11px;color:#b0b6c1;">
+                            Gestión de cuentas, simplificada.
+                        </p>
+                    </td>
+                </tr>
 
-                                <tr>
+            </table>
 
-                                    <td
-                                        style="
-                                            padding: 18px 20px;
-                                            background-color: #f9fafb;
-                                        "
-                                    >
-
-                                        <p
-                                            style="
-                                                margin: 0 0 6px 0;
-                                                color: #6b7280;
-                                                font-size: 12px;
-                                                text-transform: uppercase;
-                                                letter-spacing: 0.5px;
-                                            "
-                                        >
-                                            Saldo pendiente
-                                        </p>
-
-                                        <p
-                                            style="
-                                                margin: 0;
-                                                color: #111827;
-                                                font-size: 24px;
-                                                font-weight: bold;
-                                            "
-                                        >
-                                            {{ balance }} €
-                                        </p>
-
-                                    </td>
-
-                                </tr>
-
-                            </table>
-
-
-                            <p
-                                style="
-                                    margin: 0 0 24px 0;
-                                    color: #4b5563;
-                                    font-size: 15px;
-                                    line-height: 1.7;
-                                "
-                            >
-                                Encontrarás el estado de cuenta completo
-                                adjunto a este correo en formato PDF.
-                            </p>
-
-
-                            <!-- ========================================= -->
-                            <!-- AVISO DEL ADJUNTO -->
-                            <!-- ========================================= -->
-
-                            <table
-                                width="100%"
-                                cellpadding="0"
-                                cellspacing="0"
-                                border="0"
-                                style="
-                                    margin-bottom: 28px;
-                                "
-                            >
-
-                                <tr>
-
-                                    <td
-                                        style="
-                                            padding: 14px 16px;
-                                            background-color: #eef2ff;
-                                            border-left: 4px solid #4f46e5;
-                                        "
-                                    >
-
-                                        <p
-                                            style="
-                                                margin: 0;
-                                                color: #3730a3;
-                                                font-size: 14px;
-                                                line-height: 1.5;
-                                            "
-                                        >
-                                            📄 El documento completo se encuentra
-                                            adjunto como archivo PDF.
-                                        </p>
-
-                                    </td>
-
-                                </tr>
-
-                            </table>
-
-
-                            <p
-                                style="
-                                    margin: 0;
-                                    color: #4b5563;
-                                    font-size: 15px;
-                                    line-height: 1.7;
-                                "
-                            >
-                                Si tienes cualquier duda sobre la información
-                                del estado de cuenta, no dudes en ponerte
-                                en contacto con nosotros.
-                            </p>
-
-
-                            <p
-                                style="
-                                    margin: 28px 0 0 0;
-                                    color: #111827;
-                                    font-size: 15px;
-                                    line-height: 1.6;
-                                "
-                            >
-                                Un saludo,<br>
-
-                                <strong>
-                                    Club Ledger
-                                </strong>
-                            </p>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- ================================================= -->
-                    <!-- FOOTER -->
-                    <!-- ================================================= -->
-
-                    <tr>
-
-                        <td
-                            style="
-                                padding: 20px 32px;
-                                background-color: #f9fafb;
-                                border-top: 1px solid #e5e7eb;
-                                text-align: center;
-                            "
-                        >
-
-                            <p
-                                style="
-                                    margin: 0;
-                                    color: #9ca3af;
-                                    font-size: 12px;
-                                    line-height: 1.5;
-                                "
-                            >
-                                Este correo ha sido generado automáticamente
-                                por Club Ledger.
-                            </p>
-
-                        </td>
-
-                    </tr>
-
-                </table>
-
-            </td>
-        </tr>
-
-    </table>
+        </td>
+    </tr>
+</table>
 
 </body>
-
 </html>

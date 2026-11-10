@@ -1,43 +1,52 @@
+
+/* FUENTE */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+/* TAILWIND */
 @import "tailwindcss";
-@theme {
-  --font-sans: "Onest", sans-serif;
-}
+
+/* FLOWBITE */
 @plugin "flowbite/plugin";
 
+/* MODO OSCURO */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/**
-  * A catch-all path to Django template files, JavaScript, and Python files
-  * that contain Tailwind CSS classes and will be scanned by Tailwind to generate the final CSS file.
-  *
-  * If your final CSS file is not being updated after code changes, you may want to broaden or narrow
-  * the scope of this path.
-  */
+/* ARCHIVOS QUE ESCANEA TAILWIND */
 @source "../../../**/*.{html,py,js}";
 @source "../../../node_modules/flowbite";
 
-
+/* TEMA GLOBAL */
 @theme {
+
+  /* Tipografía */
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Colores */
   --color-dark-primary: #101010;
   --color-dark-secondary: #212121;
   --color-dark-tertiary: #202020;
+
   --color-secondary: #7A7180;
-  --color-btn-primary:#288DD7;
-  --color-btn-hover-primary:#2783C5;
+
+  --color-btn-primary: #288DD7;
+  --color-btn-hover-primary: #2783C5;
 }
 
-
+/* ESTILOS GENERALES */
 body {
-    font-family: var(--font-sans);
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
 }
 
+/* SELECT */
 select option {
-    color: #111827;
-    background-color: #ffffff;
+  color: #111827;
+  background-color: #ffffff;
 }
 
 .dark select option {
   background-color: #1f2937;
   color: #f3f4f6;
 }
-
