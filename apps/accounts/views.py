@@ -163,6 +163,8 @@ class AccountListView(ListView):
             context['payment_form'] = PaymentForm()
             context['charge_form'] = ChargeForm()
             context['account_update_form'] = AccountUpdateForm()
+
+            context["breadcrumb_current"] = "Cuentas"
             return context
 
 
@@ -193,6 +195,10 @@ class AccountDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView)
         context['charge_form'] = ChargeForm()
         context['payment_form'] = PaymentForm()
         context["payment_methods"] = Transaction.PaymentMethod.choices
+
+        context["breadcrumb_parent"] = self.object.customer.name
+        context["breadcrumb_parent_url"] = reverse("customers:customer_detail", kwargs={"pk": self.object.customer.pk})
+        context["breadcrumb_current"] = self.object.name
 
         return context
 

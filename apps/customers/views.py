@@ -101,6 +101,7 @@ class CustomerListView(LoginRequiredMixin, ListView):
 
         context["customer_form"] = CustomerForm()
         context["customers_count"] = self.get_queryset().count()
+        context["breadcrumb_current"] = "Clientes"
         return context
 
 class CustomerDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView):
@@ -148,9 +149,11 @@ class CustomerDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView
             is_active=True
         ).order_by("-name")
         context['all_seasons'] = Season.objects.all().order_by("-created_at")
-
-
         context["accounts"] = accounts
+
+        context["breadcrumb_parent"] = "Clientes"
+        context["breadcrumb_parent_url"] = reverse("customers:customer_list")
+        context["breadcrumb_current"] = self.object.name
 
         return context
 

@@ -3,16 +3,57 @@
                dark:border-zinc-800 dark:bg-dark-primary">
 
     <div class="flex min-h-16 items-center justify-between gap-4 px-6 py-4 lg:px-8">
+        <!-- BREADCRUMBS -->
+        <nav
+            aria-label="Ruta de navegación"
+            class="flex min-w-0 items-center gap-2"
+        >
 
-        <!-- Título de la página -->
-        <h2 class="truncate text-xl font-semibold tracking-tight
-                   text-gray-900 dark:text-white">
+            <!-- Sección padre -->
+            {% if breadcrumb_parent %}
 
-            {% block page_title %}
-                Dashboard
-            {% endblock %}
+                <a
+                    href="{{ breadcrumb_parent_url }}"
+                    class="shrink-0 text-sm font-medium
+                        text-gray-400 transition-colors
+                        hover:text-btn-primary
+                        dark:text-secondary
+                        dark:hover:text-blue-400"
+                >
+                    {{ breadcrumb_parent }}
+                </a>
 
-        </h2>
+                <!-- Separador -->
+                <svg
+                    class="h-4 w-4 shrink-0
+                        text-gray-300 dark:text-gray-600"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                >
+                    <path
+                        d="m9 18 6-6-6-6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+
+            {% endif %}
+
+            <!-- Página actual -->
+            <span
+                class="truncate text-lg font-semibold
+                    tracking-tight text-gray-900
+                    dark:text-white"
+                aria-current="page"
+            >
+                {{ breadcrumb_current|default:"Dashboard" }}
+            </span>
+
+        </nav>
+
 
         <!-- Acciones -->
         <div class="flex shrink-0 items-center gap-3 sm:gap-4">

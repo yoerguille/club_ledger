@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
+## [2026-11-10]
+
+### Added
+- Added a new Club Ledger brand identity, including a custom CL monogram, application logo, favicon, and Apple Touch icon.
+- Added dynamic breadcrumbs to the navigation bar, displaying the current page and its parent section using Django view context.
+- Added visual account identifiers (e.g., `ACC-00015`) based on account primary keys.
+- Added automated tests for the informational account email functionality, covering email delivery restrictions and expected view behavior.
+- Added JetBrains Mono as a secondary typeface for account identifiers and technical references.
+
+### Changed
+- Updated the application's primary typography to Plus Jakarta Sans for a modern fintech-inspired interface.
+- Updated the sidebar and application branding to incorporate the new Club Ledger logo.
+- Refined the account list layout to display account identifiers, account names, and customer information within a unified column.
+- Updated the navigation bar to support context-aware breadcrumbs and dynamic links to parent pages.
+- Improved account list typography, spacing, and visual hierarchy while preserving filtering, sorting, pagination, and account actions.
+- Updated the application's favicon and browser branding.
+
+### Fixed
+- Corrected account list table column alignment and empty-state column spanning.
+- Improved account list result counts and season selection display.
+
 ## [2026-11-09]
 
 ### Added

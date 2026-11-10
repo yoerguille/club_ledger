@@ -59,6 +59,7 @@ class SeasonListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         context["seasons"] = seasons
         context["season_form"] = SeasonForm()
+        context["breadcrumb_current"] = "Temporadas"
 
         return context
 

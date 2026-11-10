@@ -7,21 +7,24 @@
     <div class="flex h-20 items-center border-b border-gray-200
                 px-5 dark:border-zinc-800">
 
-        <div class="flex h-9 w-9 items-center justify-center
-                    rounded-lg bg-btn-primary text-white">
+        {% load static %}
 
-            <svg class="h-5 w-5" fill="none" stroke="currentColor"
-                 stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M3 3h18v18H3zM7 8h10M7 12h6M7 16h8" />
-            </svg>
+        <a href="{% url 'dashboard:dashboard' %}"
+        class="flex items-center gap-3">
 
-        </div>
+            <img
+                src="{% static 'img/brand/club-ledger-icon.png' %}"
+                alt=""
+                class="h-9 w-9 object-contain"
+            >
 
-        <h1 class="ml-3 text-lg font-bold tracking-tight
-                   text-gray-900 dark:text-white">
-            Club Ledger
-        </h1>
+            <span class="font-sans text-lg font-bold
+                        tracking-tight text-gray-950
+                        dark:text-white">
+                Club Ledger
+            </span>
+
+        </a>
 
     </div>
 
