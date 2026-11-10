@@ -111,10 +111,7 @@ class StatementInfoEmailView(LoginRequiredMixin, TemplateView):
                 "El cliente no tiene una dirección de email registrada."
             )
 
-            return redirect(
-                "accounts:account_detail",
-                pk=account.pk,
-            )
+            return redirect("accounts:account_list")
 
         base_url = request.build_absolute_uri("/")
 
