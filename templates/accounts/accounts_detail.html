@@ -18,16 +18,13 @@ Cuenta
 
     <div class="mb-5 flex items-start justify-between">
         <div>
-            <h1 class="text-3xl mb-0.5 font-bold text-gray-900 dark:text-gray-100">
-                    {{ account.name }}
-            </h1>
             {% with follow_up=account.active_collection_follow_up %}
 
                 {% if follow_up %}
 
                     {% if follow_up.is_overdue %}
                         <span class="inline-flex items-center rounded-full
-                                    bg-red-100 px-3 py-1 text-xs font-medium
+                                    bg-red-100 px-3 py-1 text-lg font-medium
                                     text-red-700 dark:bg-red-900
                                     dark:text-red-300">
                             Cobro vencido
