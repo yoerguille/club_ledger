@@ -37,6 +37,7 @@
 
     <!-- Tu archivo JS -->
     <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/sidebar.js' %}" defer></script>
     
 
     <title>
@@ -56,12 +57,15 @@
 <body
  class="absolute inset-0 -z-10 h-full w-full bg-slate-50 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]
  dark:bg-dark-secondary dark:bg-none">
+    <div class="flex min-h-screen">
 
-    <div class="min-h-screen flex">
+        <!-- SIDEBAR -->
+        <div id="sidebar-container" class="shrink-0">
+            {% include "components/sidebar.html" %}
+        </div>
 
-        {% include "components/sidebar.html" %}
-
-        <div class="flex-1 flex flex-col">
+        <!-- CONTENIDO PRINCIPAL -->
+        <div class="flex min-w-0 flex-1 flex-col">
 
             {% include "components/navbar.html" %}
 
@@ -70,15 +74,14 @@
                 {% include "components/messages.html" %}
 
                 {% block content %}
-                
                 {% endblock %}
 
             </main>
 
         </div>
 
-
     </div>
+
     {% block extra_js %}
 
     {% endblock %}
