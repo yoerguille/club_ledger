@@ -17,7 +17,7 @@ from apps.customers.services import register_customer
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404 , redirect
 from django.http import JsonResponse
-
+from django.core.paginator import Paginator
 from django.db.models import Case, DecimalField, F, Sum, Value, When
 from django.db.models.functions import Coalesce
 
@@ -111,7 +111,6 @@ class CustomerDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView
     context_object_name = 'customer'
 
     def get_context_data(self, **kwargs):
-
         context = super().get_context_data(**kwargs)
 
         active_season = Season.objects.filter(
@@ -135,6 +134,13 @@ class CustomerDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView
             "season",
         )
 
+        paginator= Paginator(accounts, 6)
+        page_number= self.request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        context["page_obj"] = page_obj
+        context["all_accounts"] = page_obj.object_list
+        context["accounts"] = accounts
         context["account_form"] = AccountForm()
         context["customer_form"] = CustomerForm(instance=self.object)
         context["active_season"] = active_season
@@ -149,7 +155,6 @@ class CustomerDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView
             is_active=True
         ).order_by("-name")
         context['all_seasons'] = Season.objects.all().order_by("-created_at")
-        context["accounts"] = accounts
 
         context["breadcrumb_parent"] = "Clientes"
         context["breadcrumb_parent_url"] = reverse("customers:customer_list")

@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
+## [2026-11-11]
+
+### Added
+- Added pagination in customer detail page to improve page navigation.
+
+### Changed
+- Changed the size of some letters.
+
 ## [2026-11-10]
 
 ### Added
