@@ -31,6 +31,12 @@
             document.documentElement.classList.add("dark");
         }
     </script>
+    <script>
+        // Recuperar preferencias antes del renderizado
+        if (localStorage.getItem("sidebar-collapsed") === "true") {
+            document.documentElement.classList.add("sidebar-collapsed");
+        }
+    </script>
 
     {% tailwind_css %}
     <meta charset="UTF-8">
@@ -60,7 +66,10 @@
     <div class="flex min-h-screen">
 
         <!-- SIDEBAR -->
-        <div id="sidebar-container" class="shrink-0">
+        <div id="sidebar-container" class="sticky top-0 h-screen w-64 shrink-0
+           transition-[width] duration-300 ease-in-out
+           motion-reduce:transition-none"
+        >
             {% include "components/sidebar.html" %}
         </div>
 

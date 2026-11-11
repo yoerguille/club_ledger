@@ -8,6 +8,8 @@ The format is based on Keep a Changelog.
 
 ### Added
 - Added pagination in customer detail page to improve page navigation.
+- Added hidden sidebar feature.
+- Added animation to hidden sidebar.
 
 ### Changed
 - Changed the size of some letters.

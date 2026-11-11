@@ -1,7 +1,7 @@
 
-<aside class="sticky top-0 h-screen shrink-0
-              overflow-y-auto
-              bg-white dark:bg-dark-primary">
+<aside class="top-0 flex h-screen w-full min-w-0
+           flex-col overflow-x-hidden overflow-y-auto
+           bg-white dark:bg-dark-primary">
 
     <!-- Logotipo -->
     <div class="flex h-20 items-center border-b border-gray-200
@@ -15,12 +15,14 @@
             <img
                 src="{% static 'img/brand/club-ledger-icon.png' %}"
                 alt=""
-                class="h-9 w-9 object-contain"
+                class="h-9 w-9 shrink-0 object-contain"
             >
 
-            <span class="font-sans text-lg font-bold
+            <span data-sidebar-label
+            class="font-sans text-lg font-bold
                         tracking-tight text-gray-950
-                        dark:text-white">
+                        dark:text-white whitespace-nowrap
+                        opacity-100 transition-opacity duration-200">
                 Club Ledger
             </span>
 
@@ -33,10 +35,19 @@
         <!-- Navegación -->
         <nav class="flex-1 space-y-1 px-3 py-6">
 
-            <p class="mb-3 px-3 text-xs font-semibold uppercase
-                      tracking-wider text-gray-400 dark:text-secondary">
-                Principal
-            </p>
+            <!-- TÍTULO DE NAVEGACIÓN -->
+            <div class="mb-3 h-5 px-3">
+
+                <p
+                    data-sidebar-heading
+                    class="whitespace-nowrap text-xs
+                        font-semibold uppercase tracking-wider
+                        text-gray-400 dark:text-secondary"
+                >
+                    Principal
+                </p>
+
+            </div>
 
             <!-- Dashboard -->
             <a href="{% url 'dashboard:dashboard' %}"
@@ -60,7 +71,13 @@
                     <rect x="14" y="14" width="7" height="7" rx="1"/>
                 </svg>
 
-                <span>Dashboard</span>
+                <span title="Dashboard"
+                data-sidebar-label
+                class="whitespace-nowrap opacity-100
+                    transition-opacity duration-200
+                    motion-reduce:transition-none"
+                >
+                Dashboard</span>
             </a>
 
             <!-- Clientes -->
@@ -86,7 +103,13 @@
                           d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
                 </svg>
 
-                <span>Clientes</span>
+                <span title="Clientes"
+                data-sidebar-label
+                    class="whitespace-nowrap opacity-100
+                    transition-opacity duration-200
+                    motion-reduce:transition-none"
+                >
+                Clientes</span>
             </a>
 
             <!-- Cuentas -->
@@ -110,7 +133,13 @@
                           d="M3 10h18M7 15h4"/>
                 </svg>
 
-                <span>Cuentas</span>
+                <span title="Cuentas"
+                data-sidebar-label
+                class="whitespace-nowrap opacity-100
+                    transition-opacity duration-200
+                    motion-reduce:transition-none"
+                >
+                Cuentas</span>
             </a>
 
             <!-- Temporadas -->
@@ -134,7 +163,13 @@
                           d="M16 3v4M8 3v4M3 10h18"/>
                 </svg>
 
-                <span>Temporadas</span>
+                <span title="Temporadas"
+                 data-sidebar-label
+                class="whitespace-nowrap opacity-100
+                    transition-opacity duration-200
+                    motion-reduce:transition-none"
+                >
+                Temporadas</span>
             </a>
 
         </nav>
@@ -142,7 +177,8 @@
     {% endif %}
 
     <!-- Pie de sidebar -->
-    <div class="border-t border-gray-200 px-5 py-4
+    <div data-sidebar-heading
+    class="border-t border-gray-200 px-5 py-4
                 dark:border-zinc-800">
 
         <p class="text-xs text-gray-400 dark:text-secondary">

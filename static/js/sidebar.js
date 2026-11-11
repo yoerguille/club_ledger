@@ -3,41 +3,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const sidebar = document.getElementById("sidebar-container");
     const toggleButton = document.getElementById("sidebar-toggle");
+    const headings = sidebar.querySelectorAll(
+        "[data-sidebar-heading]"
+    );
 
     if (!sidebar || !toggleButton) return;
 
-    // Recuperar preferencia del usuario
-    let isHidden = localStorage.getItem("sidebar-hidden") === "true";
+    // Textos del sidebar
+    const labels = sidebar.querySelectorAll("[data-sidebar-label]");
+
+    // Recuperar el estado anterior
+    let isCollapsed =
+        localStorage.getItem("sidebar-collapsed") === "true";
 
     function updateSidebar() {
 
-        // Mostrar u ocultar el sidebar
-        sidebar.classList.toggle("hidden", isHidden);
+        // Modificar anchura
+        sidebar.classList.toggle("w-64", !isCollapsed);
+        sidebar.classList.toggle("w-20", isCollapsed);
+
+        // Mostrar u ocultar textos suavemente
+        labels.forEach(label => {
+            label.classList.toggle("opacity-0", isCollapsed);
+            label.classList.toggle("opacity-100", !isCollapsed);
+            label.classList.toggle("pointer-events-none", isCollapsed);
+        });
 
         // Actualizar accesibilidad
         toggleButton.setAttribute(
             "aria-expanded",
-            String(!isHidden)
+            String(!isCollapsed)
         );
 
         toggleButton.setAttribute(
             "aria-label",
-            isHidden ? "Mostrar menú lateral" : "Ocultar menú lateral"
+            isCollapsed
+                ? "Expandir menú lateral"
+                : "Contraer menú lateral"
         );
+
+        headings.forEach(heading => {
+            heading.classList.toggle("invisible", isCollapsed);
+        });
     }
 
     // Aplicar estado inicial
     updateSidebar();
 
-    // Escuchar clics del botón
+    // Escuchar clic
     toggleButton.addEventListener("click", () => {
 
-        isHidden = !isHidden;
+        isCollapsed = !isCollapsed;
 
         updateSidebar();
 
-        // Guardar preferencia
-        localStorage.setItem("sidebar-hidden", String(isHidden));
+        // Recordar preferencia
+        localStorage.setItem(
+            "sidebar-collapsed",
+            String(isCollapsed)
+        );
 
     });
 
