@@ -4,23 +4,40 @@
 Login
 {% endblock %}
 
+{% block page_title %}
+    Login
+{% endblock %}
+
+
 {% block content %}
 
 {% load static %}
 
-    <div class="w-full max-w-md  mx-auto">
+    <div class="flex min-h-[calc(100vh-64px)] items-center justify-center">
 
-        <div class="rounded-2xl bg-white p-8 shadow-sm dark:bg-dark-primary">
+        <div class="w-full max-w-md shrink-0 rounded-2xl bg-white p-8 shadow-sm dark:bg-dark-primary">
 
             <div class="mb-8 text-center">
 
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-                    Club Ledger
-                </h1>
+                
+                <!-- ENCABEZADO DEL LOGIN -->
+                <div class="mb-8 flex flex-col items-center">
 
-                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                    Inicia sesión para continuar
-                </p>
+                    <!-- Logotipo oficial -->
+                    <img
+                        src="{% static 'img/brand/club-ledger-logo.png' %}"
+                        alt="Club Ledger"
+                        class="h-12 w-auto max-w-full object-contain"
+                    >
+
+                    <!-- Subtítulo -->
+                    <p class="mt-4 text-center text-sm text-gray-500
+                            dark:text-gray-400">
+                        Inicia sesión para continuar
+                    </p>
+
+                </div>
+
 
             </div>
 

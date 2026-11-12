@@ -63,22 +63,30 @@
 <body
  class="absolute inset-0 -z-10 h-full w-full bg-slate-50 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]
  dark:bg-dark-secondary dark:bg-none">
+    
     <div class="flex min-h-screen">
 
-        <!-- SIDEBAR -->
-        <div id="sidebar-container" class="sticky top-0 h-screen w-64 shrink-0
-           transition-[width] duration-300 ease-in-out
-           motion-reduce:transition-none"
-        >
-            {% include "components/sidebar.html" %}
-        </div>
+        {% if user.is_authenticated %}
+            <!-- SIDEBAR -->
+            <div
+                id="sidebar-container"
+                class="sticky top-0 h-screen w-64 shrink-0
+                    transition-[width] duration-300 ease-in-out
+                    motion-reduce:transition-none"
+            >
+                {% include "components/sidebar.html" %}
+            </div>
+        {% endif %}
 
         <!-- CONTENIDO PRINCIPAL -->
         <div class="flex min-w-0 flex-1 flex-col">
 
-            {% include "components/navbar.html" %}
+            {% if user.is_authenticated %}
+                <!-- NAVBAR -->
+                {% include "components/navbar.html" %}
+            {% endif %}
 
-            <main class="p-8">
+            <main class="flex-1 p-8">
 
                 {% include "components/messages.html" %}
 
@@ -90,6 +98,7 @@
         </div>
 
     </div>
+
 
     {% block extra_js %}
 
