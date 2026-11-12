@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
+## [2026-11-12]
+
+### Changed
+- Eliminated sidebar and navbar on login page.
+
 ## [2026-11-11]
 
 ### Added

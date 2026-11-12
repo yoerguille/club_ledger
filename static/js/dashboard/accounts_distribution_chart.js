@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const labels = [
         "Pendientes de cobro",
-        "Saldadas",
+        "Saldo 0",
         "Cerradas",
         "Saldo a favor del cliente",
     ];
