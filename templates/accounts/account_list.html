@@ -2,48 +2,46 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Cuentas{% endblock %}
-{% block page_title %}Cuentas{% endblock %}
+{% block title %}Cuentas | Club Ledger{% endblock %}
 
 {% block extra_js %}
-    <script src="{% static 'js/account_list_modals.js' %}" defer></script>
-    <script src="{% static 'js/payment-create.js' %}" defer></script>
-    <script src="{% static 'js/charge-create.js' %}" defer></script>
+<script src="{% static 'js/account_list_modals.js' %}" defer></script>
+<script src="{% static 'js/payment-create.js' %}" defer></script>
+<script src="{% static 'js/charge-create.js' %}" defer></script>
 {% endblock %}
 
 {% block content %}
 
-<div class="space-y-6">
+<div class="mx-auto max-w-7xl space-y-5">
 
-    <!-- ========================================== -->
-    <!-- CABECERA -->
-    <!-- ========================================== -->
+    <!-- CABECERA Y TEMPORADA -->
+    <div class="flex flex-wrap items-end justify-between gap-4">
 
-    <section class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 class="text-xl font-semibold tracking-tight
+                   text-gray-900 dark:text-white">
+            Cuentas
+        </h1>
 
-        <div>
-            <p class="mt-1 mx-1 text-xl text-gray-500 dark:text-gray-200">
-                Consulta los saldos y el estado de las cuentas de tus clientes.
-            </p>
-        </div>
+        <form method="get"
+              action="{% url 'accounts:account_list' %}">
 
-        <!-- SELECTOR DE TEMPORADA -->
-
-        <form method="get" action="{% url 'accounts:account_list' %}">
-
-            <!-- Conservar búsqueda, ordenación y filtros -->
-            <input type="hidden" name="q"
+            <input type="hidden"
+                   name="q"
                    value="{{ request.GET.q|default:'' }}">
 
-            <input type="hidden" name="sort"
+            <input type="hidden"
+                   name="sort"
                    value="{{ request.GET.sort|default:'name_asc' }}">
 
             {% for status in selected_statuses %}
-                <input type="hidden" name="status" value="{{ status }}">
+                <input type="hidden"
+                       name="status"
+                       value="{{ status }}">
             {% endfor %}
 
             <label for="header-season"
-                   class="mb-1.5 block text-xs font-medium text-gray-500 dark:text-secondary">
+                   class="mb-1.5 block text-xs font-medium
+                          text-gray-500 dark:text-secondary">
                 Temporada
                 {% if selected_season.is_active %}
                     · Activa
@@ -54,60 +52,45 @@
                 id="header-season"
                 name="season"
                 onchange="this.form.requestSubmit()"
-                class="min-w-44 rounded-lg border border-gray-200
-                       bg-white px-3 py-2.5 text-sm font-medium
-                       text-gray-900 transition-colors
-                       focus:border-btn-primary focus:outline-none
+                class="min-w-44 rounded-lg border
+                       border-gray-200 bg-white
+                       px-3 py-2.5 text-sm font-medium
+                       text-gray-900
+                       focus:border-btn-primary
+                       focus:outline-none
                        focus:ring-2 focus:ring-btn-primary/20
-                       dark:border-white/10 dark:bg-dark-primary
+                       dark:border-zinc-700
+                       dark:bg-dark-primary
                        dark:text-white dark:scheme-dark"
             >
                 {% for season in seasons %}
-                    <option
-                        value="{{ season.pk }}"
+
+                    <option value="{{ season.pk }}"
                         {% if selected_season and season.pk == selected_season.pk %}
                             selected
                         {% endif %}
                     >
                         {{ season.name }}
                     </option>
+
                 {% endfor %}
             </select>
 
         </form>
 
-    </section>
+    </div>
 
-
-    <!-- ========================================== -->
-    <!-- PANEL DE BÚSQUEDA Y FILTROS -->
-    <!-- ========================================== -->
-
+    <!-- FILTROS -->
     <section class="rounded-xl border border-gray-200
-                    bg-white p-5 shadow-sm
-                    dark:border-white/10 dark:bg-dark-primary">
-
-        <div class="mb-4 flex items-center gap-2">
-
-            <svg class="h-5 w-5 text-gray-500 dark:text-secondary"
-                 fill="none" stroke="currentColor"
-                 stroke-width="1.8" viewBox="0 0 24 24"
-                 aria-hidden="true">
-                <circle cx="11" cy="11" r="7"/>
-                <path stroke-linecap="round" d="m20 20-4-4"/>
-            </svg>
-
-            <h2 class="text-sm font-semibold text-gray-900 dark:text-white">
-                Buscar y filtrar
-            </h2>
-
-        </div>
+                    bg-white px-5 py-4
+                    dark:border-zinc-800 dark:bg-dark-primary">
 
         <form
             id="account-filters"
             method="get"
             action="{% url 'accounts:account_list' %}"
-            class="grid grid-cols-1 gap-4 md:grid-cols-12 md:items-end"
+            class="grid grid-cols-1 gap-3
+                   md:grid-cols-12 md:items-end"
         >
 
             {% if selected_season %}
@@ -117,13 +100,12 @@
             {% endif %}
 
             <!-- BÚSQUEDA -->
-
             <div class="md:col-span-5">
 
                 <label for="search"
                        class="mb-1.5 block text-xs font-medium
                               text-gray-600 dark:text-secondary">
-                    Nombre de la cuenta o cliente
+                    Buscar cuenta
                 </label>
 
                 <input
@@ -132,19 +114,22 @@
                     type="search"
                     value="{{ request.GET.q|default:'' }}"
                     placeholder="Buscar cuenta o cliente..."
-                    class="w-full rounded-lg border border-gray-300
-                           bg-gray-50 px-3.5 py-2.5 text-sm
-                           text-gray-900 placeholder:text-gray-400
-                           focus:border-btn-primary focus:outline-none
+                    class="w-full rounded-lg border
+                           border-gray-200 bg-white
+                           px-3.5 py-2.5 text-sm
+                           text-gray-900
+                           placeholder:text-gray-400
+                           focus:border-btn-primary
+                           focus:outline-none
                            focus:ring-2 focus:ring-btn-primary/20
-                           dark:border-white/10 dark:bg-dark-secondary
-                           dark:text-white dark:placeholder:text-secondary"
+                           dark:border-zinc-700
+                           dark:bg-dark-tertiary
+                           dark:text-white"
                 >
 
             </div>
 
             <!-- ORDENACIÓN -->
-
             <div class="md:col-span-3">
 
                 <label for="sort"
@@ -156,55 +141,55 @@
                 <select
                     id="sort"
                     name="sort"
-                    class="w-full rounded-lg border border-gray-300
-                           bg-gray-50 px-3.5 py-2.5 text-sm
+                    class="w-full rounded-lg border
+                           border-gray-200 bg-white
+                           px-3.5 py-2.5 text-sm
                            text-gray-900
-                           focus:border-btn-primary focus:outline-none
+                           focus:border-btn-primary
+                           focus:outline-none
                            focus:ring-2 focus:ring-btn-primary/20
-                           dark:border-white/10 dark:bg-dark-secondary
+                           dark:border-zinc-700
+                           dark:bg-dark-tertiary
                            dark:text-white dark:scheme-dark"
                 >
-
                     <option value="name_asc"
-                            {% if request.GET.sort == 'name_asc' or not request.GET.sort %}
-                                selected
-                            {% endif %}>
+                        {% if request.GET.sort == 'name_asc' or not request.GET.sort %}
+                            selected
+                        {% endif %}>
                         Nombre A → Z
                     </option>
 
                     <option value="name_desc"
-                            {% if request.GET.sort == 'name_desc' %}
-                                selected
-                            {% endif %}>
+                        {% if request.GET.sort == 'name_desc' %}
+                            selected
+                        {% endif %}>
                         Nombre Z → A
                     </option>
 
                     <option value="balance_desc"
-                            {% if request.GET.sort == 'balance_desc' %}
-                                selected
-                            {% endif %}>
+                        {% if request.GET.sort == 'balance_desc' %}
+                            selected
+                        {% endif %}>
                         Saldo mayor → menor
                     </option>
 
                     <option value="balance_asc"
-                            {% if request.GET.sort == 'balance_asc' %}
-                                selected
-                            {% endif %}>
+                        {% if request.GET.sort == 'balance_asc' %}
+                            selected
+                        {% endif %}>
                         Saldo menor → mayor
                     </option>
-
                 </select>
 
             </div>
 
             <!-- FILTRO POR SITUACIÓN -->
-
             <div class="relative md:col-span-4">
 
                 <label for="status-dropdown-button"
                        class="mb-1.5 block text-xs font-medium
                               text-gray-600 dark:text-secondary">
-                    Situación de la cuenta
+                    Situación
                 </label>
 
                 <button
@@ -212,379 +197,318 @@
                     data-dropdown-toggle="status-dropdown"
                     type="button"
                     aria-controls="status-dropdown"
-                    class="flex w-full items-center justify-between
-                           rounded-lg border border-gray-300
-                           bg-gray-50 px-3.5 py-2.5
-                           text-sm font-medium text-gray-900
-                           transition-colors hover:bg-gray-100
-                           focus:outline-none focus:ring-2
-                           focus:ring-btn-primary/20
-                           dark:border-white/10 dark:bg-dark-secondary
-                           dark:text-white dark:hover:bg-dark-tertiary"
+                    class="flex w-full items-center
+                           justify-between rounded-lg
+                           border border-gray-200
+                           bg-white px-3.5 py-2.5
+                           text-sm text-gray-700
+                           hover:bg-gray-50
+                           dark:border-zinc-700
+                           dark:bg-dark-tertiary
+                           dark:text-white"
                 >
+                    <span>Filtrar por situación</span>
 
-                    <span class="flex items-center gap-2">
-
-                        <svg class="h-4 w-4" fill="none"
-                             stroke="currentColor" stroke-width="1.8"
-                             viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M4 7h16M7 12h10M10 17h4"/>
-                        </svg>
-
-                        Situación
-
-                    </span>
-
-                    <svg class="h-4 w-4" fill="none"
-                         stroke="currentColor" stroke-width="2"
-                         viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="m6 9 6 6 6-6"/>
+                    <svg class="h-4 w-4"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="m6 9 6 6 6-6"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"/>
                     </svg>
-
                 </button>
 
-                <!-- PANEL DESPLEGABLE -->
-
+                <!-- DESPLEGABLE FLOWBITE -->
                 <div
                     id="status-dropdown"
                     class="z-30 hidden w-64 rounded-lg
-                           border border-gray-200 bg-white
-                           p-3 shadow-lg
-                           dark:border-zinc-700 dark:bg-dark-secondary"
+                           border border-gray-200
+                           bg-white p-3 shadow-lg
+                           dark:border-zinc-700
+                           dark:bg-dark-secondary"
                 >
-
-                    <p class="mb-3 text-xs font-medium
-                              text-gray-500 dark:text-secondary">
-                        Mostrar cuentas
-                    </p>
 
                     <div class="space-y-3">
 
-                        <label class="flex cursor-pointer items-center gap-3">
+                        <label class="flex cursor-pointer
+                                      items-center gap-3">
                             <input
                                 type="checkbox"
                                 name="status"
                                 value="pending"
                                 {% if "pending" in selected_statuses %}checked{% endif %}
-                                class="h-4 w-4 rounded border-gray-300
-                                       text-btn-primary focus:ring-btn-primary"
+                                class="h-4 w-4 rounded
+                                       border-gray-300
+                                       text-btn-primary
+                                       focus:ring-btn-primary"
                             >
-                            <span class="text-sm text-gray-700 dark:text-gray-200">
+                            <span class="text-sm text-gray-700
+                                         dark:text-gray-200">
                                 Pendientes de cobro
                             </span>
                         </label>
 
-                        <label class="flex cursor-pointer items-center gap-3">
+                        <label class="flex cursor-pointer
+                                      items-center gap-3">
                             <input
                                 type="checkbox"
                                 name="status"
                                 value="zero"
                                 {% if "zero" in selected_statuses %}checked{% endif %}
-                                class="h-4 w-4 rounded border-gray-300
-                                       text-btn-primary focus:ring-btn-primary"
+                                class="h-4 w-4 rounded
+                                       border-gray-300
+                                       text-btn-primary
+                                       focus:ring-btn-primary"
                             >
-                            <span class="text-sm text-gray-700 dark:text-gray-200">
+                            <span class="text-sm text-gray-700
+                                         dark:text-gray-200">
                                 Saldo 0
                             </span>
                         </label>
 
-                        <label class="flex cursor-pointer items-center gap-3">
+                        <label class="flex cursor-pointer
+                                      items-center gap-3">
                             <input
                                 type="checkbox"
                                 name="status"
                                 value="negative"
                                 {% if "negative" in selected_statuses %}checked{% endif %}
-                                class="h-4 w-4 rounded border-gray-300
-                                       text-btn-primary focus:ring-btn-primary"
+                                class="h-4 w-4 rounded
+                                       border-gray-300
+                                       text-btn-primary
+                                       focus:ring-btn-primary"
                             >
-                            <span class="text-sm text-gray-700 dark:text-gray-200">
+                            <span class="text-sm text-gray-700
+                                         dark:text-gray-200">
                                 Saldo a favor del cliente
                             </span>
                         </label>
 
-                        <label class="flex cursor-pointer items-center gap-3">
+                        <label class="flex cursor-pointer
+                                      items-center gap-3">
                             <input
                                 type="checkbox"
                                 name="status"
                                 value="closed"
                                 {% if "closed" in selected_statuses %}checked{% endif %}
-                                class="h-4 w-4 rounded border-gray-300
-                                       text-btn-primary focus:ring-btn-primary"
+                                class="h-4 w-4 rounded
+                                       border-gray-300
+                                       text-btn-primary
+                                       focus:ring-btn-primary"
                             >
-                            <span class="text-sm text-gray-700 dark:text-gray-200">
+                            <span class="text-sm text-gray-700
+                                         dark:text-gray-200">
                                 Cerradas
                             </span>
                         </label>
 
                     </div>
 
-                    <div class="mt-4 border-t border-gray-200 pt-3
-                                dark:border-zinc-700">
-
+                    <div class="mt-4 border-t border-gray-100
+                                pt-3 dark:border-zinc-700">
                         <button
                             type="submit"
-                            class="w-full rounded-lg bg-btn-primary
-                                   px-3 py-2 text-sm font-medium text-white
+                            class="w-full rounded-lg
+                                   bg-btn-primary px-3 py-2
+                                   text-sm font-medium text-white
                                    hover:bg-btn-hover-primary"
                         >
                             Aplicar filtros
                         </button>
-
                     </div>
 
                 </div>
 
             </div>
 
-            <!-- RESTABLECER FILTROS -->
-
+            <!-- RESTABLECER -->
             {% if request.GET.q or request.GET.sort or selected_statuses %}
 
-                <div class="flex flex-wrap items-center gap-3
-                            border-t border-gray-100 pt-4
-                            dark:border-white/10 md:col-span-12">
+                <div class="md:col-span-12">
 
-                    <a
-                        href="{% url 'accounts:account_list' %}{% if selected_season %}?season={{ selected_season.pk }}{% endif %}"
-                        class="rounded-lg px-3 py-2 text-sm font-medium
-                               text-gray-600 hover:bg-gray-100
-                               dark:text-gray-300 dark:hover:bg-dark-tertiary"
-                    >
-                        Restablecer
+                    <a href="{% url 'accounts:account_list' %}{% if selected_season %}?season={{ selected_season.pk }}{% endif %}"
+                       class="text-xs font-medium
+                              text-gray-500 hover:text-btn-primary
+                              dark:text-secondary
+                              dark:hover:text-blue-400">
+                        Restablecer filtros
                     </a>
-
-                    <span class="text-xs text-gray-500 dark:text-secondary">
-                        Consulta personalizada
-                    </span>
 
                 </div>
 
             {% endif %}
 
+            <!-- Permite aplicar búsqueda y ordenación -->
+            <div class="md:col-span-12 flex justify-end">
+
+                <button type="submit"
+                        class="rounded-lg bg-gray-900
+                               px-4 py-2 text-sm font-medium
+                               text-white hover:bg-gray-800
+                               dark:bg-white dark:text-gray-900
+                               dark:hover:bg-gray-200">
+                    Buscar
+                </button>
+
+            </div>
+
         </form>
 
     </section>
 
-
-    <!-- ========================================== -->
-    <!-- RESULTADOS -->
-    <!-- ========================================== -->
-
+    <!-- LISTADO -->
     <section class="overflow-hidden rounded-xl
-                    border border-gray-200 bg-white shadow-sm
-                    dark:border-white/10 dark:bg-dark-primary">
+                    border border-gray-200 bg-white
+                    dark:border-zinc-800 dark:bg-dark-primary">
 
         <!-- CABECERA DE RESULTADOS -->
+        <div class="flex items-center justify-between
+                    border-b border-gray-100
+                    px-5 py-4 dark:border-zinc-800">
 
-        <div class="flex flex-col gap-2 border-b border-gray-200
-                    px-5 py-4 dark:border-white/10
-                    sm:flex-row sm:items-center sm:justify-between">
+            <h2 class="text-sm font-semibold
+                       text-gray-900 dark:text-white">
+                Cuentas
+            </h2>
 
-            <div>
-
-                <h2 class="text-base font-semibold text-gray-900 dark:text-white">
-                    Resultados
-                </h2>
-
-                <p class="mt-1 text-xs text-gray-500 dark:text-secondary">
-
-                    {% if selected_season %}
-                        {{ selected_season.name }} ·
-                    {% endif %}
-
-                    {{ page_obj.paginator.count }}
-                    cuenta{{ page_obj.paginator.count|pluralize }} en el listado
-
-                </p>
-
-            </div>
-
-            <p class="text-xs text-gray-500 dark:text-secondary">
-                Selecciona una cuenta para consultar su detalle
-            </p>
+            <span class="font-mono text-xs
+                         text-gray-500 dark:text-secondary">
+                {{ page_obj.paginator.count }}
+                resultados
+            </span>
 
         </div>
 
-
-        <!-- ========================================== -->
-        <!-- TABLA DE CUENTAS -->
-        <!-- ========================================== -->
-
         <div class="overflow-x-auto">
 
-            <table class="w-full min-w-[820px] text-left text-sm">
+            <table class="w-full min-w-[700px]
+                          text-left text-sm">
 
-                <thead class="border-b border-gray-200 bg-gray-50
-                              text-xs font-medium uppercase tracking-wide
-                              text-gray-500
-                              dark:border-white/10 dark:bg-dark-secondary
-                              dark:text-secondary">
+                <thead>
+                    <tr class="border-b border-gray-100
+                               bg-gray-50/50
+                               text-[10px] uppercase
+                               tracking-wider text-gray-400
+                               dark:border-zinc-800
+                               dark:bg-dark-tertiary/20
+                               dark:text-gray-500">
 
-                    <tr>
-                        <th scope="col" class="px-5 py-3 font-medium">
-                            Cuenta / cliente
+                        <th scope="col"
+                            class="px-5 py-3.5 font-medium">
+                            Cuenta / Cliente
                         </th>
 
-                        <th scope="col" class="px-5 py-3 font-medium">
-                            Temporada
+                        <th scope="col"
+                            class="px-5 py-3.5 text-right font-medium">
+                            Saldo
                         </th>
 
-                        <th scope="col" class="px-5 py-3 text-right font-medium">
-                            Saldo neto
+                        <th scope="col"
+                            class="px-5 py-3.5 font-medium">
+                            Situación
                         </th>
 
-                        <th scope="col" class="px-5 py-3 font-medium">
-                            Situación económica
-                        </th>
-
-                        <th scope="col" class="px-5 py-3 text-right font-medium">
+                        <th scope="col"
+                            class="w-20 px-5 py-3.5 text-right
+                                   font-medium">
                             Acciones
                         </th>
-                    </tr>
 
+                    </tr>
                 </thead>
 
-
-                <!-- CUERPO -->
-
-                <tbody class="divide-y divide-gray-100 dark:divide-white/10">
+                <tbody class="divide-y divide-gray-100
+                              dark:divide-zinc-800">
 
                     {% for account in accounts %}
 
-                        <tr class="transition-colors
-                                   hover:bg-gray-50
-                                   dark:hover:bg-dark-tertiary">
+                        <tr class="group transition-colors
+                                   hover:bg-gray-50/70
+                                   dark:hover:bg-dark-tertiary/30">
 
-                            <!-- ================================= -->
-                            <!-- CUENTA / CLIENTE / ID -->
-                            <!-- ================================= -->
-
+                            <!-- CUENTA Y CLIENTE -->
                             <td class="px-5 py-4">
 
-                                <!-- IDENTIFICADOR VISUAL -->
-
-                                <span
-                                    class="mb-1 block font-mono
-                                           text-[11px] font-medium tracking-wide
-                                           text-gray-400 dark:text-gray-500"
-                                >
+                                <span class="mb-1 block font-mono
+                                             text-[10px] tracking-wide
+                                             text-gray-400
+                                             dark:text-gray-500">
                                     ACC-{{ account.pk|stringformat:"05d" }}
                                 </span>
-
-                                <!-- NOMBRE DE CUENTA -->
 
                                 <a
                                     href="{% url 'accounts:account_detail' account.pk %}"
                                     data-account-name-display="{{ account.pk }}"
-                                    class="block w-fit text-sm font-semibold
-                                           text-gray-900 transition-colors
+                                    class="block w-fit text-sm
+                                           font-semibold text-gray-900
+                                           transition-colors
                                            hover:text-btn-primary
-                                           dark:text-white dark:hover:text-blue-400"
+                                           dark:text-white
+                                           dark:hover:text-blue-400"
                                 >
                                     {{ account.name }}
                                 </a>
 
-                                <!-- CLIENTE -->
-
                                 <a
                                     href="{% url 'customers:customer_detail' account.customer.pk %}"
-                                    class="mt-1 block w-fit text-xs
-                                           text-gray-500 transition-colors
+                                    class="mt-1 block w-fit
+                                           text-xs text-gray-500
                                            hover:text-btn-primary
-                                           dark:text-secondary dark:hover:text-blue-400"
+                                           dark:text-secondary
+                                           dark:hover:text-blue-400"
                                 >
                                     {{ account.customer.name }}
                                 </a>
 
+                                <span class="mt-1 block text-xs
+                                             text-gray-400
+                                             dark:text-gray-500">
+                                    {{ account.season.name }}
+                                </span>
+
                             </td>
-
-
-                            <!-- TEMPORADA -->
-
-                            <td class="whitespace-nowrap px-5 py-4
-                                       text-gray-600 dark:text-gray-300">
-                                {{ account.season.name }}
-                            </td>
-
 
                             <!-- SALDO -->
-
                             <td class="whitespace-nowrap px-5 py-4
-                                       text-right font-semibold tabular-nums
-                                       {% if account.balance > 0 %}
-                                           text-amber-700 dark:text-amber-400
-                                       {% elif account.balance < 0 %}
-                                           text-red-600 dark:text-red-400
-                                       {% else %}
-                                           text-gray-900 dark:text-white
-                                       {% endif %}">
+                                       text-right align-middle">
 
-                                {{ account.balance|floatformat:2 }} €
+                                <span class="font-mono text-sm
+                                             font-semibold text-gray-900
+                                             dark:text-white">
+                                    {{ account.balance|floatformat:2 }} €
+                                </span>
 
                             </td>
 
+                            <!-- SITUACIÓN -->
+                            <td class="px-5 py-4 align-middle">
 
-                            <!-- SITUACIÓN ECONÓMICA -->
+                                <span class="text-xs font-medium
+                                             text-gray-500
+                                             dark:text-gray-300">
 
-                            <td class="px-5 py-4">
-
-                                {% if account.is_closed %}
-
-                                    <span class="inline-flex items-center gap-1.5
-                                                 whitespace-nowrap rounded-full
-                                                 bg-emerald-100 px-2.5 py-1
-                                                 text-xs font-medium text-emerald-700
-                                                 dark:bg-emerald-900/25
-                                                 dark:text-emerald-400">
-                                        ✓ Cerrada
-                                    </span>
-
-                                {% elif account.balance > 0 %}
-
-                                    <span class="inline-flex whitespace-nowrap rounded-full
-                                                 bg-amber-100 px-2.5 py-1
-                                                 text-xs font-medium text-amber-800
-                                                 dark:bg-amber-900/25
-                                                 dark:text-amber-400">
+                                    {% if account.is_closed %}
+                                        Cerrada
+                                    {% elif account.balance > 0 %}
                                         Pendiente
-                                    </span>
-
-                                {% elif account.balance < 0 %}
-
-                                    <span class="inline-flex whitespace-nowrap rounded-full
-                                                 bg-red-100 px-2.5 py-1
-                                                 text-xs font-medium text-red-700
-                                                 dark:bg-red-900/25
-                                                 dark:text-red-400">
+                                    {% elif account.balance < 0 %}
                                         Saldo a favor
-                                    </span>
-
-                                {% else %}
-
-                                    <span class="inline-flex whitespace-nowrap rounded-full
-                                                 bg-gray-100 px-2.5 py-1
-                                                 text-xs font-medium text-gray-600
-                                                 dark:bg-zinc-800 dark:text-gray-300">
+                                    {% else %}
                                         Saldo 0
-                                    </span>
+                                    {% endif %}
 
-                                {% endif %}
+                                </span>
 
                             </td>
 
-
-                            <!-- ================================= -->
-                            <!-- ACCIONES DE LA CUENTA -->
-                            <!-- ================================= -->
-
-                            <td class="px-5 py-4 text-right">
+                            <!-- ACCIONES -->
+                            <td class="px-5 py-4 text-right
+                                       align-middle">
 
                                 <!-- BOTÓN TRES PUNTOS -->
-
                                 <button
                                     id="account-actions-button-{{ account.pk }}"
                                     data-dropdown-toggle="account-actions-{{ account.pk }}"
@@ -592,60 +516,53 @@
                                     type="button"
                                     aria-label="Acciones de {{ account.name }}"
                                     aria-haspopup="true"
-                                    class="inline-flex h-9 w-9 items-center justify-center
-                                           rounded-lg border border-gray-200
-                                           bg-white text-gray-500 transition-colors
-                                           hover:border-gray-300 hover:bg-gray-50
+                                    class="inline-flex h-9 w-9
+                                           items-center justify-center
+                                           rounded-lg text-gray-400
+                                           transition-colors
+                                           hover:bg-gray-100
                                            hover:text-gray-900
-                                           focus:outline-none focus:ring-2
-                                           focus:ring-btn-primary/30
-                                           dark:border-white/10
-                                           dark:bg-dark-secondary
                                            dark:text-gray-400
                                            dark:hover:bg-dark-tertiary
                                            dark:hover:text-white"
                                 >
-
-                                    <svg class="h-5 w-5" fill="currentColor"
-                                         viewBox="0 0 24 24" aria-hidden="true">
+                                    <svg class="h-5 w-5"
+                                         fill="currentColor"
+                                         viewBox="0 0 24 24"
+                                         aria-hidden="true">
                                         <circle cx="5" cy="12" r="1.8"/>
                                         <circle cx="12" cy="12" r="1.8"/>
                                         <circle cx="19" cy="12" r="1.8"/>
                                     </svg>
-
                                 </button>
 
-
-                                <!-- MENÚ DESPLEGABLE -->
-
+                                <!-- MENÚ DE ACCIONES -->
                                 <div
                                     id="account-actions-{{ account.pk }}"
-                                    class="z-50 hidden w-52 overflow-hidden
-                                           rounded-xl border border-gray-200
+                                    class="z-50 hidden w-52
+                                           overflow-hidden rounded-xl
+                                           border border-gray-200
                                            bg-white py-1 shadow-lg
                                            dark:border-zinc-700
                                            dark:bg-dark-secondary"
                                 >
 
                                     <!-- VER DETALLE -->
-
                                     <a
                                         href="{% url 'accounts:account_detail' account.pk %}"
-                                        class="flex items-center gap-3 px-4 py-2.5
-                                               text-sm text-gray-700
-                                               transition-colors hover:bg-gray-100
+                                        class="flex items-center gap-3
+                                               px-4 py-2.5 text-sm
+                                               text-gray-700
+                                               hover:bg-gray-100
                                                dark:text-gray-200
                                                dark:hover:bg-dark-tertiary"
                                     >
-                                        <span class="w-5 text-center" aria-hidden="true">
-                                            ↗
-                                        </span>
+                                        <span class="w-5 text-center"
+                                              aria-hidden="true">↗</span>
                                         Ver detalle
                                     </a>
 
-
-                                    <!-- ENVIAR POR EMAIL -->
-
+                                    <!-- ENVIAR EMAIL -->
                                     <form
                                         method="post"
                                         action="{% url 'statements:statement_info_email' account.pk %}"
@@ -654,75 +571,71 @@
 
                                         <button
                                             type="submit"
-                                            class="flex w-full items-center gap-3
-                                                   px-4 py-2.5 text-left
-                                                   text-sm text-gray-700
-                                                   transition-colors hover:bg-gray-100
+                                            class="flex w-full items-center
+                                                   gap-3 px-4 py-2.5
+                                                   text-left text-sm
+                                                   text-gray-700
+                                                   hover:bg-gray-100
                                                    dark:text-gray-200
                                                    dark:hover:bg-dark-tertiary"
                                         >
-                                            <span class="w-5 text-center" aria-hidden="true">
-                                                ✉
-                                            </span>
+                                            <span class="w-5 text-center"
+                                                  aria-hidden="true">✉</span>
                                             Enviar por email
                                         </button>
-                                    </form>
 
+                                    </form>
 
                                     {% if not account.is_closed %}
 
                                         <!-- EDITAR CUENTA -->
-
                                         <button
                                             type="button"
                                             data-modal-target="account-edit-modal"
                                             data-modal-toggle="account-edit-modal"
                                             data-edit-url="{% url 'accounts:account_update' account.pk %}"
                                             data-account-name="{{ account.name }}"
-                                            class="flex w-full items-center gap-3
-                                                   px-4 py-2.5 text-left
-                                                   text-sm text-gray-700
-                                                   transition-colors hover:bg-gray-100
+                                            class="flex w-full items-center
+                                                   gap-3 px-4 py-2.5
+                                                   text-left text-sm
+                                                   text-gray-700
+                                                   hover:bg-gray-100
                                                    dark:text-gray-200
                                                    dark:hover:bg-dark-tertiary"
                                         >
-
                                             <svg class="h-4 w-4 shrink-0"
                                                  fill="none"
                                                  stroke="currentColor"
                                                  stroke-width="1.8"
                                                  viewBox="0 0 24 24"
                                                  aria-hidden="true">
-                                                <path stroke-linecap="round"
-                                                      stroke-linejoin="round"
-                                                      d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L9 17l-4 1 1-4Z"/>
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L9 17l-4 1 1-4Z"/>
                                             </svg>
-
                                             Editar cuenta
-
                                         </button>
 
-
-                                        <div class="my-1 border-t border-gray-100
+                                        <div class="my-1 border-t
+                                                    border-gray-100
                                                     dark:border-zinc-700"></div>
 
-
                                         <!-- REGISTRAR CARGO -->
-
                                         <button
                                             type="button"
                                             data-modal-target="charge-create-modal"
                                             data-modal-toggle="charge-create-modal"
                                             data-charge-url="{% url 'api_charge_create' account.pk %}"
                                             data-account-name="{{ account.name }}"
-                                            class="flex w-full items-center gap-3
-                                                   px-4 py-2.5 text-left
-                                                   text-sm text-gray-700
-                                                   transition-colors hover:bg-gray-100
+                                            class="flex w-full items-center
+                                                   gap-3 px-4 py-2.5
+                                                   text-left text-sm
+                                                   text-gray-700
+                                                   hover:bg-gray-100
                                                    dark:text-gray-200
                                                    dark:hover:bg-dark-tertiary"
                                         >
-
                                             <svg class="h-4 w-4 shrink-0"
                                                  fill="none"
                                                  stroke="currentColor"
@@ -733,28 +646,24 @@
                                                 <path stroke-linecap="round"
                                                       d="M12 8v8M8 12h8"/>
                                             </svg>
-
                                             Registrar cargo
-
                                         </button>
 
-
                                         <!-- REGISTRAR PAGO -->
-
                                         <button
                                             type="button"
                                             data-modal-target="payment-create-modal"
                                             data-modal-toggle="payment-create-modal"
                                             data-payment-url="{% url 'api_payment_create' account.pk %}"
                                             data-account-name="{{ account.name }}"
-                                            class="flex w-full items-center gap-3
-                                                   px-4 py-2.5 text-left
-                                                   text-sm text-gray-700
-                                                   transition-colors hover:bg-gray-100
+                                            class="flex w-full items-center
+                                                   gap-3 px-4 py-2.5
+                                                   text-left text-sm
+                                                   text-gray-700
+                                                   hover:bg-gray-100
                                                    dark:text-gray-200
                                                    dark:hover:bg-dark-tertiary"
                                         >
-
                                             <svg class="h-4 w-4 shrink-0"
                                                  fill="none"
                                                  stroke="currentColor"
@@ -762,13 +671,13 @@
                                                  viewBox="0 0 24 24"
                                                  aria-hidden="true">
                                                 <rect x="3" y="5"
-                                                      width="18" height="14" rx="2"/>
+                                                      width="18"
+                                                      height="14"
+                                                      rx="2"/>
                                                 <path stroke-linecap="round"
                                                       d="M3 10h18M7 15h3"/>
                                             </svg>
-
                                             Registrar pago
-
                                         </button>
 
                                     {% endif %}
@@ -781,41 +690,16 @@
 
                     {% empty %}
 
-                        <!-- ESTADO VACÍO -->
-
                         <tr>
-                            <td colspan="5" class="px-6 py-14 text-center">
+                            <td colspan="4"
+                                class="px-6 py-14 text-center">
 
-                                <div class="mx-auto flex h-12 w-12
-                                            items-center justify-center
-                                            rounded-full bg-gray-100
-                                            text-gray-500
-                                            dark:bg-dark-secondary
-                                            dark:text-secondary">
-
-                                    <svg class="h-6 w-6"
-                                         viewBox="0 0 24 24"
-                                         fill="none"
-                                         stroke="currentColor"
-                                         stroke-width="1.7"
-                                         aria-hidden="true">
-
-                                        <rect x="4" y="3"
-                                              width="16" height="18" rx="2"/>
-
-                                        <path d="M8 8h8M8 12h8M8 16h5"
-                                              stroke-linecap="round"/>
-
-                                    </svg>
-
-                                </div>
-
-                                <p class="mt-3 font-medium
+                                <p class="text-sm font-medium
                                           text-gray-900 dark:text-white">
                                     No se encontraron cuentas
                                 </p>
 
-                                <p class="mt-1 text-sm
+                                <p class="mt-1 text-xs
                                           text-gray-500 dark:text-secondary">
                                     Prueba con otra búsqueda o cambia
                                     la temporada seleccionada.
@@ -823,8 +707,9 @@
 
                                 <a
                                     href="{% url 'accounts:account_list' %}"
-                                    class="mt-3 inline-block text-sm
-                                           font-medium text-btn-primary
+                                    class="mt-3 inline-block
+                                           text-xs font-medium
+                                           text-btn-primary
                                            hover:text-btn-hover-primary"
                                 >
                                     Restablecer filtros
@@ -841,31 +726,30 @@
 
         </div>
 
-
-        <!-- ========================================== -->
         <!-- PAGINACIÓN -->
-        <!-- ========================================== -->
-
         {% if is_paginated %}
 
             <div class="flex flex-col gap-4
-                        border-t border-gray-200 px-5 py-4
-                        dark:border-white/10
-                        sm:flex-row sm:items-center sm:justify-between">
+                        border-t border-gray-100
+                        px-5 py-4
+                        dark:border-zinc-800
+                        sm:flex-row sm:items-center
+                        sm:justify-between">
 
-                <!-- INFORMACIÓN DE RESULTADOS -->
-
-                <p class="text-sm text-gray-500 dark:text-secondary">
+                <p class="text-xs text-gray-500
+                          dark:text-secondary">
 
                     Mostrando
 
-                    <span class="font-medium text-gray-900 dark:text-white">
+                    <span class="font-medium text-gray-900
+                                 dark:text-white">
                         {{ page_obj.start_index }}–{{ page_obj.end_index }}
                     </span>
 
                     de
 
-                    <span class="font-medium text-gray-900 dark:text-white">
+                    <span class="font-medium text-gray-900
+                                 dark:text-white">
                         {{ page_obj.paginator.count }}
                     </span>
 
@@ -873,33 +757,25 @@
 
                 </p>
 
-
-                <!-- NAVEGACIÓN -->
-
-                <nav
-                    aria-label="Paginación de cuentas"
-                    class="flex items-center gap-1"
-                >
-
-                    <!-- ANTERIOR -->
+                <nav aria-label="Paginación de cuentas"
+                     class="flex flex-wrap items-center gap-1">
 
                     {% if page_obj.has_previous %}
 
                         <a
                             href="?{{ pagination_query }}&page={{ page_obj.previous_page_number }}"
-                            class="rounded-lg border border-gray-200
-                                   px-3 py-2 text-sm text-gray-600
-                                   transition-colors hover:bg-gray-100
-                                   dark:border-white/10 dark:text-gray-300
+                            class="rounded-lg border
+                                   border-gray-200 px-3 py-2
+                                   text-xs text-gray-600
+                                   hover:bg-gray-100
+                                   dark:border-zinc-700
+                                   dark:text-gray-300
                                    dark:hover:bg-dark-tertiary"
                         >
                             Anterior
                         </a>
 
                     {% endif %}
-
-
-                    <!-- NÚMEROS DE PÁGINA -->
 
                     {% for number in page_obj.paginator.page_range %}
 
@@ -908,7 +784,8 @@
                             <span
                                 aria-current="page"
                                 class="rounded-lg bg-btn-primary
-                                       px-3 py-2 text-sm font-medium text-white"
+                                       px-3 py-2 text-xs
+                                       font-medium text-white"
                             >
                                 {{ number }}
                             </span>
@@ -917,10 +794,12 @@
 
                             <a
                                 href="?{{ pagination_query }}&page={{ number }}"
-                                class="rounded-lg border border-gray-200
-                                       px-3 py-2 text-sm text-gray-600
-                                       transition-colors hover:bg-gray-100
-                                       dark:border-white/10 dark:text-gray-300
+                                class="rounded-lg border
+                                       border-gray-200 px-3 py-2
+                                       text-xs text-gray-600
+                                       hover:bg-gray-100
+                                       dark:border-zinc-700
+                                       dark:text-gray-300
                                        dark:hover:bg-dark-tertiary"
                             >
                                 {{ number }}
@@ -930,17 +809,16 @@
 
                     {% endfor %}
 
-
-                    <!-- SIGUIENTE -->
-
                     {% if page_obj.has_next %}
 
                         <a
                             href="?{{ pagination_query }}&page={{ page_obj.next_page_number }}"
-                            class="rounded-lg border border-gray-200
-                                   px-3 py-2 text-sm text-gray-600
-                                   transition-colors hover:bg-gray-100
-                                   dark:border-white/10 dark:text-gray-300
+                            class="rounded-lg border
+                                   border-gray-200 px-3 py-2
+                                   text-xs text-gray-600
+                                   hover:bg-gray-100
+                                   dark:border-zinc-700
+                                   dark:text-gray-300
                                    dark:hover:bg-dark-tertiary"
                         >
                             Siguiente
@@ -958,11 +836,7 @@
 
 </div>
 
-
-<!-- ========================================== -->
 <!-- MODALES REUTILIZABLES -->
-<!-- ========================================== -->
-
 {% include "accounts/modals/payment_create_modal.html" %}
 {% include "accounts/modals/charge_create_modal.html" %}
 {% include "accounts/modals/update_account_modal.html" %}
