@@ -99,35 +99,60 @@
                        value="{{ selected_season.pk }}">
             {% endif %}
 
+           
             <!-- BÚSQUEDA -->
             <div class="md:col-span-5">
 
-                <label for="search"
-                       class="mb-1.5 block text-xs font-medium
-                              text-gray-600 dark:text-secondary">
+                <label
+                    for="search"
+                    class="mb-1.5 block text-xs font-medium
+                        text-gray-600 dark:text-secondary"
+                >
                     Buscar cuenta
                 </label>
 
-                <input
-                    id="search"
-                    name="q"
-                    type="search"
-                    value="{{ request.GET.q|default:'' }}"
-                    placeholder="Buscar cuenta o cliente..."
-                    class="w-full rounded-lg border
-                           border-gray-200 bg-white
-                           px-3.5 py-2.5 text-sm
-                           text-gray-900
-                           placeholder:text-gray-400
-                           focus:border-btn-primary
-                           focus:outline-none
-                           focus:ring-2 focus:ring-btn-primary/20
-                           dark:border-zinc-700
-                           dark:bg-dark-tertiary
-                           dark:text-white"
-                >
+                <div class="relative">
+
+                    <input
+                        id="search"
+                        name="q"
+                        type="search"
+                        value="{{ request.GET.q|default:'' }}"
+                        placeholder="Buscar cuenta o cliente..."
+                        class="w-full rounded-lg border
+                            border-gray-200 bg-white
+                            py-2.5 pl-3.5 pr-24 text-sm
+                            text-gray-900
+                            placeholder:text-gray-400
+                            focus:border-btn-primary
+                            focus:outline-none
+                            focus:ring-2 focus:ring-btn-primary/20
+                            dark:border-zinc-700
+                            dark:bg-dark-tertiary
+                            dark:text-white"
+                    >
+
+                    <!-- BOTÓN INTEGRADO -->
+                    <button
+                        type="submit"
+                        class="absolute right-1 top-1/2
+                            -translate-y-1/2
+                            inline-flex h-8 items-center
+                            justify-center rounded-md
+                            bg-gray-900 px-3
+                            text-xs font-medium text-white
+                            transition-colors
+                            hover:bg-gray-800
+                            dark:bg-white dark:text-gray-900
+                            dark:hover:bg-gray-200"
+                    >
+                        Buscar
+                    </button>
+
+                </div>
 
             </div>
+
 
             <!-- ORDENACIÓN -->
             <div class="md:col-span-3">
@@ -340,20 +365,6 @@
                 </div>
 
             {% endif %}
-
-            <!-- Permite aplicar búsqueda y ordenación -->
-            <div class="md:col-span-12 flex justify-end">
-
-                <button type="submit"
-                        class="rounded-lg bg-gray-900
-                               px-4 py-2 text-sm font-medium
-                               text-white hover:bg-gray-800
-                               dark:bg-white dark:text-gray-900
-                               dark:hover:bg-gray-200">
-                    Buscar
-                </button>
-
-            </div>
 
         </form>
 
