@@ -1,6 +1,7 @@
 from django import forms
 from apps.core.forms.styles import INPUT_CLASSES
 from .models import Transaction
+from django.utils import timezone
 
 
 class ChargeForm(forms.ModelForm):
@@ -18,6 +19,9 @@ class ChargeForm(forms.ModelForm):
         }
     def __init__(self, *args, customer=None, **kwargs):
         super().__init__(*args, **kwargs)
+
+        if not self.is_bound and not self.instance.pk:
+                self.fields["date"].initial = timezone.localdate()
 
         for field in self.fields.values():
             field.widget.attrs["class"] = INPUT_CLASSES
@@ -41,6 +45,9 @@ class PaymentForm(forms.ModelForm):
         }
     def __init__(self, *args, customer=None, **kwargs):
         super().__init__(*args, **kwargs)
+
+        if not self.is_bound and not self.instance.pk:
+                self.fields["date"].initial = timezone.localdate()
 
         for field in self.fields.values():
             field.widget.attrs["class"] = INPUT_CLASSES

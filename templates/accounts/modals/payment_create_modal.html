@@ -17,6 +17,7 @@
         <form
             id="payment-create-form"
             data-api-url="{% if account %}{% url 'api_payment_create' account.pk %}{% endif %}"
+            autocomplete="off"
         >
             {% csrf_token %}
             <!-- Cuerpo -->

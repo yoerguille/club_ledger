@@ -16,6 +16,7 @@
         <form
             id="charge-create-form"
             data-api-url="{% if account %}{% url 'api_charge_create' account.pk %}{% endif %}"
+            autocomplete="off"
         >
             {% csrf_token %}
             <!-- Cuerpo -->
