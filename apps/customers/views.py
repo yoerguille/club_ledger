@@ -138,6 +138,10 @@ class CustomerDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView
         page_number= self.request.GET.get("page")
         page_obj = paginator.get_page(page_number)
 
+        query_params = self.request.GET.copy()
+        query_params.pop("page", None)
+        context["pagination_query"] = query_params.urlencode()
+
         context["page_obj"] = page_obj
         context["all_accounts"] = page_obj.object_list
         context["accounts"] = accounts

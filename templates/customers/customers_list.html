@@ -60,6 +60,7 @@
                 id="customer-filters"
                 method="get"
                 class="flex flex-col gap-3 lg:flex-row lg:items-end"
+                autocomplete="off"
             >
 
                 <!-- BÚSQUEDA -->
@@ -109,6 +110,24 @@
                                    dark:bg-dark-tertiary
                                    dark:text-white"
                         >
+
+
+                            <!-- BOTÓN INTEGRADO -->
+                        <button
+                            type="submit"
+                            class="absolute right-1 top-1/2
+                                -translate-y-1/2
+                                inline-flex h-8 items-center
+                                justify-center rounded-md
+                                bg-gray-900 px-3
+                                text-xs font-medium text-white
+                                transition-colors
+                                hover:bg-gray-800
+                                dark:bg-white dark:text-gray-900
+                                dark:hover:bg-gray-200"
+                        >
+                            Buscar
+                        </button>
 
                     </div>
 
@@ -192,20 +211,6 @@
                     </select>
 
                 </div>
-
-                <!-- APLICAR -->
-                <button
-                    type="submit"
-                    class="inline-flex min-h-10 items-center
-                           justify-center rounded-lg
-                           bg-gray-900 px-5 py-2.5
-                           text-sm font-medium text-white
-                           transition-colors hover:bg-gray-800
-                           dark:bg-white dark:text-gray-900
-                           dark:hover:bg-gray-200"
-                >
-                    Aplicar
-                </button>
 
             </form>
 

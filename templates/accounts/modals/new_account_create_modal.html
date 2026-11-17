@@ -19,6 +19,7 @@
     <form
         id="new-account-form"
         data-api-url="{% url 'api_account_create' customer.pk %}"
+        autocomplete="off"
     >
         {% csrf_token %}
         <div class="space-y-4 p-6">

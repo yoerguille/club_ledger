@@ -16,6 +16,7 @@
     id="customer-create-form"
     method="post"
     action="{% url 'customers:customer_create' %}"
+    autocomplete="off"
 >
     {% csrf_token %}
 
