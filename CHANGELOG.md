@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog.
 
+## [2026-11-17]
+
+### Changed
+- Reorganized customer details into a compact contact summary with dedicated customer actions.
+- Grouped the season selector and primary account creation action alongside the account section heading.
+- Expanded the customer detail layout to use the available width and made account cards automatically distribute across available columns.
+- Removed redundant season labels and account badges from customer account cards.
+- Integrated the customer search button into the search field.
+- Disabled browser autocomplete in customer filters and customer and account creation forms.
+
+### Fixed
+- Preserved the selected season and query parameters when paginating customer accounts.
+- Corrected customer account pagination labels to refer to accounts instead of transactions and hid navigation when only one page is available.
+- Updated the empty account state to refer to the selected season rather than the customer's entire account history.
+
+## [2026-11-16]
+
+### Changed
+- Integrated the account search button into the search field and refined the account list heading.
+- Set the initial date to the current local date in new, unbound charge and payment forms.
+- Disabled browser autocomplete in account filters and charge and payment creation forms.
+
+## [2026-11-15]
+
+### Changed
+- Refined account and customer list layouts, filters, spacing, and light and dark theme styling.
+- Updated the dashboard's pending accounts card and overdue follow-up list, including clearer account links and reminder actions.
+
+## [2026-11-14]
+
+### Changed
+- Enabled smooth scrolling throughout the application.
+
 ## [2026-11-12]
 
 ### Changed
