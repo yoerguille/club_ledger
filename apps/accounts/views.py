@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.urls import reverse
 from .forms import AccountForm, AccountUpdateForm
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.db.models.functions import Coalesce
@@ -24,6 +25,8 @@ from django.core.paginator import Paginator
 # Create your views here.
 
 @require_POST
+@login_required
+@permission_required("accounts.change_account", raise_exception=True)
 def closed_account(request, pk):
     account = get_object_or_404(Account, pk=pk)
 
@@ -45,7 +48,8 @@ def closed_account(request, pk):
         pk=account.pk
     )
 
-class AccountListView(ListView):
+class AccountListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = "accounts.view_account"
     model=Account
     template_name ="accounts/accounts_list.html"
     context_object_name ="accounts"
