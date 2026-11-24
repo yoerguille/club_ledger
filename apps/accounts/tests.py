@@ -123,3 +123,34 @@ class AccountCreateServiceTests(TestCase):
                 name="Cuenta de Prueba",
                 notes="Notas de prueba"
             )
+
+
+class AccountCreateWebTests(TestCase):
+    def setUp(self):
+        from django.contrib.auth import get_user_model
+        from django.contrib.auth.models import Permission
+
+        user = get_user_model().objects.create_user(username="account_creator")
+        user.user_permissions.add(Permission.objects.get(
+            content_type__app_label="accounts", codename="add_account"
+        ))
+        self.client.force_login(user)
+        self.customer = Customer.objects.create(name="Club")
+        self.url = reverse("accounts:account_create", args=[self.customer.pk])
+
+    def test_account_uses_active_season(self):
+        season = Season.objects.create(
+            name="Activa", start_date=date(2026, 1, 1),
+            end_date=date(2026, 12, 31), is_active=True,
+        )
+        response = self.client.post(self.url, {"name": "General"})
+        self.assertRedirects(response, reverse("customers:customer_detail", args=[self.customer.pk]),
+                             fetch_redirect_response=False)
+        account = Account.objects.get(customer=self.customer, name="General")
+        self.assertEqual(account.season, season)
+
+    def test_missing_active_season_rejects_account(self):
+        response = self.client.post(self.url, {"name": "General"})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("No hay ninguna temporada activa", str(response.context["form"].non_field_errors()))
+        self.assertFalse(Account.objects.exists())

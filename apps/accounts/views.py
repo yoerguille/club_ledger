@@ -242,7 +242,7 @@ class AccountCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView)
         try:
             register_new_account(
                 customer=self.customer,
-                season=form.season,
+                season=season,
                 name=form.cleaned_data['name'],
                 notes = form.cleaned_data.get("notes") or "",
 
