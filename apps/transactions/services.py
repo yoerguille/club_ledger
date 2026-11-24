@@ -1,5 +1,6 @@
 from django.db import transaction
 
+from apps.accounts.models import Account
 from apps.collection.models import CollectionFollowUp
 from apps.transactions.models import Transaction
 
@@ -16,6 +17,10 @@ def register_payment(
     payment_method,
     notes="",
 ):
+    account = Account.objects.select_for_update().get(pk=account.pk)
+    if account.is_closed:
+        raise ValidationError("No se puede registrar un pago en una cuenta cerrada.")
+
     payment = Transaction.objects.create(
         account=account,
         movement_type=Transaction.MovementType.PAYMENT,
@@ -44,6 +49,7 @@ def register_charge(
     amount,
     notes="",
 ):
+    account = Account.objects.select_for_update().get(pk=account.pk)
     if account.is_closed:
         raise ValidationError("No se puede registrar un cargo en una cuenta cerrada.")
 
@@ -62,3 +68,11 @@ def register_charge(
     )
 
     return charge
+
+
+@transaction.atomic
+def delete_transaction(movement):
+    account = Account.objects.select_for_update().get(pk=movement.account_id)
+    if account.is_closed:
+        raise ValidationError("No se puede borrar un movimiento de una cuenta cerrada.")
+    movement.delete()

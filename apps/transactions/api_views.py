@@ -32,10 +32,13 @@ class PaymentCreateAPIView(APIView):
         serializer.is_valid(raise_exception=True)
 
         # 4. Registrar el pago
-        payment = register_payment(
-            account=account,
-            **serializer.validated_data,
-        )
+        try:
+            payment = register_payment(
+                account=account,
+                **serializer.validated_data,
+            )
+        except DjangoValidationError as error:
+            raise DRFValidationError({"detail": error.messages}) from error
 
         # 5. Devolver la respuesta HTTP
         return Response(
