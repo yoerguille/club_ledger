@@ -51,7 +51,7 @@ def closed_account(request, pk):
 class AccountListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     permission_required = "accounts.view_account"
     model=Account
-    template_name ="accounts/accounts_list.html"
+    template_name ="accounts/account_list.html"
     context_object_name ="accounts"
     paginate_by = 20
 
