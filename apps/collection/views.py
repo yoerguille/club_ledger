@@ -130,7 +130,7 @@ class CollectionReminderSendView(LoginRequiredMixin, View):
             )
             return render(
                 request,
-                "collections/reminder_review.html",
+                "collection/reminder_review.html",
                 {
                     "follow_up": follow_up,
                     "reminder": reminder,
@@ -148,7 +148,7 @@ class CollectionReminderSendView(LoginRequiredMixin, View):
             )
             return render(
                 request,
-                "collections/reminder_review.html",
+                "collection/reminder_review.html",
                 {
                     "follow_up": follow_up,
                     "reminder": reminder,
