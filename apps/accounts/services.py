@@ -29,7 +29,9 @@ def register_new_account(
 class AccountCloseService:
 
     @staticmethod
+    @transaction.atomic
     def close(account):
+        account = Account.objects.select_for_update().get(pk=account.pk)
 
         # 1. Comprobar si la cuenta ya está cerrada
         if account.is_closed:

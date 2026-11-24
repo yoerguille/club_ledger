@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.http import HttpResponseNotAllowed
 from apps.collection.models import CollectionFollowUp
-from apps.transactions.services import register_payment, register_charge
+from apps.transactions.services import delete_transaction, register_payment, register_charge
 from django.core.exceptions import ValidationError
 
 # Create your views here.
@@ -97,14 +97,18 @@ class PaymentCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView)
         return reverse("accounts:account_detail", kwargs={"pk": self.account.pk})
     
     def form_valid(self, form):
-        register_payment(
-            account=self.account,
-            date=form.cleaned_data["date"],
-            description=form.cleaned_data["description"],
-            amount=form.cleaned_data["amount"],
-            payment_method=form.cleaned_data["payment_method"],
-            notes=form.cleaned_data.get("notes") or "",
-        )
+        try:
+            register_payment(
+                account=self.account,
+                date=form.cleaned_data["date"],
+                description=form.cleaned_data["description"],
+                amount=form.cleaned_data["amount"],
+                payment_method=form.cleaned_data["payment_method"],
+                notes=form.cleaned_data.get("notes") or "",
+            )
+        except ValidationError as error:
+            form.add_error(None, error)
+            return self.form_invalid(form)
 
         messages.success(
             self.request,
@@ -123,6 +127,18 @@ class PaymentCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView)
 class TransactionDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     model = Transaction
     permission_required ="transactions.delete_transaction"
+
+    def form_valid(self, form):
+        destination = self.get_success_url()
+        try:
+            delete_transaction(self.object)
+        except ValidationError as error:
+            messages.error(self.request, " ".join(error.messages))
+        return redirect(destination)
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return self.form_valid(None)
 
     def get_success_url(self):
         return reverse_lazy("accounts:account_detail", kwargs={"pk": self.object.account.pk})
