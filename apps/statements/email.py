@@ -10,6 +10,9 @@ class StatementEmailSender:
         self.account = account
 
     def send(self, base_url):
+        return self.build(base_url).send()
+
+    def build(self, base_url):
         context = StatementBuilder(self.account).build()
 
         html_content = render_to_string(
@@ -53,6 +56,6 @@ class StatementEmailSender:
             "application/pdf"
         )
 
-        email.send()
+        return email
 
         

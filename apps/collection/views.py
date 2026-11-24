@@ -6,7 +6,8 @@ from decimal import Decimal, InvalidOperation
 
 from django.core.exceptions import ValidationError
 
-from .email import CollectionReminderEmailSender
+from uuid import uuid4
+from .delivery import deliver, report_delivery, Status
 from .models import CollectionFollowUp, CollectionReminder 
 from .integrations import CollectionReminderService
 
@@ -68,6 +69,7 @@ class CollectionReminderPrepareView(LoginRequiredMixin, View):
                 "follow_up": follow_up,
                 "reminder": reminder,
                 "original_balance": str(follow_up.account.balance),
+                "delivery_token": uuid4(),
             },
         )
 
@@ -135,49 +137,20 @@ class CollectionReminderSendView(LoginRequiredMixin, View):
                     "follow_up": follow_up,
                     "reminder": reminder,
                     "original_balance": original_balance,
+                    "delivery_token": request.POST.get("delivery_token"),
                 },
             )
 
         try:
-            sender = CollectionReminderEmailSender(follow_up)
-            sent_count=sender.send(reminder)
-        except Exception:
-            messages.error(
-                request,
-                "No se ha podido enviar el recordatorio por email."
-            )
-            return render(
-                request,
-                "collection/reminder_review.html",
-                {
-                    "follow_up": follow_up,
-                    "reminder": reminder,
-                    "original_balance": original_balance,
-                },
-            )
-        if sent_count != 1:
-            messages.error(
-                request,
-                "El servidor de correo no ha confirmado el envío."
-            )
-            return redirect(
-                "accounts:account_detail",
-                pk=account.pk
-            )
-        CollectionReminder.objects.create(
-            follow_up=follow_up,
-            recipient_email=customer.email,
-            subject=f"Recordatorio de pago - {account.season.name}",
-            message=reminder,
-            balance_at_send=account.balance,
-        )
-
-        messages.success(
-            request,
-            f"Recordatorio enviado correctamente a {customer.email}.",
-        )
-
-        return redirect(
-            "accounts:account_detail",
-            pk=account.pk,
-        )
+            status = deliver(account.pk, request.POST.get("delivery_token"), follow_up_id=follow_up.pk,
+                             message=reminder, expected_balance=balance_at_generation)
+        except ValidationError as error:
+            messages.error(request, " ".join(error.messages))
+        else:
+            report_delivery(request, status)
+            if status == Status.REJECTED:
+                return render(request, "collection/reminder_review.html", {
+                    "follow_up": follow_up, "reminder": reminder, "original_balance": original_balance,
+                    "delivery_token": request.POST.get("delivery_token"),
+                })
+        return redirect("accounts:account_detail", pk=account.pk)

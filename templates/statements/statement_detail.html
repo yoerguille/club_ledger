@@ -29,6 +29,7 @@
         class="inline"
     >
         {% csrf_token %}
+            <input type="hidden" name="delivery_token" value="{{ delivery_token }}">
 
         <button
             type="submit"

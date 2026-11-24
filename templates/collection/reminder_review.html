@@ -75,6 +75,7 @@
             action="{% url 'collection:send_reminder' follow_up.pk %}"
         >
             {% csrf_token %}
+            <input type="hidden" name="delivery_token" value="{{ delivery_token }}">
 
             <input
                 type="hidden"

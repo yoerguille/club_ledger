@@ -629,6 +629,10 @@ Cuenta
         <div class="overflow-hidden rounded-lg border border-gray-200
                     bg-white dark:border-gray-800 dark:bg-dark-primary">
 
+            {% for attempt in account.delivery_attempts.all %}
+                <p class="border-b p-5">{{ attempt.created_at|date:"d/m/Y H:i" }} · {{ attempt.recipient }} · {{ attempt.subject }} · {{ attempt.get_status_display }}</p>
+            {% endfor %}
+
             {% for reminder in collection_reminders %}
 
                 <div class="flex flex-col gap-4 border-b border-gray-200 p-5

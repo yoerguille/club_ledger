@@ -152,3 +152,28 @@ class CollectionReminder(models.Model):
             f"{self.follow_up.account.customer.name} - "
             f"{self.sent_at:%d/%m/%Y}"
         )
+
+
+class DeliveryAttempt(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", "Pendiente"
+        SENDING = "sending", "Envío sin confirmar"
+        UNKNOWN = "unknown", "Sin confirmar"
+        REJECTED = "rejected", "Rechazado"
+        SENT = "sent", "Aceptado por el servidor"
+
+    id = models.UUIDField(primary_key=True)
+    account = models.ForeignKey(Account, on_delete=models.PROTECT, related_name="delivery_attempts")
+    # An empty follow-up identifies the statement which opens a collection.
+    follow_up = models.ForeignKey(CollectionFollowUp, null=True, on_delete=models.PROTECT)
+    status = models.CharField(max_length=12, choices=Status, default=Status.PENDING)
+    recipient = models.EmailField()
+    subject = models.CharField(max_length=255)
+    body = models.TextField()
+    html = models.TextField(blank=True)
+    pdf = models.BinaryField(null=True)
+    balance = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]

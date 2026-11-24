@@ -1,10 +1,9 @@
+from uuid import uuid4
+from django.core.exceptions import ValidationError
+from apps.collection.delivery import deliver, report_delivery
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.contrib import messages
-from ..collection.models import CollectionFollowUp
-from config import settings
-from django.utils import timezone
-from datetime import timedelta
 
 from apps.accounts.models import Account
 
@@ -69,25 +68,12 @@ class StatementEmailView(LoginRequiredMixin, View):
                 pk=account.pk,
             )
 
-        base_url = request.build_absolute_uri("/")
-
-        sent_at = timezone.now()
-
-        StatementEmailSender(account).send(
-            base_url=base_url,
-        )
-
-        CollectionFollowUp.objects.create(
-            account=account,
-            amount=account.balance,
-            sent_at=sent_at,
-            due_date=sent_at.date() + timedelta(days=settings.COLLECTION_PAYMENT_TERM_DAYS)
-        )
-
-        messages.success(
-            request,
-            f"Estado de cuenta enviado correctamente a {customer.email}.",
-        )
+        try:
+            status = deliver(account.pk, request.POST.get("delivery_token"), base_url=request.build_absolute_uri("/"))
+        except ValidationError as error:
+            messages.error(request, " ".join(error.messages))
+        else:
+            report_delivery(request, status)
 
         return redirect(
             "accounts:account_detail",
@@ -170,5 +156,5 @@ class StatementDetailView(LoginRequiredMixin, TemplateView):
 
         builder = StatementBuilder(account)
         
-        return builder.build()
+        return {**builder.build(), "delivery_token": uuid4()}
     
