@@ -39,6 +39,14 @@
     </script>
 
     {% tailwind_css %}
+    <style>
+        .sidebar-collapsed #sidebar-container { width: 5rem; }
+        .sidebar-collapsed #sidebar-container [data-sidebar-label] {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .sidebar-collapsed #sidebar-container [data-sidebar-heading] { visibility: hidden; }
+    </style>
     <meta charset="UTF-8">
 
     <!-- Tu archivo JS -->
